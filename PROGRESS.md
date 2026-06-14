@@ -20,6 +20,7 @@ Ostatnia aktualizacja: 2026-06-14
 - Render QA przez Browser/IAB: 33 kombinacje stron i viewportow (desktop 1440x900, tablet 1024x768, telefon 390x844), zero poziomego overflow, zero uszkodzonych obrazkow, zero bledow konsoli aplikacji; header bialy, `/rooms` bez filtrow zaczyna od Aula A01, a `/rooms?participants=23` od najlepiej dopasowanej sali.
 - Lokalny serwer do review dziala na `http://127.0.0.1:8000`.
 - ZIP odtworzony: `student_spot.zip` ma ok. 34 MB i zawiera nowe trasy, migracje, grafiki newsow oraz `source_info/blog_package*`.
+- Repo GitHub utworzone jako prywatne: `https://github.com/pawelkwaczynski/student_spot`; branch `main`, remote `origin`.
 - Do wykonania po tej aktualizacji: reczny review uzytkownika przed Frog.
 
 ## Aktualny checkpoint do wznowienia
