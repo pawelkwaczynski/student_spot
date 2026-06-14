@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ reservation.title }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <article class="panel">
+    <h1 class="page-title">{{ reservation.title }}</h1>
+    <p><span class="status {{ reservation.status }}">{{ t(reservation.status) }}</span></p>
+    <p>{{ reservation.description }}</p>
+    <p class="meta">{{ reservation.starts_at.strftime("%Y-%m-%d %H:%M") }} - {{ reservation.ends_at.strftime("%H:%M") }} · {{ reservation.room.name }}</p>
+    {% if reservation.status == "approved" %}
+      <p><a class="button secondary" href="{{ url_for('reservations.calendar_ics', reservation_id=reservation.id) }}">{{ t("add_to_calendar") }}</a></p>
+    {% endif %}
+    {% if reservation.rejection_reason %}
+      <p><strong>{{ t("rejection_reason") }}:</strong> {{ reservation.rejection_reason }}</p>
+    {% endif %}
+    <h2>{{ t("status") }}</h2>
+    <ul>
+      {% for entry in reservation.status_history %}
+        <li>{{ entry.created_at.strftime("%Y-%m-%d %H:%M") }}: {{ entry.from_status or "-" }} → {{ entry.to_status }}{% if entry.note %} — {{ entry.note }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </article>
+{% endblock %}

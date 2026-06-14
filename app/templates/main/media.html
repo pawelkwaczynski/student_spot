@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ t("media") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <section class="panel media-hero" aria-labelledby="media-title">
+    <div>
+      <h1 id="media-title" class="page-title">{{ t("media") }}</h1>
+      {% if locale == "pl" %}
+        <p class="lead">Materiały prasowe i pliki graficzne do prezentacji nieoficjalnego prototypu StudentSpot.</p>
+      {% else %}
+        <p class="lead">Press materials and downloadable graphics for the unofficial StudentSpot prototype.</p>
+      {% endif %}
+    </div>
+    <button class="room-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
+      <img src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" alt="{{ t('demo_visual_alt') }}">
+    </button>
+  </section>
+
+  <article class="panel" aria-labelledby="press-note-title">
+    <h2 id="press-note-title">{{ t("press_note") }}</h2>
+    {% if locale == "pl" %}
+      <p><strong>StudentSpot</strong> to nieoficjalny projekt studencki przygotowany jako MVP aplikacji wspierającej życie akademickie Akademii Humanistyczno-Ekonomicznej w Łodzi. Prototyp porządkuje trzy codzienne potrzeby kół naukowych: odkrywanie organizacji, rezerwację sal oraz komunikację z administracją.</p>
+      <p>Aplikacja obejmuje katalog kół naukowych AHE, sale w budynku przy Sterlinga 26, konta demonstracyjne dla różnych ról, obsługę wniosków członkowskich, proces rezerwacji i zatwierdzania sal, eksport spotkań do kalendarza oraz funkcje dostępności: wersję PL/EN, tryb ciemny, większy kontrast i powiększoną czcionkę.</p>
+      <p>Projekt został zbudowany jako lekka aplikacja Flask/Jinja2 z bazą SQLAlchemy, testami automatycznymi i instrukcją wdrożenia na serwerze Frog.</p>
+    {% else %}
+      <p><strong>StudentSpot</strong> is an unofficial student MVP designed to support academic life at the University of Humanities and Economics in Lodz. The prototype organizes three recurring needs of student research groups: discovering organizations, booking rooms, and communicating with administration.</p>
+      <p>The application includes an AHE club catalog, rooms at Sterlinga 26, demo accounts for several roles, membership requests, room reservation approvals, calendar export, and accessibility features: PL/EN, dark mode, high contrast, and larger font.</p>
+      <p>The project is built as a lightweight Flask/Jinja2 app with SQLAlchemy, automated tests, and Frog deployment documentation.</p>
+    {% endif %}
+  </article>
+
+  <section class="panel" aria-labelledby="downloads-title">
+    <h2 id="downloads-title">{{ t("downloads") }}</h2>
+    <div class="media-grid">
+      <article class="media-download">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/brand/studentspot-logo.png') }}" data-lightbox-alt="StudentSpot logo" aria-label="{{ t('open_image') }}: StudentSpot logo">
+          <img src="{{ url_for('static', filename='media/brand/studentspot-logo.png') }}" alt="StudentSpot logo">
+        </button>
+        <h3>StudentSpot logo</h3>
+        <a class="button" href="{{ url_for('static', filename='media/brand/studentspot-logo.png') }}" download="studentspot-logo.png">{{ t("download_file") }}</a>
+      </article>
+      <article class="media-download">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
+          <img src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" alt="{{ t('demo_visual_alt') }}">
+        </button>
+        <h3>{{ t("welcome_popup_graphic") }}</h3>
+        <a class="button" href="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" download="studentspot-popup-welcome.png">{{ t("download_file") }}</a>
+      </article>
+      <article class="media-download">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/brand/ahe-logo-pl.png') }}" data-lightbox-alt="AHE logo PL" aria-label="{{ t('open_image') }}: AHE logo PL">
+          <img src="{{ url_for('static', filename='media/brand/ahe-logo-pl.png') }}" alt="AHE logo PL">
+        </button>
+        <h3>AHE logo PL</h3>
+        <a class="button" href="{{ url_for('static', filename='media/brand/ahe-logo-pl.png') }}" download="ahe-logo-pl.png">{{ t("download_file") }}</a>
+      </article>
+      <article class="media-download">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/brand/ahe-logo-en.png') }}" data-lightbox-alt="AHE logo EN" aria-label="{{ t('open_image') }}: AHE logo EN">
+          <img src="{{ url_for('static', filename='media/brand/ahe-logo-en.png') }}" alt="AHE logo EN">
+        </button>
+        <h3>AHE logo EN</h3>
+        <a class="button" href="{{ url_for('static', filename='media/brand/ahe-logo-en.png') }}" download="ahe-logo-en.png">{{ t("download_file") }}</a>
+      </article>
+      <article class="media-download">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/brand/samorzad-logo.png') }}" data-lightbox-alt="Samorząd Studentów AHE logo" aria-label="{{ t('open_image') }}: Samorząd Studentów AHE logo">
+          <img src="{{ url_for('static', filename='media/brand/samorzad-logo.png') }}" alt="Samorząd Studentów AHE logo">
+        </button>
+        <h3>Samorząd Studentów AHE</h3>
+        <a class="button" href="{{ url_for('static', filename='media/brand/samorzad-logo.png') }}" download="samorzad-ahe-logo.png">{{ t("download_file") }}</a>
+      </article>
+      <article class="media-download">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/brand/utw-logo.png') }}" data-lightbox-alt="Uniwersytet Trzeciego Wieku AHE logo" aria-label="{{ t('open_image') }}: Uniwersytet Trzeciego Wieku AHE logo">
+          <img src="{{ url_for('static', filename='media/brand/utw-logo.png') }}" alt="Uniwersytet Trzeciego Wieku AHE logo">
+        </button>
+        <h3>UTW AHE</h3>
+        <a class="button" href="{{ url_for('static', filename='media/brand/utw-logo.png') }}" download="utw-ahe-logo.png">{{ t("download_file") }}</a>
+      </article>
+    </div>
+    <p class="meta">{{ t("media_usage_note") }}</p>
+  </section>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ t("find_your_club") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <section class="panel" aria-labelledby="find-club-title">
+    <h1 id="find-club-title" class="page-title">{{ t("find_your_club") }}</h1>
+    {% if locale == "pl" %}
+      <p class="lead">Konto jest aktywne. System proponuje koła powiązane z Twoim kierunkiem, a rola w kole zostanie później potwierdzona przez administratora albo opiekuna koła.</p>
+    {% else %}
+      <p class="lead">Your account is active. The system suggests clubs connected with your major, and your club role will later be confirmed by an administrator or club guardian.</p>
+    {% endif %}
+  </section>
+
+  <section class="grid" aria-label="{{ t('recommended_clubs') }}">
+    {% for club in recommended_clubs %}
+      <article class="card">
+        <h2>{{ club.name_pl if locale == "pl" else club.name_en }}</h2>
+        <p>{{ club.description_pl if locale == "pl" else club.description_en }}</p>
+        <p>
+          {% for tag in club.tags[:4] %}
+            <span class="badge">{{ tag }}</span>
+          {% endfor %}
+        </p>
+        <div class="inline-actions">
+          <a class="button" href="{{ url_for('clubs.detail', club_id=club.id) }}">{{ t("join_club") }}</a>
+          <a class="button ghost" href="{{ url_for('clubs.detail', club_id=club.id) }}">{{ t("already_member") }}</a>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  <section class="panel" aria-labelledby="registration-role-title">
+    <h2 id="registration-role-title">{{ t("registration_roles_title") }}</h2>
+    <p>{{ t("registration_roles_copy") }}</p>
+    <div class="inline-actions">
+      <a class="button secondary" href="{{ url_for('clubs.list_clubs') }}">{{ t("all_clubs") }}</a>
+      <a class="button ghost" href="{{ url_for('main.info') }}">{{ t("utw_model_title") }}</a>
+    </div>
+  </section>
+{% endblock %}

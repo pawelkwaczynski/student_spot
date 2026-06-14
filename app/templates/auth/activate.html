@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_form.html" import field with context %}
+{% block title %}{{ t("confirm_email") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("confirm_email") }}</h1>
+  <p class="lead">{{ t("confirm_email_copy") }}</p>
+  {% if dev_code %}
+    <p class="flash">{{ t("dev_activation_code", code=dev_code) }}</p>
+  {% endif %}
+  <form class="form-card" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.code, "activation_code") }}
+    {{ form.submit(class_="button", value=t("activate")) }}
+  </form>
+{% endblock %}

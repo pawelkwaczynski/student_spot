@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_form.html" import field, checkbox with context %}
+{% block title %}{{ t("register") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("register") }}</h1>
+  <form class="form-card registration-form" method="post" novalidate data-registration-form>
+    {{ form.hidden_tag() }}
+    <div class="registration-steps" aria-label="{{ t('registration_steps') }}">
+      <span class="registration-step is-active" data-step-indicator="1">{{ t("registration_step_1") }}</span>
+      <span class="registration-step" data-step-indicator="2">{{ t("registration_step_2") }}</span>
+    </div>
+
+    <section data-registration-step="1" aria-labelledby="registration-step-1-title">
+      <h2 id="registration-step-1-title">{{ t("registration_step_1") }}</h2>
+      <div class="grid">
+        {{ field(form.index_number) }}
+        {{ field(form.first_name) }}
+        {{ field(form.last_name) }}
+        {{ field(form.nickname) }}
+        {{ field(form.email) }}
+        {{ field(form.major_id, "major") }}
+        {{ field(form.year_of_study) }}
+        {{ field(form.study_level) }}
+        {{ field(form.study_mode) }}
+      </div>
+      <div class="inline-actions">
+        <button class="secondary" type="button" data-next-registration-step>{{ t("next_step") }}</button>
+      </div>
+    </section>
+
+    <section data-registration-step="2" aria-labelledby="registration-step-2-title" hidden>
+      <h2 id="registration-step-2-title">{{ t("registration_step_2") }}</h2>
+      <div class="grid">
+        {{ field(form.password) }}
+        {{ field(form.confirm_password) }}
+      </div>
+      {{ checkbox(form.accept_terms) }}
+      {{ checkbox(form.accept_privacy) }}
+      <p class="meta">{{ t("registration_security_note") }}</p>
+      <div class="inline-actions">
+        <button class="ghost" type="button" data-prev-registration-step>{{ t("previous_step") }}</button>
+        {{ form.submit(class_="button", value=t("register")) }}
+      </div>
+    </section>
+  </form>
+{% endblock %}

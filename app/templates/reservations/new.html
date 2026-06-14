@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "_form.html" import field, checkbox with context %}
+{% block title %}{{ t("create_reservation") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("create_reservation") }}</h1>
+  <form class="form-card" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.club_id, "organization") }}
+    {{ field(form.room_id, "room") }}
+    {{ field(form.title) }}
+    {{ field(form.description) }}
+    {{ field(form.event_type) }}
+    <div class="grid">
+      {{ field(form.date) }}
+      {{ field(form.start_time) }}
+      {{ field(form.end_time) }}
+      {{ field(form.participants) }}
+    </div>
+    <fieldset>
+      <legend>{{ t("features") }}</legend>
+      <div class="check-grid">
+        {% for feature in features if feature.category == "equipment" %}
+          <label class="checkbox-row">
+            <input type="checkbox" name="required_features" value="{{ feature.code }}">
+            <span>{{ feature.name_pl if locale == "pl" else feature.name_en }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>{{ t("accessibility") }}</legend>
+      {{ checkbox(form.requires_step_free_access, "step_free") }}
+      {{ checkbox(form.requires_elevator, "elevator") }}
+      {{ checkbox(form.requires_induction_loop, "induction_loop") }}
+      {{ checkbox(form.requires_accessible_computer, "accessible_computer") }}
+      <p class="meta">{{ t("privacy_hint") }}</p>
+      {{ field(form.accessibility_notes, "accessibility_notes") }}
+    </fieldset>
+    {{ form.submit(class_="button", value=t("create_reservation")) }}
+  </form>
+{% endblock %}

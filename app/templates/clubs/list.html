@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ t("clubs") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("clubs") }}</h1>
+  <form class="panel filter-panel" method="get" aria-label="{{ t('filter') }}">
+    <div class="grid compact-grid">
+      <div class="field">
+        <label for="q">{{ t("search") }}</label>
+        <input id="q" name="q" type="search" value="{{ search }}" placeholder="AI, grafika, warsztaty">
+      </div>
+      <div class="field">
+        <label for="major">{{ t("major") }}</label>
+        <select id="major" name="major">
+          <option value="">{{ t("all") }}</option>
+          {% for major in majors %}
+            <option value="{{ major.slug }}" {% if selected_major == major.slug %}selected{% endif %}>{{ major.name_pl if locale == "pl" else major.name_en }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="tag">{{ t("activity_type") }}</label>
+        <select id="tag" name="tag">
+          <option value="">{{ t("all") }}</option>
+          {% for item in tags %}
+            <option value="{{ item }}" {% if selected_tag == item %}selected{% endif %}>{{ item }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="inline-actions">
+      <button type="submit">{{ t("filter") }}</button>
+      <a class="button secondary" href="{{ url_for('clubs.list_clubs') }}">{{ t("clear") }}</a>
+    </div>
+  </form>
+  <div class="grid">
+    {% for club in clubs %}
+      <article class="card">
+        <h2>{{ club.name_pl if locale == "pl" else club.name_en }}</h2>
+        <p>{{ club.description_pl if locale == "pl" else club.description_en }}</p>
+        <p class="meta">
+          {{ t("major") }}:
+          {% for major in club.majors %}
+            {{ major.name_pl if locale == "pl" else major.name_en }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+        {% if club.guardian_name %}
+          <p class="meta">{{ t("guardian") }}: {{ club.guardian_name }}</p>
+        {% endif %}
+        {% if club.contact_email %}
+          <p class="meta">{{ t("email") }}: <a href="mailto:{{ club.contact_email }}">{{ club.contact_email }}</a></p>
+        {% endif %}
+        <p>
+          {% for tag in club.tags %}
+            <span class="badge">{{ tag }}</span>
+          {% endfor %}
+        </p>
+        <p class="meta">{{ t("data_status") }}: {{ club.verification_status }}</p>
+        {% if club.source_url %}
+          <p><a href="{{ club.source_url }}" rel="noopener" target="_blank">{{ t("official_source") }}</a></p>
+        {% endif %}
+        <a class="button secondary" href="{{ url_for('clubs.detail', club_id=club.id) }}">{{ t("request_membership") }}</a>
+      </article>
+    {% else %}
+      <p class="panel">{{ t("no_clubs_match") }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}

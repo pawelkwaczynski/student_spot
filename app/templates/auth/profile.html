@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from "_form.html" import field with context %}
+{% block title %}{{ t("profile") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("profile") }}</h1>
+  <form class="form-card" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ field(form.first_name) }}
+    {{ field(form.last_name) }}
+    {{ field(form.nickname) }}
+    {{ field(form.preferred_language, "language") }}
+    {{ form.submit(class_="button", value=t("save")) }}
+  </form>
+{% endblock %}
