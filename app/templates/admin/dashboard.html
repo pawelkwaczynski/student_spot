@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}{{ t("admin") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("admin") }}</h1>
+  <section class="panel" aria-labelledby="memberships-title">
+    <h2 id="memberships-title">{{ t("pending_memberships") }}</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Student</th><th>{{ t("clubs") }}</th><th>{{ t("status") }}</th><th>{{ t("role") }}</th><th>Akcja</th></tr></thead>
+        <tbody>
+          {% for membership in memberships %}
+            <tr>
+              <td>{{ membership.user.display_name }}</td>
+              <td>{{ membership.club.name_pl }}</td>
+              <td><span class="status {{ membership.status }}">{{ t(membership.status) }}</span></td>
+              <td>
+                <form method="post" action="{{ url_for('admin.decide_membership', membership_id=membership.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <select name="club_role" aria-label="{{ t('role') }}">
+                    <option value="member">member</option>
+                    <option value="chair">chair</option>
+                    <option value="vice_chair">vice_chair</option>
+                  </select>
+              </td>
+              <td class="inline-actions">
+                  <button name="action" value="approve">{{ t("approve") }}</button>
+                  <button class="secondary" name="action" value="reject">{{ t("reject") }}</button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="5">Brak wniosków / No requests.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="reservations-title">
+    <h2 id="reservations-title">{{ t("pending_reservations") }}</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>{{ t("title") }}</th><th>{{ t("room") }}</th><th>{{ t("date") }}</th><th>{{ t("rejection_reason") }}</th><th>Akcja</th></tr></thead>
+        <tbody>
+          {% for reservation in reservations %}
+            <tr>
+              <td>{{ reservation.title }}</td>
+              <td>{{ reservation.room.name }}</td>
+              <td>{{ reservation.starts_at.strftime("%Y-%m-%d %H:%M") }}</td>
+              <td colspan="2">
+                <form method="post" action="{{ url_for('admin.decide_reservation', reservation_id=reservation.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <label class="sr-only" for="reason-{{ reservation.id }}">{{ t("rejection_reason") }}</label>
+                  <textarea id="reason-{{ reservation.id }}" name="rejection_reason" rows="2"></textarea>
+                  <div class="inline-actions">
+                    <button name="action" value="approve">{{ t("approve") }}</button>
+                    <button class="secondary" name="action" value="reject">{{ t("reject") }}</button>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="5">Brak wniosków / No requests.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {% if hidden_clubs %}
+    <section class="panel" aria-labelledby="hidden-clubs-title">
+      <h2 id="hidden-clubs-title">{{ t("clubs_to_confirm") }}</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>{{ t("clubs") }}</th><th>{{ t("major") }}</th><th>{{ t("guardian") }}</th><th>{{ t("status") }}</th><th>Akcja</th></tr></thead>
+          <tbody>
+            {% for club in hidden_clubs %}
+              <tr>
+                <td>{{ club.name_pl }}</td>
+                <td>
+                  {% for major in club.majors %}
+                    {{ major.name_pl }}{% if not loop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+                <td>{{ club.guardian_name or "-" }}</td>
+                <td><span class="status pending">{{ club.verification_status }}</span></td>
+                <td>
+                  <form method="post" action="{{ url_for('admin.confirm_club', club_id=club.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">{{ t("confirm_data") }}</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if current_user.global_role in ["system_admin", "property_admin"] %}
+    <section class="panel" aria-labelledby="utw-appeal-title">
+      <h2 id="utw-appeal-title">{{ t("utw_appeal") }}</h2>
+      <form method="post" action="{{ url_for('admin.send_utw_appeal') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="utw-message">{{ t("message") }}</label>
+        <textarea id="utw-message" name="message" rows="3" maxlength="220" required></textarea>
+        <button type="submit">{{ t("send") }}</button>
+      </form>
+    </section>
+  {% endif %}
+
+  <section class="panel" aria-labelledby="audit-title">
+    <h2 id="audit-title">{{ t("audit_log") }}</h2>
+    <ul>
+      {% for log in audit_logs %}
+        <li>{{ log.created_at.strftime("%Y-%m-%d %H:%M") }} — {{ log.action }} — {{ log.object_type or "" }} {{ log.object_id or "" }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

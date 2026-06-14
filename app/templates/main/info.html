@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}{{ t("info") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <section class="panel info-hero" aria-labelledby="info-title">
+    <div>
+      <h1 id="info-title" class="page-title">{{ t("info") }}</h1>
+      {% if locale == "pl" %}
+        <p class="lead">Kontekst projektu, autor, źródła danych i identyfikacja wizualna zastosowana w prototypie StudentSpot.</p>
+      {% else %}
+        <p class="lead">Project context, author details, data sources, and visual identity used in the StudentSpot prototype.</p>
+      {% endif %}
+    </div>
+    <button class="room-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
+      <img src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" alt="{{ t('demo_visual_alt') }}">
+    </button>
+  </section>
+
+  <div class="dashboard-grid">
+    <article class="panel" aria-labelledby="info-project-title">
+      <h2 id="info-project-title">{{ t("project_context") }}</h2>
+      {% if locale == "pl" %}
+        <p><strong>StudentSpot</strong> to nieoficjalne MVP aplikacji dla społeczności Akademii Humanistyczno-Ekonomicznej w Łodzi. Projekt pokazuje, jak można połączyć katalog kół naukowych, rezerwację sal przy Sterlinga 26, role administracyjne, powiadomienia i dostępność cyfrową w jednym lekkim systemie.</p>
+        <p>Zakres demonstracyjny jest świadomie ograniczony do danych szablonowych i materiałów źródłowych dostarczonych do projektu. Prototyp nie jest oficjalnym systemem AHE i nie wysyła wiadomości do realnych użytkowników.</p>
+      {% else %}
+        <p><strong>StudentSpot</strong> is an unofficial MVP for the University of Humanities and Economics in Lodz community. It shows how student clubs, Sterlinga 26 room booking, admin roles, notifications, and digital accessibility can live in one lightweight system.</p>
+        <p>The demo scope is intentionally limited to template data and source materials provided for the project. The prototype is not an official AHE system and does not send messages to real users.</p>
+      {% endif %}
+    </article>
+
+    <aside class="panel author-card" aria-labelledby="info-author-title">
+      <h2 id="info-author-title">{{ t("author_note") }}</h2>
+      <dl class="detail-list">
+        <div><dt>{{ t("author") }}</dt><dd>Paweł Kwaczyński</dd></div>
+        <div><dt>{{ t("student_id") }}</dt><dd>165318</dd></div>
+        <div><dt>{{ t("email") }}</dt><dd><a href="mailto:kwaczynski.pawel@gmail.com">kwaczynski.pawel@gmail.com</a></dd></div>
+        <div><dt>{{ t("affiliation") }}</dt><dd>{{ t("airon_member") }}</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <section class="panel" aria-labelledby="professor-title">
+    <h2 id="professor-title">{{ t("professor_requirements") }}</h2>
+    {% if locale == "pl" %}
+      <p>Ta sekcja pokazuje wprost, jak prototyp StudentSpot odpowiada na wymagania projektowej części przedmiotu: od opisu organizacji, przez role i wymagania, po przepływy informacyjne systemu.</p>
+      <div class="requirements-grid">
+        <article class="requirement-card">
+          <h3>1. Miejsce użytkowania i organizacja</h3>
+          <p>Projekt jest adresowany do Akademii Humanistyczno-Ekonomicznej w Łodzi jako organizacji edukacyjnej, w której przetwarzane są dane studentów, kół naukowych, sal i wydarzeń. Zakres MVP obejmuje budynek przy Sterlinga 26 oraz środowisko kół naukowych AHE.</p>
+          <div class="org-chart" aria-label="Schemat organizacyjny AHE dla projektu StudentSpot">
+            <span>AHE Łódź</span>
+            <span>Administracja sal Sterlinga 26</span>
+            <span>Opiekunowie kół</span>
+            <span>Koła naukowe / SKN AIRON</span>
+            <span>Studenci i członkowie</span>
+            <span>UTW AHE</span>
+          </div>
+        </article>
+        <article class="requirement-card">
+          <h3>2. Problem i kontekst systemu</h3>
+          <p>Problemem jest rozproszenie informacji o kołach, członkostwie, dostępności sal i decyzjach administracyjnych. Celem systemu jest uporządkowanie procesu: odkrycie koła, złożenie wniosku, wybór sali, rezerwacja, decyzja administracji i powiadomienie.</p>
+          <p class="meta">Dokumenty wynikowe: wniosek członkowski, wniosek rezerwacyjny, decyzja statusowa, powiadomienie, wpis audytu i plik kalendarza .ics.</p>
+        </article>
+        <article class="requirement-card">
+          <h3>3. Użytkownicy, role i uprawnienia</h3>
+          <div class="role-grid">
+            <span><strong>System admin</strong> - pełna administracja</span>
+            <span><strong>Property admin</strong> - decyzje sal</span>
+            <span><strong>Opiekun koła</strong> - nadzór nad kołem</span>
+            <span><strong>Boss / chair</strong> - rezerwacje i członkostwa</span>
+            <span><strong>Vice chair</strong> - wsparcie przewodniczącego</span>
+            <span><strong>Członek</strong> - udział w kole</span>
+            <span><strong>Pending student</strong> - oczekuje na decyzję</span>
+            <span><strong>UTW organizer*</strong> - rezerwacje i apele UTW</span>
+          </div>
+          <p class="meta">* UTW AHE = Uniwersytet Trzeciego Wieku Akademii Humanistyczno-Ekonomicznej w Łodzi. W projekcie oznacza osobny typ organizatora bez numeru indeksu studenta.</p>
+        </article>
+        <article class="requirement-card">
+          <h3>4. Założenia i zależności</h3>
+          <p>System korzysta z danych publicznych AHE, materiałów KV przekazanych do projektu, lokalnej bazy SQL/SQLite w demo, docelowo MySQL na Frog, mechanizmu e-mail/SMTP do aktywacji, eksportu kalendarza ICS oraz preferencji dostępności zapisanych w przeglądarce.</p>
+        </article>
+        <article class="requirement-card">
+          <h3>5. Wymagania funkcjonalne</h3>
+          <ul class="clean-list">
+            <li>Rejestracja, aktywacja, logowanie i profil użytkownika.</li>
+            <li>Katalog 13 kół AHE, filtrowanie, rekomendacje i wnioski członkowskie.</li>
+            <li>Katalog sal Sterlinga 26, wyszukiwanie, zdjęcia i lightbox.</li>
+            <li>Rezerwacje sal, wykrywanie konfliktów, decyzje administracji i historia statusów.</li>
+            <li>Powiadomienia, apel do UTW, eksport spotkania do kalendarza .ics.</li>
+            <li>PL/EN, dark mode, wysoki kontrast i większa czcionka.</li>
+          </ul>
+        </article>
+        <article class="requirement-card">
+          <h3>6. Wymagania niefunkcjonalne</h3>
+          <ul class="clean-list">
+            <li>Responsywność: desktop, tablet i telefon.</li>
+            <li>Dostępność: skip-link, fokus, kontrast, tryb ciemny, A+.</li>
+            <li>Bezpieczeństwo: CSRF, hashe haseł, brak sekretów w repo, brak logowania danych wrażliwych.</li>
+            <li>Utrzymanie: testy pytest, dokumentacja Frog, checkpoint w PROGRESS.md i folder source_info.</li>
+            <li>Wydajność: lekki Flask/Jinja2, statyczne assety i prosta baza SQL.</li>
+          </ul>
+        </article>
+        <article class="requirement-card wide">
+          <h3>7. Projekt koncepcyjny i przepływy informacyjne</h3>
+          <ol class="flow-steps">
+            <li>Student rejestruje konto i aktywuje dostęp.</li>
+            <li>Użytkownik przegląda koła, składa wniosek albo działa jako członek koła.</li>
+            <li>Boss, vice, opiekun lub UTW organizer wybiera salę i tworzy rezerwację.</li>
+            <li>System sprawdza konflikt terminu i zapisuje wniosek w kolejce administracyjnej.</li>
+            <li>Administrator zatwierdza lub odrzuca wniosek, a system zapisuje historię i audyt.</li>
+            <li>Użytkownik otrzymuje powiadomienie i może pobrać spotkanie do kalendarza.</li>
+          </ol>
+        </article>
+      </div>
+    {% else %}
+      <p>This section explicitly maps the StudentSpot prototype to the professor's project requirements: organization context, roles, assumptions, requirements, and the core information flows.</p>
+      <div class="requirements-grid">
+        <article class="requirement-card">
+          <h3>1. Usage place and organization</h3>
+          <p>The project targets the University of Humanities and Economics in Lodz as an educational organization processing student, club, room, and event data. The MVP covers the Sterlinga 26 building and the AHE student club environment.</p>
+          <div class="org-chart" aria-label="AHE organizational chart for the StudentSpot project">
+            <span>AHE Lodz</span>
+            <span>Sterlinga 26 room administration</span>
+            <span>Club guardians</span>
+            <span>Student clubs / SKN AIRON</span>
+            <span>Students and members</span>
+            <span>AHE UTW</span>
+          </div>
+        </article>
+        <article class="requirement-card">
+          <h3>2. Problem and system context</h3>
+          <p>The problem is fragmented information about clubs, membership, room availability, and administration decisions. The system organizes the process: discover a club, submit a request, choose a room, reserve it, receive a decision, and get notified.</p>
+          <p class="meta">Outputs: membership request, reservation request, status decision, notification, audit entry, and .ics calendar file.</p>
+        </article>
+        <article class="requirement-card">
+          <h3>3. Users, roles, and permissions</h3>
+          <div class="role-grid">
+            <span><strong>System admin</strong> - full administration</span>
+            <span><strong>Property admin</strong> - room decisions</span>
+            <span><strong>Club guardian</strong> - club supervision</span>
+            <span><strong>Boss / chair</strong> - bookings and memberships</span>
+            <span><strong>Vice chair</strong> - chair support</span>
+            <span><strong>Member</strong> - club participation</span>
+            <span><strong>Pending student</strong> - waits for decision</span>
+            <span><strong>UTW organizer*</strong> - UTW bookings and announcements</span>
+          </div>
+          <p class="meta">* AHE UTW = the University of the Third Age at the University of Humanities and Economics in Lodz. In the project it means a separate organizer account type without a student index number.</p>
+        </article>
+        <article class="requirement-card">
+          <h3>4. Assumptions and dependencies</h3>
+          <p>The system depends on public AHE data, KV materials provided for the project, a local SQL/SQLite demo database, target MySQL on Frog, e-mail/SMTP activation, ICS calendar export, and browser-stored accessibility preferences.</p>
+        </article>
+        <article class="requirement-card">
+          <h3>5. Functional requirements</h3>
+          <ul class="clean-list">
+            <li>Registration, activation, login, and user profile.</li>
+            <li>Catalog of 13 AHE clubs, filters, recommendations, and membership requests.</li>
+            <li>Sterlinga 26 room catalog, search, photos, and lightbox.</li>
+            <li>Room reservations, conflict detection, admin decisions, and status history.</li>
+            <li>Notifications, UTW announcements, and .ics calendar export.</li>
+            <li>PL/EN, dark mode, high contrast, and larger text.</li>
+          </ul>
+        </article>
+        <article class="requirement-card">
+          <h3>6. Non-functional requirements</h3>
+          <ul class="clean-list">
+            <li>Responsive layout for desktop, tablet, and phone.</li>
+            <li>Accessibility: skip-link, focus states, contrast, dark mode, A+.</li>
+            <li>Security: CSRF, password hashes, no repo secrets, no sensitive data logs.</li>
+            <li>Maintainability: pytest, Frog docs, PROGRESS.md checkpoints, and source_info.</li>
+            <li>Performance: lightweight Flask/Jinja2, static assets, and simple SQL database.</li>
+          </ul>
+        </article>
+        <article class="requirement-card wide">
+          <h3>7. Conceptual design and information flows</h3>
+          <ol class="flow-steps">
+            <li>A student registers and activates access.</li>
+            <li>The user browses clubs, submits a request, or works as a club member.</li>
+            <li>The boss, vice chair, guardian, or UTW organizer selects a room and creates a reservation.</li>
+            <li>The system checks schedule conflicts and stores the request in the admin queue.</li>
+            <li>The administrator approves or rejects the request, while the system records history and audit data.</li>
+            <li>The user receives a notification and can download the event to a calendar.</li>
+          </ol>
+        </article>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="panel" aria-labelledby="kv-title">
+    <h2 id="kv-title">{{ t("kv_title") }}</h2>
+    {% if locale == "pl" %}
+      <p>Wygląd aplikacji został dopasowany do key visual AHE, ponieważ zależało mi na tym, aby prototyp estetycznie pasował do komunikacji uczelni. Podstawą były materiały znalezione w kodzie strony www AHE (tryb inspect/dev z przeglądarki Chrome), źródło: <strong>view-source:https://www.ahe.lodz.pl//themes/custom/ahe/css/style.css</strong>.</p>
+      <p>Na tej podstawie interfejs używa palety AHE: czerwieni <strong>#A91539</strong>, granatu <strong>#222A56</strong>, prostych prostokątnych paneli, jasnoszarych powierzchni oraz typografii opartej o stack Mundial / Neue Haas Grotesk / Arial. Zachowałem też tryb ciemny, wysoki kontrast i większą czcionkę dla dostępności.</p>
+    {% else %}
+      <p>The interface was adapted to the AHE key visual because I wanted the prototype to visually match the university communication. The basis was material found in the AHE website code using Chrome inspect/dev tools, source: <strong>view-source:https://www.ahe.lodz.pl//themes/custom/ahe/css/style.css</strong>.</p>
+      <p>The UI therefore uses the AHE palette: red <strong>#A91539</strong>, navy <strong>#222A56</strong>, rectangular panels, light gray surfaces, and a Mundial / Neue Haas Grotesk / Arial font stack. Dark mode, high contrast, and larger text remain available for accessibility.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel" aria-labelledby="utw-title">
+    <h2 id="utw-title">{{ t("utw_model_title") }}</h2>
+    <p>{{ t("utw_model_copy") }}</p>
+    <p class="meta">{{ t("utw_model_note") }}</p>
+  </section>
+{% endblock %}

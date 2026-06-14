@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}{{ t("rooms") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("rooms") }} - Sterlinga 26</h1>
+  <form class="panel" method="get" aria-label="{{ t('filter') }}">
+    <div class="grid">
+      <div class="field">
+        <label for="date">{{ t("date") }}</label>
+        <input id="date" name="date" type="date" value="{{ request.args.get('date', '') }}">
+      </div>
+      <div class="field">
+        <label for="start_time">{{ t("start_time") }}</label>
+        <input id="start_time" name="start_time" type="time" value="{{ request.args.get('start_time', '') }}">
+      </div>
+      <div class="field">
+        <label for="end_time">{{ t("end_time") }}</label>
+        <input id="end_time" name="end_time" type="time" value="{{ request.args.get('end_time', '') }}">
+      </div>
+      <div class="field">
+        <label for="participants">{{ t("participants") }}</label>
+        <input id="participants" name="participants" type="number" min="1" value="{{ participants or '' }}">
+      </div>
+    </div>
+    <fieldset>
+      <legend>{{ t("features") }}</legend>
+      <div class="check-grid">
+        {% for feature in features if feature.category == "equipment" %}
+          <label class="checkbox-row">
+            <input type="checkbox" name="features" value="{{ feature.code }}" {% if feature.code in selected_features %}checked{% endif %}>
+            <span>{{ feature.name_pl if locale == "pl" else feature.name_en }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>{{ t("accessibility") }}</legend>
+      <div class="check-grid">
+        {% for feature in features if feature.category == "accessibility" %}
+          <label class="checkbox-row">
+            <input type="checkbox" name="accessibility" value="{{ feature.code }}" {% if feature.code in selected_accessibility %}checked{% endif %}>
+            <span>{{ feature.name_pl if locale == "pl" else feature.name_en }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <button type="submit">{{ t("search") }}</button>
+  </form>
+
+  <div class="grid">
+    {% for room in rooms %}
+      <article class="card room-card">
+        {% if room.photo_url %}
+          <button class="room-image-button {% if room.room_type == 'computer_lab' %}template-watermark{% endif %}" type="button" data-lightbox-src="{{ url_for('static', filename=room.photo_url) }}" data-lightbox-alt="{{ room.name }}" aria-label="{{ t('open_room_image') }}: {{ room.name }}">
+            <img class="room-thumb" src="{{ url_for('static', filename=room.photo_url) }}" alt="{{ room.name }}">
+          </button>
+        {% endif %}
+        <h2>{{ room.name }}</h2>
+        <p class="meta">{{ room.address }} · {{ t("building") }} {{ room.building }}{% if room.floor %} · {{ t("floor") }} {{ room.floor }}{% endif %}</p>
+        <p>{{ room.description_pl if locale == "pl" else room.description_en }}</p>
+        <p><strong>{{ t("capacity") }}:</strong> {{ room.capacity }}</p>
+        {% if participants %}
+          <p class="match-score">
+            {% if room.match_delta == 0 %}
+              {{ t("perfect_capacity_match") }}
+            {% else %}
+              {{ t("capacity_match", seats=room.match_delta) }}
+            {% endif %}
+          </p>
+        {% endif %}
+        <p class="badge-list">
+          {% for feature in room.features %}
+            <span class="badge">{{ feature.name_pl if locale == "pl" else feature.name_en }}</span>
+          {% endfor %}
+        </p>
+        <div class="inline-actions">
+          <a class="button" href="{{ url_for('reservations.create', room_id=room.id) }}">{{ t("reserve_room") }}</a>
+          {% if room.map_url %}
+            <a class="button secondary" href="{{ url_for('static', filename=room.map_url) }}">{{ t("building") }}</a>
+          {% endif %}
+        </div>
+      </article>
+    {% else %}
+      <article class="panel empty-state">
+        <h2>{{ t("no_rooms_match_title") }}</h2>
+        <p>{{ t("no_rooms_match_copy") }}</p>
+        {% if selected_features or selected_accessibility %}
+          <p class="meta">{{ t("room_filters_modernization_note") }}</p>
+        {% endif %}
+        <a class="button ghost" href="{{ url_for('rooms.list_rooms') }}">{{ t("clear_filters") }}</a>
+      </article>
+    {% endfor %}
+  </div>
+{% endblock %}

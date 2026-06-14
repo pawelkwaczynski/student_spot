@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ t("demo") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <section class="panel demo-hero demo-hero-compact" aria-labelledby="demo-title">
+    <div>
+      <h1 id="demo-title" class="page-title">{{ t("demo") }}</h1>
+      <p class="lead">{{ t("demo_project_copy") }}</p>
+    </div>
+  </section>
+
+  <div class="dashboard-grid">
+    <section class="panel" aria-labelledby="demo-accounts">
+      <h2 id="demo-accounts">{{ t("demo_accounts") }}</h2>
+      <p class="meta">Hasło / password: <strong>StudentSpot123!</strong></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>E-mail</th><th>{{ t("role") }}</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>admin@studentspot.example.com</strong></td><td>system admin</td></tr>
+            <tr><td><strong>property@studentspot.example.com</strong></td><td>property admin</td></tr>
+            <tr><td><strong>guardian@studentspot.example.com</strong></td><td>opiekun koła</td></tr>
+            <tr><td><strong>boss@studentspot.example.com</strong></td><td>przewodniczący / chair</td></tr>
+            <tr><td><strong>vice@studentspot.example.com</strong></td><td>vice chair</td></tr>
+            <tr><td><strong>member@studentspot.example.com</strong></td><td>zwykły członek</td></tr>
+            <tr><td><strong>pending@studentspot.example.com</strong></td><td>oczekujący student</td></tr>
+            <tr><td><strong>utw@studentspot.example.com</strong></td><td>UTW organizer</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="panel" aria-labelledby="tech-stack-title">
+      <h2 id="tech-stack-title">{{ t("tech_stack") }}</h2>
+      <ul class="clean-list">
+        <li>Python / Flask / Jinja2</li>
+        <li>SQLAlchemy + SQLite lokalnie / PyMySQL na Frog</li>
+        <li>Flask-WTF + CSRF</li>
+        <li>PL / EN, dark mode, high contrast, A+</li>
+        <li>pytest, smoke QA, gotowa paczka ZIP</li>
+      </ul>
+      <hr class="soft-rule">
+      <h3>{{ t("author_note") }}</h3>
+      <p class="meta">Paweł Kwaczyński · ID 165318 · SKN AIRON</p>
+      <p><a href="mailto:kwaczynski.pawel@gmail.com">kwaczynski.pawel@gmail.com</a></p>
+    </aside>
+  </div>
+
+{% endblock %}

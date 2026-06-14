@@ -1,0 +1,23 @@
+{% macro field(field, label_key=None) %}
+  <div class="field">
+    {{ field.label(text=t(label_key or field.name)) }}
+    {{ field(**{"aria-invalid": "true" if field.errors else "false"}) }}
+    {% if field.errors %}
+      <div class="error" role="alert">
+        {% for error in field.errors %}<div>{{ error }}</div>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro checkbox(field, label_key=None) %}
+  <label class="checkbox-row">
+    {{ field() }}
+    <span>{{ t(label_key or field.name) }}</span>
+  </label>
+  {% if field.errors %}
+    <div class="error" role="alert">
+      {% for error in field.errors %}<div>{{ error }}</div>{% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}

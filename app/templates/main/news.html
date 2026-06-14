@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ t("news") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <section class="panel" aria-labelledby="news-title">
+    <h1 id="news-title" class="page-title">{{ t("news") }}</h1>
+    {% if locale == "pl" %}
+      <p class="lead">Templatki aktualności kół naukowych na podstawie materiałów z paczki blogowej. W docelowym systemie takie wpisy mogą publikować opiekunowie, bossowie i osoby odpowiedzialne za komunikację koła.</p>
+    {% else %}
+      <p class="lead">Student club news templates based on the blog package materials. In the target system, posts like these can be published by guardians, bosses, and club communication leads.</p>
+    {% endif %}
+  </section>
+
+  <section class="news-grid" aria-label="{{ t('news') }}">
+    {% for post in posts %}
+      <article class="card news-card">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename=post.image) }}" data-lightbox-alt="{{ post.title_pl if locale == 'pl' else post.title_en }}" aria-label="{{ t('open_image') }}: {{ post.title_pl if locale == 'pl' else post.title_en }}">
+          <img class="news-thumb" src="{{ url_for('static', filename=post.image) }}" alt="{{ post.title_pl if locale == 'pl' else post.title_en }}">
+        </button>
+        <div class="news-card-body">
+          <p class="meta">{{ post.date_pl if locale == "pl" else post.date_en }} · {{ post.club }}</p>
+          <h2>{{ post.title_pl if locale == "pl" else post.title_en }}</h2>
+          <p>{{ post.excerpt_pl if locale == "pl" else post.excerpt_en }}</p>
+          <div class="inline-actions">
+            <a class="button ghost" href="{{ post.source_url }}">{{ t("official_source") }}</a>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+{% endblock %}

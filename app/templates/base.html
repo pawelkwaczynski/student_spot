@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="{{ locale }}" data-theme="light" data-contrast="normal" data-font="normal">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="StudentSpot - student club and room reservation MVP">
+    <title>{% block title %}{{ t("app_name") }}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.dataset.theme = localStorage.getItem("studentspot-theme") || "light";
+        root.dataset.contrast = localStorage.getItem("studentspot-contrast") || "normal";
+        root.dataset.font = localStorage.getItem("studentspot-font") || "normal";
+      })();
+    </script>
+  </head>
+  <body class="{% if current_user %}app-auth{% else %}app-guest{% endif %}">
+    <a class="skip-link" href="#content">{{ t("skip_to_content") }}</a>
+    <header class="site-header">
+      <div class="topbar">
+        <div class="topbar-inner">
+          <span>StudentSpot / AHE Lodz</span>
+          <span>{{ t("accessibility") }}: {{ t("contrast") }} · {{ t("larger_font") }}</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="{{ url_for('main.index') }}">
+          <img class="brand-logo" src="{{ url_for('static', filename='media/brand/studentspot-logo.png') }}" alt="" aria-hidden="true">
+          <span>{{ t("app_name") }}</span>
+        </a>
+        <div class="nav-links">
+          <a href="{{ url_for('main.index') }}">{{ t("home") }}</a>
+          <a href="{{ url_for('main.news') }}">{{ t("news") }}</a>
+          <a href="{{ url_for('main.calendar') }}">{{ t("calendar") }}</a>
+          <a href="{{ url_for('clubs.list_clubs') }}">{{ t("clubs") }}</a>
+          <a href="{{ url_for('rooms.list_rooms') }}">{{ t("rooms") }}</a>
+          <a href="{{ url_for('main.local_heroes') }}">{{ t("local_heroes") }}</a>
+          <a href="{{ url_for('main.info') }}">{{ t("info") }}</a>
+          <a href="{{ url_for('main.demo') }}">{{ t("demo") }}</a>
+          <a href="{{ url_for('main.media') }}">{{ t("media") }}</a>
+          {% if current_user %}
+            <a href="{{ url_for('main.dashboard') }}">{{ t("dashboard") }}</a>
+            {% if current_user.global_role in ["system_admin", "property_admin", "club_guardian"] %}
+              <a href="{{ url_for('admin.dashboard') }}">{{ t("admin") }}</a>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="toolbar" aria-label="Accessibility and language">
+          <a class="button ghost" href="{{ url_for('set_language', lang='pl') }}" lang="pl">PL</a>
+          <a class="button ghost" href="{{ url_for('set_language', lang='en') }}" lang="en">EN</a>
+          <button class="ghost" type="button" data-toggle-pref="theme" data-toggle-value="dark">{{ t("dark_mode") }}</button>
+          <button class="ghost" type="button" data-toggle-pref="contrast" data-toggle-value="high">{{ t("contrast") }}</button>
+          <button class="ghost" type="button" data-toggle-pref="font" data-toggle-value="large">{{ t("larger_font") }}</button>
+          {% if current_user %}
+            <a class="button secondary" href="{{ url_for('auth.logout') }}">{{ t("logout") }}</a>
+          {% else %}
+            <a class="button secondary" href="{{ url_for('auth.login') }}">{{ t("login") }}</a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+    <main id="content" class="shell" tabindex="-1">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-list" role="status" aria-live="polite">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ t(message) }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+      <div class="inner">
+        {% if locale == "pl" %}
+          <p>Nieoficjalny projekt studencki: <strong>StudentSpot</strong> by Paweł Kwaczyński / SKN AIRON / 2026</p>
+        {% else %}
+          <p>Unofficial student project: <strong>StudentSpot</strong> by Paweł Kwaczyński / SKN AIRON / 2026</p>
+        {% endif %}
+      </div>
+    </footer>
+    <button class="back-to-top" type="button" data-back-to-top aria-label="{{ t('back_to_top') }}">UP</button>
+    <script src="{{ url_for('static', filename='js/accessibility.js') }}"></script>
+  </body>
+</html>

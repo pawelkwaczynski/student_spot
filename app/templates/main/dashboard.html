@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ t("dashboard") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("dashboard") }}</h1>
+  <div class="dashboard-grid">
+    <section class="panel" aria-labelledby="summary-title">
+      <h2 id="summary-title">{{ current_user.display_name }}</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>{{ t("next_meeting") }}</h3>
+          {% if next_event %}
+            <p><strong>{{ next_event.title }}</strong></p>
+            <p class="meta">{{ next_event.starts_at.strftime("%Y-%m-%d %H:%M") }} · {{ next_event.room.name if next_event.room else "" }}</p>
+            {% if next_event.reservation %}
+              <a class="button secondary" href="{{ url_for('reservations.calendar_ics', reservation_id=next_event.reservation.id) }}">{{ t("add_to_calendar") }}</a>
+            {% endif %}
+          {% else %}
+            <p class="meta">Brak zaplanowanego spotkania / No meeting yet.</p>
+          {% endif %}
+        </article>
+        <article class="card">
+          <h3>{{ t("membership_status") }}</h3>
+          {% for membership in memberships %}
+            <p>{{ membership.club.name_pl }} <span class="status {{ membership.status }}">{{ t(membership.status) }}</span> {{ membership.club_role }}</p>
+          {% else %}
+            <p class="meta">Brak członkostwa / No membership.</p>
+          {% endfor %}
+        </article>
+        <article class="card">
+          <h3>{{ t("last_reservation") }}</h3>
+          {% for reservation in reservations[:2] %}
+            <p><a href="{{ url_for('reservations.detail', reservation_id=reservation.id) }}">{{ reservation.title }}</a> <span class="status {{ reservation.status }}">{{ t(reservation.status) }}</span></p>
+          {% else %}
+            <p class="meta">Brak rezerwacji / No reservations.</p>
+          {% endfor %}
+        </article>
+        <article class="card">
+          <h3>{{ t("need_accessible_room") }}</h3>
+          <p class="meta">{{ t("privacy_hint") }}</p>
+          <a class="button" href="{{ url_for('rooms.list_rooms') }}">{{ t("reserve_room") }}</a>
+        </article>
+      </div>
+    </section>
+    <aside class="panel" aria-labelledby="notifications-title">
+      <h2 id="notifications-title">{{ t("notifications") }}</h2>
+      {% for notification in notifications %}
+        <p>{{ notification.message_pl if locale == "pl" else notification.message_en }}</p>
+      {% else %}
+        <p class="meta">Brak powiadomień / No notifications.</p>
+      {% endfor %}
+      <hr>
+      <h3>{{ t("recommended_clubs") }}</h3>
+      {% for club in recommended_clubs %}
+        <p><a href="{{ url_for('clubs.detail', club_id=club.id) }}">{{ club.name_pl if locale == "pl" else club.name_en }}</a></p>
+      {% else %}
+        <p class="meta">{{ t("no_club_for_major") }}</p>
+      {% endfor %}
+      <hr>
+      <div class="inline-actions">
+        <a class="button" href="{{ url_for('clubs.list_clubs') }}">{{ t("clubs") }}</a>
+        <a class="button secondary" href="{{ url_for('reservations.create') }}">{{ t("reserve_room") }}</a>
+      </div>
+    </aside>
+  </div>
+{% endblock %}

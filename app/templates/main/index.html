@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ t("app_name") }}{% endblock %}
+{% block content %}
+  <section class="hero hero-welcome" aria-labelledby="welcome-title">
+    <div class="hero-copy">
+      <h1 id="welcome-title">{{ t("welcome_title") }}</h1>
+      <p class="lead">{{ t("welcome_copy") }}</p>
+      <div class="inline-actions">
+        {% if current_user %}
+          <a class="button" href="{{ url_for('main.dashboard') }}">{{ t("open_dashboard") }}</a>
+        {% else %}
+          <a class="button" href="{{ url_for('auth.login') }}">{{ t("login") }}</a>
+          <a class="button secondary" href="{{ url_for('auth.register') }}">{{ t("register") }}</a>
+        {% endif %}
+        <a class="button ghost" href="{{ url_for('rooms.list_rooms') }}">{{ t("rooms") }}</a>
+        <a class="button secondary" href="{{ url_for('main.demo') }}">{{ t("demo") }}</a>
+        <button class="ghost" type="button" data-show-welcome-popup>{{ t("show_welcome_popup") }}</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="brand-strip-section" aria-labelledby="partners-title">
+    <h2 id="partners-title" class="sr-only">{{ t("partners") }}</h2>
+    <div class="brand-strip" aria-label="{{ t('partners') }}">
+      <img src="{{ url_for('static', filename='media/brand/ahe-logo-pl.png') }}" alt="Akademia Humanistyczno-Ekonomiczna w Łodzi">
+      <img src="{{ url_for('static', filename='media/brand/samorzad-logo.png') }}" alt="Samorząd Studentów AHE">
+      <img src="{{ url_for('static', filename='media/brand/utw-logo.png') }}" alt="Uniwersytet Trzeciego Wieku AHE">
+    </div>
+  </section>
+
+  <section aria-labelledby="rooms-title">
+    <h2 id="rooms-title">{{ t("rooms") }} - Sterlinga 26</h2>
+    <div class="grid">
+      {% for room in rooms %}
+        <article class="card">
+          {% if room.photo_url %}
+            <button class="room-image-button {% if room.room_type == 'computer_lab' %}template-watermark{% endif %}" type="button" data-lightbox-src="{{ url_for('static', filename=room.photo_url) }}" data-lightbox-alt="{{ room.name }}" aria-label="{{ t('open_room_image') }}: {{ room.name }}">
+              <img class="room-thumb" src="{{ url_for('static', filename=room.photo_url) }}" alt="{{ room.name }}">
+            </button>
+          {% endif %}
+          <h3>{{ room.name }}</h3>
+          <p class="meta">{{ room.address }} · {{ t("capacity") }}: {{ room.capacity }}</p>
+          <a href="{{ url_for('rooms.list_rooms') }}">{{ t("search") }}</a>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section aria-labelledby="clubs-title">
+    <h2 id="clubs-title">{{ t("clubs") }}</h2>
+    <div class="grid">
+      {% for club in clubs %}
+        <article class="card">
+          <h3>{{ club.name_pl if locale == "pl" else club.name_en }}</h3>
+          <p>{{ club.description_pl if locale == "pl" else club.description_en }}</p>
+          <p>
+            {% for tag in club.tags[:4] %}
+              <span class="badge">{{ tag }}</span>
+            {% endfor %}
+          </p>
+          <a href="{{ url_for('clubs.detail', club_id=club.id) }}">{{ t("view_club") }}</a>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

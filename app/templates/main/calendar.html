@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ t("calendar") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <section class="panel" aria-labelledby="calendar-title">
+    <h1 id="calendar-title" class="page-title">{{ t("calendar") }}</h1>
+    {% if locale == "pl" %}
+      <p class="lead">Przykładowy widok zarezerwowanych sal i slotów godzinowych na czerwiec oraz lipiec 2026. Dane są demonstracyjne i pokazują, jak można czytać obciążenie sal Sterlinga 26.</p>
+    {% else %}
+      <p class="lead">A sample view of booked rooms and time slots for June and July 2026. The data is demonstrational and shows how Sterlinga 26 room usage can be read at a glance.</p>
+    {% endif %}
+  </section>
+
+  <section class="calendar-list" aria-label="{{ t('calendar') }}">
+    {% for slot in slots %}
+      <article class="calendar-slot">
+        <div>
+          <p class="calendar-date">{{ slot.date }}</p>
+          <p class="calendar-time">{{ slot.time }}</p>
+        </div>
+        <div>
+          <h2>{{ slot.title_pl if locale == "pl" else slot.title_en }}</h2>
+          <p class="meta">{{ slot.room }} · {{ slot.club }}</p>
+        </div>
+        <span class="status {{ slot.status }}">{{ t(slot.status) }}</span>
+      </article>
+    {% endfor %}
+  </section>
+{% endblock %}

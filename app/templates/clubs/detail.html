@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ club.name_pl }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <article class="panel">
+    <h1 class="page-title">{{ club.name_pl if locale == "pl" else club.name_en }}</h1>
+    <p class="lead">{{ club.description_pl if locale == "pl" else club.description_en }}</p>
+    <div class="meta-grid">
+      <p><strong>{{ t("major") }}:</strong>
+        {% for major in club.majors %}
+          {{ major.name_pl if locale == "pl" else major.name_en }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+      {% if club.guardian_name %}
+        <p><strong>{{ t("guardian") }}:</strong> {{ club.guardian_name }}</p>
+      {% endif %}
+      {% if club.contact_email %}
+        <p><strong>{{ t("email") }}:</strong> <a href="mailto:{{ club.contact_email }}">{{ club.contact_email }}</a></p>
+      {% endif %}
+      {% if club.suggested_rooms %}
+        <p><strong>{{ t("suggested_rooms") }}:</strong> {{ club.suggested_rooms|join(", ") }}</p>
+      {% endif %}
+    </div>
+    <p>
+      {% for tag in club.tags %}
+        <span class="badge">{{ tag }}</span>
+      {% endfor %}
+    </p>
+    <div class="inline-actions">
+      {% if club.source_url %}
+        <a class="button secondary" href="{{ club.source_url }}" rel="noopener" target="_blank">{{ t("official_source") }}</a>
+      {% endif %}
+      {% if club.website_url %}
+        <a class="button ghost" href="{{ club.website_url }}" rel="noopener" target="_blank">{{ t("website") }}</a>
+      {% endif %}
+    </div>
+    {% if existing %}
+      <p>{{ t("membership_status") }}: <span class="status {{ existing.status }}">{{ t(existing.status) }}</span></p>
+    {% elif not current_user %}
+      <p><a class="button" href="{{ url_for('auth.login') }}">{{ t("login") }}</a></p>
+    {% else %}
+      <form method="post">
+        {{ form.hidden_tag() }}
+        {{ form.club_id() }}
+        <label for="{{ form.request_type.id }}">{{ t("request_membership") }}</label>
+        {{ form.request_type() }}
+        {{ form.submit(class_="button", value=t("request_membership")) }}
+      </form>
+    {% endif %}
+  </article>
+{% endblock %}
