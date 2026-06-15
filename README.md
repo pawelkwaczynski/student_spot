@@ -46,6 +46,12 @@ Otworz:
 http://127.0.0.1:8000
 ```
 
+Publiczne demo na Mikrus Frog:
+
+```text
+https://frog01-20412.wykr.es
+```
+
 ## Konta demo
 
 Wszystkie konta maja haslo:
@@ -131,6 +137,8 @@ Minimalny start Gunicorn na Frog:
 ```bash
 gunicorn --workers 1 --threads 2 --timeout 60 --bind 0.0.0.0:${APP_PORT} wsgi:app
 ```
+
+Aktualne demo dziala na porcie `20412` i korzysta z SQLite w katalogu aplikacji. Konfiguracja MySQL przez `DATABASE_URL` zostaje opisana jako wariant docelowy w dokumentacji.
 
 ## Wazne zasady
 
