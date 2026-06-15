@@ -25,10 +25,20 @@ def dashboard():
     memberships_query = ClubMembership.query.filter_by(status="pending")
     if g.user.global_role == "club_guardian":
         memberships_query = memberships_query.join(ClubMembership.club).filter_by(guardian_id=g.user.id)
+    elif g.user.global_role == "property_admin":
+        memberships_query = memberships_query.filter(False)
     reservations_query = Reservation.query.filter_by(status="pending")
     if g.user.global_role == "club_guardian":
         reservations_query = reservations_query.filter(False)
     memberships = memberships_query.order_by(ClubMembership.created_at.asc()).all()
+    member_directory_query = ClubMembership.query.join(ClubMembership.club)
+    if g.user.global_role == "club_guardian":
+        member_directory_query = member_directory_query.filter(Club.guardian_id == g.user.id)
+    elif g.user.global_role != "system_admin":
+        member_directory_query = member_directory_query.filter(False)
+    member_directory = (
+        member_directory_query.order_by(Club.name_pl.asc(), ClubMembership.status.asc(), ClubMembership.created_at.asc()).all()
+    )
     reservations = reservations_query.order_by(Reservation.created_at.asc()).all()
     hidden_clubs = []
     if g.user.global_role in {"system_admin", "property_admin"}:
@@ -37,6 +47,7 @@ def dashboard():
     return render_template(
         "admin/dashboard.html",
         memberships=memberships,
+        member_directory=member_directory,
         reservations=reservations,
         hidden_clubs=hidden_clubs,
         audit_logs=audit_logs,

@@ -39,6 +39,7 @@
           <a href="{{ url_for('main.demo') }}">{{ t("demo") }}</a>
           <a href="{{ url_for('main.media') }}">{{ t("media") }}</a>
           {% if current_user %}
+            <a href="{{ url_for('messages.inbox') }}">{{ t("inbox") }}</a>
             <a href="{{ url_for('main.dashboard') }}">{{ t("dashboard") }}</a>
             {% if current_user.global_role in ["system_admin", "property_admin", "club_guardian"] %}
               <a href="{{ url_for('admin.dashboard') }}">{{ t("admin") }}</a>

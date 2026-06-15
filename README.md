@@ -23,8 +23,11 @@ StudentSpot to lekka aplikacja Flask/Jinja2 do demonstracyjnego zarzadzania kola
 - Strona `/local-heroes` z demonstracyjnymi profilami lokalnych liderow, ambasadorow i ekspertow AHE.
 - Lightbox zdjec sal oraz znak wodny `TEMPLATRE` dla roboczych sal komputerowych K200A/K320.
 - Lightbox grafik na stronach Info, Media, Aktualnosci i Local Heroes.
-- Panel admina do potwierdzania danych kol i wysylania komunikatow do kont UTW.
+- Panel admina/opiekuna do potwierdzania danych kol, obslugi wnioskow czlonkowskich, listy czlonkow kola, zmiany statusu/roli oraz wysylania wiadomosci do czlonkow.
+- Skrzynka wiadomosci w aplikacji: opiekun kola wysyla komunikat do zatwierdzonych czlonkow, a czlonek odbiera go w `/messages`.
+- Panel admina do wysylania komunikatow do kont UTW.
 - Powiadomienia w aplikacji i podstawowy audyt.
+- Plik `prezentacja_ustna_10_min.md` z gotowym scenariuszem prezentacji przed profesorem.
 
 ## Szybki start lokalny
 
@@ -69,7 +72,7 @@ StudentSpot123!
 python -m pytest
 ```
 
-Aktualnie testy sprawdzaja m.in. seed 8 kont, 13 kol AHE, ukrywanie kol wymagajacych weryfikacji, ograniczenie sal do Sterlinga, rejestracje, aktywacje, duplikaty, uprawnienia, filtrowanie sal i kol, najlepsze dopasowanie pojemnosci, konflikt rezerwacji, eksport `.ics`, komunikat UTW, decyzje admina, audyt, strony `/news`, `/calendar`, `/local-heroes` oraz polska i angielska wersje mapy wymagan projektowych w `/info`.
+Aktualnie testy sprawdzaja m.in. seed 8 kont, 13 kol AHE, ukrywanie kol wymagajacych weryfikacji, ograniczenie sal do Sterlinga, rejestracje, aktywacje, duplikaty, uprawnienia, filtrowanie sal i kol, najlepsze dopasowanie pojemnosci, konflikt rezerwacji, potrzeby dostepnosciowe, eksport `.ics`, komunikat UTW, decyzje admina, pelna liste czlonkow u opiekuna, wiadomosci do czlonkow, audyt, strony `/news`, `/calendar`, `/local-heroes` oraz polska i angielska wersje mapy wymagan projektowych w `/info`.
 
 ## Materialy zrodlowe
 

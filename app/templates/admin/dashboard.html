@@ -14,15 +14,15 @@
               <td>{{ membership.club.name_pl }}</td>
               <td><span class="status {{ membership.status }}">{{ t(membership.status) }}</span></td>
               <td>
-                <form method="post" action="{{ url_for('admin.decide_membership', membership_id=membership.id) }}">
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                  <select name="club_role" aria-label="{{ t('role') }}">
-                    <option value="member">member</option>
-                    <option value="chair">chair</option>
-                    <option value="vice_chair">vice_chair</option>
-                  </select>
+                <select name="club_role" form="pending-membership-form-{{ membership.id }}" aria-label="{{ t('role') }}">
+                  <option value="member">member</option>
+                  <option value="chair">chair</option>
+                  <option value="vice_chair">vice_chair</option>
+                </select>
               </td>
               <td class="inline-actions">
+                <form id="pending-membership-form-{{ membership.id }}" method="post" action="{{ url_for('admin.decide_membership', membership_id=membership.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <button name="action" value="approve">{{ t("approve") }}</button>
                   <button class="secondary" name="action" value="reject">{{ t("reject") }}</button>
                 </form>
@@ -30,6 +30,47 @@
             </tr>
           {% else %}
             <tr><td colspan="5">Brak wniosków / No requests.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="member-directory-title">
+    <div class="section-heading-row">
+      <h2 id="member-directory-title">{{ t("club_members") }}</h2>
+      {% if current_user.global_role == "club_guardian" %}
+        <a class="button secondary" href="{{ url_for('messages.compose') }}">{{ t("new_club_message") }}</a>
+      {% endif %}
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Student</th><th>{{ t("clubs") }}</th><th>{{ t("status") }}</th><th>{{ t("role") }}</th><th>Akcja</th></tr></thead>
+        <tbody>
+          {% for membership in member_directory %}
+            <tr>
+              <td>{{ membership.user.display_name }}<br><span class="meta">{{ membership.user.email }}</span></td>
+              <td>{{ membership.club.name_pl }}</td>
+              <td><span class="status {{ membership.status }}">{{ t(membership.status) }}</span></td>
+              <td>
+                <select name="club_role" form="member-directory-form-{{ membership.id }}" aria-label="{{ t('role') }}">
+                  <option value="member" {% if membership.club_role == "member" %}selected{% endif %}>member</option>
+                  <option value="chair" {% if membership.club_role == "chair" %}selected{% endif %}>chair</option>
+                  <option value="vice_chair" {% if membership.club_role == "vice_chair" %}selected{% endif %}>vice_chair</option>
+                  <option value="secretary" {% if membership.club_role == "secretary" %}selected{% endif %}>secretary</option>
+                  <option value="treasurer" {% if membership.club_role == "treasurer" %}selected{% endif %}>treasurer</option>
+                </select>
+              </td>
+              <td class="inline-actions">
+                <form id="member-directory-form-{{ membership.id }}" method="post" action="{{ url_for('admin.decide_membership', membership_id=membership.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button name="action" value="approve">{{ t("update_role") if membership.status == "approved" else t("approve") }}</button>
+                  <button class="secondary" name="action" value="reject">{{ t("reject") }}</button>
+                </form>
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="5">Brak członków / No members.</td></tr>
           {% endfor %}
         </tbody>
       </table>

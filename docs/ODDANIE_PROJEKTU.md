@@ -18,7 +18,7 @@ https://github.com/pawelkwaczynski/student_spot
 
 ## Zakres aplikacji
 
-StudentSpot jest nieoficjalnym prototypem studenckim dla środowiska AHE w Łodzi. Aplikacja wspiera katalog kół naukowych, wybór koła, rezerwacje sal w budynku Sterlinga 26, decyzje administracyjne, powiadomienia, eksport spotkania do kalendarza oraz ustawienia dostępności.
+StudentSpot jest nieoficjalnym prototypem studenckim dla środowiska AHE w Łodzi. Aplikacja wspiera katalog kół naukowych, wybór koła, listę członków u opiekuna, zatwierdzanie statusów i ról, wiadomości do członków koła, rezerwacje sal w budynku Sterlinga 26, decyzje administracyjne, powiadomienia, eksport spotkania do kalendarza oraz ustawienia dostępności.
 
 Projekt zawiera dwie wersje językowe PL/EN, tryb ciemny, wysoki kontrast, większą czcionkę, responsywny układ desktop/tablet/mobile oraz dane demonstracyjne.
 
@@ -84,6 +84,7 @@ W projekcie dokumenty wynikowe mają formę rekordów systemowych i widoków apl
 - wniosek członkowski: rekord `ClubMembership`,
 - wniosek rezerwacyjny: rekord `Reservation`,
 - decyzja statusowa: historia statusu i decyzja admina,
+- wiadomość opiekuna do członków koła: rekord `ClubMessage` i rekordy odbiorców `ClubMessageRecipient`,
 - powiadomienie: rekord `Notification`,
 - wpis audytu: rekord `AuditLog`,
 - plik kalendarza: eksport `.ics` dla zatwierdzonego spotkania.

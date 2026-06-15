@@ -21,6 +21,7 @@ def create_app(config_object: type[Config] | None = None) -> Flask:
     from app.auth.routes import bp as auth_bp
     from app.clubs.routes import bp as clubs_bp
     from app.main.routes import bp as main_bp
+    from app.messages.routes import bp as messages_bp
     from app.reservations.routes import bp as reservations_bp
     from app.rooms.routes import bp as rooms_bp
 
@@ -29,6 +30,7 @@ def create_app(config_object: type[Config] | None = None) -> Flask:
     app.register_blueprint(clubs_bp, url_prefix="/clubs")
     app.register_blueprint(rooms_bp, url_prefix="/rooms")
     app.register_blueprint(reservations_bp, url_prefix="/reservations")
+    app.register_blueprint(messages_bp, url_prefix="/messages")
     app.register_blueprint(admin_bp, url_prefix="/admin")
 
     from app.cli import register_cli

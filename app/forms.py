@@ -129,3 +129,10 @@ class AdminDecisionForm(FlaskForm):
         ],
     )
     submit = SubmitField("save")
+
+
+class ClubMessageForm(FlaskForm):
+    club_id = SelectField("club", coerce=int, validators=[DataRequired()])
+    subject = StringField("message_subject", validators=[DataRequired(), Length(max=180)])
+    body = TextAreaField("message_body", validators=[DataRequired(), Length(min=3, max=3000)])
+    submit = SubmitField("send_message")
