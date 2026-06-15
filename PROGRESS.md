@@ -183,3 +183,9 @@ Finalizacja oddaniowa 2026-06-15:
 - GitHub: `main` wypchniety do `https://github.com/pawelkwaczynski/student_spot`, commit `85190eb`.
 - Frog: aplikacja uruchomiona przez Gunicorn na porcie `20412`, publiczny adres `https://frog01-20412.wykr.es`, health check zwraca `{"service":"studentspot","status":"ok"}`.
 - Publiczny Browser QA: home ma popup, 7 publicznych kol i brak overflow; logowanie `guardian@studentspot.example.com` dziala; panel opiekuna pokazuje czlonkow i przycisk wiadomosci.
+
+Aktualizacja copy demo 2026-06-16:
+- Zmieniono sekcje `Szybki tutorial pokazowy` w `/demo` na copy przekazane przez uzytkownika.
+- Uspojniono wersje EN: `Quick demo tutorial` i `Suggested workflow`.
+- Testy: `.venv/bin/python -m compileall app tests`, `.venv/bin/python -m pytest tests/test_core_flows.py`, `.venv/bin/python -m pip check` OK, `27 passed`.
+- Browser QA `/demo` PL/EN: nowe copy widoczne, stare `Efekt wow` / `Strong demo path` usuniete, brak poziomego overflow.
