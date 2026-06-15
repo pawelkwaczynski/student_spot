@@ -44,6 +44,10 @@
       {{ checkbox(form.requires_elevator, "elevator") }}
       {{ checkbox(form.requires_induction_loop, "induction_loop") }}
       {{ checkbox(form.requires_accessible_computer, "accessible_computer") }}
+      {{ checkbox(form.requires_sign_language_interpreter, "sign_language_interpreter") }}
+      {{ checkbox(form.requires_blind_guide, "blind_guide") }}
+      {{ checkbox(form.requires_accessible_transport, "accessible_transport") }}
+      {{ checkbox(form.requires_assistive_equipment, "assistive_equipment") }}
       <p class="meta">{{ t("privacy_hint") }}</p>
       {{ field(form.accessibility_notes, "accessibility_notes") }}
     </fieldset>

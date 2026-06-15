@@ -100,7 +100,7 @@ Sekcja jest dostepna w wersji PL i EN oraz zostala sprawdzona na desktopie, tabl
 | 13 kol i widocznosc publiczna | `app.cli`, `clubs.routes` | `test_scientific_club_seed_public_visibility_and_hidden_records` |
 | Filtry kol i rekomendacje | `clubs.routes`, `main.dashboard` | `test_club_filters_and_dashboard_recommendations` |
 | Eksport kalendarza | `reservations.calendar_ics` | `test_approved_meeting_can_be_downloaded_as_ics` |
-| Potwierdzenie kol i apel UTW | `admin.routes` | `test_admin_can_confirm_hidden_club_and_send_utw_appeal` |
+| Potwierdzenie kol i komunikat UTW | `admin.routes` | `test_admin_can_confirm_hidden_club_and_send_utw_announcement` |
 | Mapa wymagan projektowych PL/EN | `main.info`, `translations` | `test_info_page_contains_author_kv_and_project_map`, `test_info_page_professor_map_is_translated_to_english` |
 | Rejestracja 2-krokowa i wybor kola | `auth.routes`, `auth/register.html`, `auth/choose_club.html` | `test_registration_activation_flow` |
 | Aktualnosci, kalendarz, Local Heroes | `main.routes`, `main/news.html`, `main/calendar.html`, `main/local_heroes.html` | `test_news_calendar_and_local_heroes_pages` |
@@ -118,7 +118,7 @@ Sekcja jest dostepna w wersji PL i EN oraz zostala sprawdzona na desktopie, tabl
 8. Pobierz `.ics` dla zatwierdzonego wydarzenia.
 9. Zaloguj sie jako `property@studentspot.example.com` albo `admin@studentspot.example.com`.
 10. Zatwierdz albo odrzuc rezerwacje z powodem.
-11. Pokaz potwierdzanie ukrytych kol, apel UTW, historie statusow, wydarzenie i audyt.
+11. Pokaz potwierdzanie ukrytych kol, komunikat UTW, historie statusow, wydarzenie i audyt.
 
 ## Wymagania niefunkcjonalne
 

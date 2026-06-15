@@ -99,9 +99,9 @@
   {% endif %}
 
   {% if current_user.global_role in ["system_admin", "property_admin"] %}
-    <section class="panel" aria-labelledby="utw-appeal-title">
-      <h2 id="utw-appeal-title">{{ t("utw_appeal") }}</h2>
-      <form method="post" action="{{ url_for('admin.send_utw_appeal') }}">
+    <section class="panel" aria-labelledby="utw-announcement-title">
+      <h2 id="utw-announcement-title">{{ t("utw_announcement") }}</h2>
+      <form method="post" action="{{ url_for('admin.send_utw_announcement') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="utw-message">{{ t("message") }}</label>
         <textarea id="utw-message" name="message" rows="3" maxlength="220" required></textarea>
