@@ -15,5 +15,6 @@ htmlcov/
 .env.local
 instance/
 student_spot.zip
+student_spot*.zip
 
 *.log

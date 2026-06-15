@@ -130,6 +130,7 @@ Aktualizacja UI z 2026-06-15:
 - Poprawiono kontrast dark mode: hero strony glownej, przycisk `Pokaz popup`, naglowki sekcji i tabele demo nie maja juz jasnego tekstu na jasnym tle. Playwright QA: hero lead 9.54:1, `Pokaz popup` 15.98:1, tabela demo 9.54-15.98:1, bez poziomego overflow.
 - Zmniejszono logotypy StudentSpot i AHE w stopce o ok. 30%; Browser QA `/clubs/`: oba logo 54 px wysokosci, jedna linia, brak poziomego overflow.
 - Zmieniono stopke na `Projekt studencki: StudentSpot...` oraz dodano w `/info` zdanie o opiece prof. dr hab. Mariana Niedzwiedzinskiego i przedmiocie projektu; Browser QA potwierdzil teksty i brak overflow.
+- Przebudowano `/local-heroes` wedlug referencji: 23 profile z nowo dodanych portretow i danych `source_info/ahe-2026-06-15.json`, duzy uklad portret + opis, bez starych placeholderow ikon. Browser QA: pierwszy profil `Adrian Makoć`, 23 profile, obrazy laduja sie, brak overflow; Playwright screenshot desktop/mobile.
 
 ```bash
 python -m compileall app tests

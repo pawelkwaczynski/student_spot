@@ -17,6 +17,6 @@ zip -r student_spot.zip . \
   -x ".DS_Store" \
   -x "*/.DS_Store" \
   -x "instance/*" \
-  -x "student_spot.zip"
+  -x "student_spot*.zip"
 
 echo "Created student_spot.zip"

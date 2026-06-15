@@ -119,8 +119,11 @@ def test_news_calendar_and_local_heroes_pages(client):
     assert "Sala K320".encode() in response.data
     response = client.get("/local-heroes")
     assert response.status_code == 200
-    assert "Dawid Tomaszewski".encode() in response.data
-    assert b"ambassador-icon.png" in response.data
+    assert "Adrian Makoć".encode() in response.data
+    assert "FACT-CHECKING I PRZECIWDZIAŁANIE DEZINFORMACJI".encode() in response.data
+    assert b"adrian-makoc.webp" in response.data
+    assert response.data.count(b'class="local-hero-feature"') == 23
+    assert b"ambassador-icon.png" not in response.data
 
 
 def test_duplicate_index_and_email_are_rejected(client):

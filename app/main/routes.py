@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from flask import Blueprint, render_template
+import json
+from pathlib import Path
+
+from flask import Blueprint, current_app, render_template
 
 from app.models import Club, Event, Notification, Reservation, Room
 from app.security import login_required
@@ -160,56 +163,57 @@ CALENDAR_SLOTS = [
 ]
 
 
-LOCAL_HEROES = [
-    {
-        "name": "Dawid Tomaszewski",
-        "role_pl": "Ambasador aktywności studenckiej",
-        "role_en": "Student activity ambassador",
-        "image": "media/people/ambassador-icon.png",
-        "bio_pl": "Przykładowy profil lokalnego lidera: student związany z AIrON i reprezentacją kierunku Informatyka w pracach programowych.",
-        "bio_en": "A sample local leader profile: an AIrON-connected student representing Computer Science in programme work.",
-    },
-    {
-        "name": "Grzegorz Piechowski",
-        "role_pl": "Twórca projektów game-dev",
-        "role_en": "Game-dev project creator",
-        "image": "media/people/ambassador-icon.png",
-        "bio_pl": "Profil templatkowy dla członka koła prezentującego projekt gry na wydarzeniu branżowym i pokazującego efekt pracy zespołowej.",
-        "bio_en": "A template profile for a club member presenting a game project at an industry event and showing teamwork outcomes.",
-    },
-    {
-        "name": "Gabriel Gosik",
-        "role_pl": "Ambasador projektów kreatywnych",
-        "role_en": "Creative projects ambassador",
-        "image": "media/people/ambassador-icon.png",
-        "bio_pl": "Profil pokazujący, jak aplikacja może promować studentów rozwijających projekty na styku technologii, grafiki i narracji.",
-        "bio_en": "A profile showing how the app can promote students building projects across technology, graphics, and storytelling.",
-    },
-    {
-        "name": "mgr inż. Zoltan Farkas",
-        "role_pl": "Opiekun koła AIrON",
-        "role_en": "AIrON club guardian",
-        "image": "media/people/expert-icon.png",
-        "bio_pl": "Ekspert i opiekun procesu dydaktycznego w module kół naukowych; w StudentSpot wspiera walidację danych oraz kierunek rozwoju koła.",
-        "bio_en": "An expert and guardian in the club module; in StudentSpot this role supports data validation and the club development direction.",
-    },
-    {
-        "name": "dr Rafał Tryścień",
-        "role_pl": "Opiekun koła kognitywistycznego",
-        "role_en": "Cognitive science club guardian",
-        "image": "media/people/expert-icon.png",
-        "bio_pl": "Profil ekspercki powiązany z kołem kognitywistycznym, wydarzeniami naukowymi i interdyscyplinarnymi spotkaniami studentów.",
-        "bio_en": "An expert profile connected with the cognitive science club, scientific events, and interdisciplinary student meetings.",
-    },
-    {
-        "name": "mgr Klaudia Gołojuch",
-        "role_pl": "Opiekunka koła Grafika",
-        "role_en": "Graphic Design club guardian",
-        "image": "media/people/expert-icon.png",
-        "bio_pl": "Profil wspierający działania portfolio, wystawy i komunikację wizualną koła; w MVP pełni rolę danych demonstracyjnych.",
-        "bio_en": "A profile supporting portfolio work, exhibitions, and visual communication; in the MVP it acts as demonstration data.",
-    },
-]
+LOCAL_HERO_IMAGE_FILES = {
+    "Adrian Makoć": "media/people/adrian-makoc.webp",
+    "Aleksandra Świstak": "media/people/aleksandra-swistak.webp",
+    "Anita Skorupska": "media/people/anita-skorupska.webp",
+    "Anna Wichrowska": "media/people/anna-wichrowska.webp",
+    "Artur Sendyka": "media/people/artur-sendyka.webp",
+    "Bartłomiej Rosiak": "media/people/bartlomiej-rosiak.webp",
+    "Błażej Strus": "media/people/blazej-strus.webp",
+    "Damian Domański": "media/people/damian-domanski.webp",
+    "Dawid Nielaba": "media/people/dawid-nielaba.webp",
+    "Gabriela Kubacka": "media/people/gabriela-kubacka.webp",
+    "Jarosław Grzesicki": "media/people/jaroslaw-grzesicki.webp",
+    "Julia Czaja": "media/people/julia-czaja.webp",
+    "Klaudia Dzieputa": "media/people/klaudia-dzieputa.webp",
+    "Marcin Możdżan": "media/people/marcin-mozdzan.webp",
+    "Marek Nowicki": "media/people/marek-nowicki.webp",
+    "Mariuszu Nguyen": "media/people/mariusz-nguyen.webp",
+    "Michał Ćwikliński": "media/people/michal-cwiklinski.webp",
+    "Natalia Augustyniak": "media/people/natalia-augustyniak.webp",
+    "Oliwia Tyralska": "media/people/oliwia-tyralska.webp",
+    "Patrycja Pąśko": "media/people/patrycja-pasko.webp",
+    "Patrycja Plich": "media/people/patrycja-plich.webp",
+    "Sylwia Łongwa": "media/people/sylwia-longwa.webp",
+    "Tomasz Ziółkowski": "media/people/tomasz-ziolkowski.webp",
+}
+
+LOCAL_HERO_NAME_OVERRIDES = {
+    "Mariuszu Nguyen": "Mariusz Nguyen",
+}
+
+
+def load_local_heroes() -> list[dict[str, str]]:
+    source_path = Path(current_app.root_path).parent / "source_info" / "ahe-2026-06-15.json"
+    if not source_path.exists():
+        return []
+    records = json.loads(source_path.read_text(encoding="utf-8"))
+    heroes = []
+    for record in records:
+        raw_name = record.get("field-content", "").strip()
+        image = LOCAL_HERO_IMAGE_FILES.get(raw_name)
+        if not image:
+            continue
+        heroes.append(
+            {
+                "name": LOCAL_HERO_NAME_OVERRIDES.get(raw_name, raw_name),
+                "program": record.get("field-content (2)", "").strip(),
+                "bio": record.get("field-content (3)", "").strip(),
+                "image": image,
+            }
+        )
+    return sorted(heroes, key=lambda hero: hero["name"].casefold())
 
 
 @bp.route("/")
@@ -232,7 +236,7 @@ def calendar():
 
 @bp.route("/local-heroes")
 def local_heroes():
-    return render_template("main/local_heroes.html", heroes=LOCAL_HEROES)
+    return render_template("main/local_heroes.html", heroes=load_local_heroes())
 
 
 @bp.route("/demo")
