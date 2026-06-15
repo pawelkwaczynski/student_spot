@@ -60,9 +60,10 @@
     });
 
     return {
-      show(src, alt) {
+      show(src, alt, size) {
         image.setAttribute("src", src);
         image.setAttribute("alt", alt || "");
+        backdrop.querySelector(".lightbox-dialog").classList.toggle("lightbox-compact", size === "compact");
         backdrop.classList.add("is-open");
         close.focus();
       },
@@ -73,11 +74,12 @@
   document.addEventListener("click", (event) => {
     const trigger = event.target.closest("[data-lightbox-src]");
     if (!trigger) return;
-    lightbox.show(trigger.dataset.lightboxSrc, trigger.dataset.lightboxAlt);
+    lightbox.show(trigger.dataset.lightboxSrc, trigger.dataset.lightboxAlt, trigger.dataset.lightboxSize);
   });
 
   function showWelcomePopup(force) {
     if (!document.body.classList.contains("app-guest")) return;
+    if (!force && window.location.pathname !== "/") return;
     if (document.querySelector(".welcome-popup")) return;
     const locale = document.documentElement.lang === "en" ? "en" : "pl";
     const imageSrc = locale === "en" ? "/static/media/visuals/welcome-popup-en.png" : "/static/media/visuals/welcome-popup.png";

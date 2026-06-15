@@ -7,10 +7,10 @@
     <div>
       {% if locale == "pl" %}
         <p class="lead">Kontekst projektu, autor, źródła danych i identyfikacja wizualna zastosowana w prototypie StudentSpot.</p>
-        <p class="meta">Projekt studencki pod opieką prof. dr hab. Mariana Niedźwiedzińskiego w ramach przedmiotu: Podstawy systemów informatycznych zarządzania / Metodyka zarządzania informacją - Projekt</p>
+        <p class="meta">Projekt studencki pod opieką prof. dr hab. Mariana Niedźwiedzińskiego w ramach przedmiotu: Podstawy systemów informatycznych zarządzania / Metodyka zarządzania informacją.</p>
       {% else %}
         <p class="lead">Project context, author details, data sources, and visual identity used in the StudentSpot prototype.</p>
-        <p class="meta">Student project supervised by Prof. Marian Niedźwiedziński, PhD, DSc, as part of the course: Fundamentals of Management Information Systems / Information Management Methodology - Project.</p>
+        <p class="meta">Student project supervised by Prof. Marian Niedźwiedziński, PhD, DSc, as part of the course: Fundamentals of Management Information Systems / Information Management Methodology.</p>
       {% endif %}
     </div>
     <button class="room-image-button" type="button" data-lightbox-src="{{ url_for('static', filename=popup_asset) }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
@@ -85,7 +85,7 @@
           <h3>5. Wymagania funkcjonalne</h3>
           <ul class="clean-list">
             <li>Rejestracja, aktywacja, logowanie i profil użytkownika.</li>
-            <li>Katalog 13 kół AHE, filtrowanie, rekomendacje i wnioski członkowskie.</li>
+            <li>Katalog 7 publicznie pokazanych kół AHE, filtrowanie, rekomendacje i wnioski członkowskie.</li>
             <li>Katalog sal Sterlinga 26, wyszukiwanie, zdjęcia i lightbox.</li>
             <li>Rezerwacje sal, wykrywanie konfliktów, decyzje administracji i historia statusów.</li>
             <li>Powiadomienia, komunikat do UTW, eksport spotkania do kalendarza .ics.</li>
@@ -98,7 +98,7 @@
             <li>Responsywność: desktop, tablet i telefon.</li>
             <li>Dostępność: skip-link, fokus, kontrast, tryb ciemny, A+.</li>
             <li>Bezpieczeństwo: CSRF, hashe haseł, brak sekretów w repo, brak logowania danych wrażliwych.</li>
-            <li>Utrzymanie: testy pytest, dokumentacja Frog, checkpoint w PROGRESS.md i folder source_info.</li>
+            <li>Utrzymanie: testy pytest, dokumentacja Frog, repozytorium lokalne i GitHub.</li>
             <li>Wydajność: lekki Flask/Jinja2, statyczne assety i prosta baza SQL.</li>
           </ul>
         </article>
@@ -156,7 +156,7 @@
           <h3>5. Functional requirements</h3>
           <ul class="clean-list">
             <li>Registration, activation, login, and user profile.</li>
-            <li>Catalog of 13 AHE clubs, filters, recommendations, and membership requests.</li>
+            <li>Catalog of 7 publicly shown AHE clubs, filters, recommendations, and membership requests.</li>
             <li>Sterlinga 26 room catalog, search, photos, and lightbox.</li>
             <li>Room reservations, conflict detection, admin decisions, and status history.</li>
             <li>Notifications, UTW admin messages, and .ics calendar export.</li>
@@ -169,7 +169,7 @@
             <li>Responsive layout for desktop, tablet, and phone.</li>
             <li>Accessibility: skip-link, focus states, contrast, dark mode, A+.</li>
             <li>Security: CSRF, password hashes, no repo secrets, no sensitive data logs.</li>
-            <li>Maintainability: pytest, Frog docs, PROGRESS.md checkpoints, and source_info.</li>
+            <li>Maintainability: pytest, Frog docs, local repository, and GitHub.</li>
             <li>Performance: lightweight Flask/Jinja2, static assets, and simple SQL database.</li>
           </ul>
         </article>

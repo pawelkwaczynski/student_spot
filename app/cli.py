@@ -443,6 +443,80 @@ def seed_demo() -> None:
             user.terms_accepted_at = datetime(2026, 6, 14, 12, 0)
             user.privacy_accepted_at = datetime(2026, 6, 14, 12, 0)
 
+    sample_members = {
+        "ada_airon": get_or_create(
+            User,
+            email="ada.airon@studentspot.example.com",
+            defaults={
+                "index_number": "165322",
+                "first_name": "Ada",
+                "last_name": "Nowak",
+                "nickname": "ada-airon",
+                "password_hash": password_hash,
+                "year_of_study": 1,
+                "major": majors["informatics"],
+                "global_role": "student",
+                "account_status": "active",
+                "preferred_language": "pl",
+            },
+        ),
+        "michal_data": get_or_create(
+            User,
+            email="michal.data@studentspot.example.com",
+            defaults={
+                "index_number": "165323",
+                "first_name": "Michał",
+                "last_name": "Danecki",
+                "nickname": "michal-data",
+                "password_hash": password_hash,
+                "year_of_study": 3,
+                "major": majors["informatics"],
+                "global_role": "student",
+                "account_status": "active",
+                "preferred_language": "pl",
+            },
+        ),
+        "oliwia_design": get_or_create(
+            User,
+            email="oliwia.design@studentspot.example.com",
+            defaults={
+                "index_number": "165324",
+                "first_name": "Oliwia",
+                "last_name": "Lis",
+                "nickname": "oliwia-design",
+                "password_hash": password_hash,
+                "year_of_study": 2,
+                "major": majors["graphics"],
+                "global_role": "student",
+                "account_status": "active",
+                "preferred_language": "pl",
+            },
+        ),
+        "jan_pending": get_or_create(
+            User,
+            email="jan.pending@studentspot.example.com",
+            defaults={
+                "index_number": "165325",
+                "first_name": "Jan",
+                "last_name": "Kowalski",
+                "nickname": "jan-pending",
+                "password_hash": password_hash,
+                "year_of_study": 1,
+                "major": majors["management"],
+                "global_role": "student",
+                "account_status": "active",
+                "preferred_language": "pl",
+            },
+        ),
+    }
+
+    for user in sample_members.values():
+        user.study_level = user.study_level or "first_cycle"
+        user.study_mode = user.study_mode or "part_time"
+        user.email_verified_at = user.email_verified_at or datetime(2026, 6, 14, 12, 0)
+        user.terms_accepted_at = user.terms_accepted_at or datetime(2026, 6, 14, 12, 0)
+        user.privacy_accepted_at = user.privacy_accepted_at or datetime(2026, 6, 14, 12, 0)
+
     features = {
         "projector": feature("projector", "Projektor", "Projector"),
         "screen": feature("screen", "Ekran", "Screen"),
@@ -471,7 +545,11 @@ def seed_demo() -> None:
 
     membership(users["boss"], clubs["airon"], "approved", "chair")
     membership(users["vice"], clubs["airon"], "approved", "vice_chair")
+    membership(sample_members["ada_airon"], clubs["airon"], "approved", "member")
+    membership(sample_members["michal_data"], clubs["airon"], "approved", "secretary")
+    membership(sample_members["jan_pending"], clubs["airon"], "pending", "member")
     membership(users["member"], clubs["grafika"], "approved", "member")
+    membership(sample_members["oliwia_design"], clubs["grafika"], "approved", "treasurer")
     membership(users["pending"], clubs["warsztaty-emocji"], "pending", "member")
 
     rooms = {
@@ -630,7 +708,7 @@ def seed_demo() -> None:
         "rejected",
         "Przykładowy powód odrzucenia w danych demonstracyjnych.",
     )
-    for user in users.values():
+    for user in [*users.values(), *sample_members.values()]:
         if not user.notifications:
             db.session.add(
                 Notification(
@@ -763,6 +841,8 @@ def club(
 def membership(user: User, club: Club, status: str, role: str) -> ClubMembership:
     existing = ClubMembership.query.filter_by(user_id=user.id, club_id=club.id).first()
     if existing:
+        existing.status = status
+        existing.club_role = role
         return existing
     item = ClubMembership(user=user, club=club, status=status, club_role=role)
     db.session.add(item)

@@ -12,7 +12,7 @@ StudentSpot to lekka aplikacja Flask/Jinja2 do demonstracyjnego zarzadzania kola
 - Wnioski czlonkowskie i decyzje administratora/opiekuna.
 - Katalog sal ze zdjeciami, filtrowaniem i mapa budynku.
 - Dopasowanie sal po liczbie osob: najpierw sale z najmniejsza sensowna nadwyzka miejsc.
-- Katalog 13 oficjalnych kol AHE: 7 publicznych i 6 ukrytych do potwierdzenia przez admina.
+- Katalog 7 publicznie pokazanych kol AHE oraz 6 ukrytych rekordow do potwierdzenia przez admina.
 - Rezerwacje sal, konflikt terminow, decyzje admina i historia statusow.
 - Eksport zatwierdzonego spotkania kola do pliku `.ics`.
 - Strona `/news` z templatkami aktualnosci kol naukowych na podstawie paczki blogowej.
@@ -102,6 +102,18 @@ Skrypt tworzy:
 
 ```text
 student_spot.zip
+```
+
+Paczka dev handoff do przenoszenia stylu AHE/KV i dobrych praktyk do kolejnych projektow:
+
+```bash
+bash scripts/package_dev_handoff.sh
+```
+
+Wynik:
+
+```text
+student_spot_dev_handoff.zip
 ```
 
 Do ZIP nie trafia `.venv`, cache Pythona, lokalna baza SQLite, lokalne notatki z dostępami, plik `.env` ani pliki systemowe `.DS_Store`.
