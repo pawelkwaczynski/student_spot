@@ -114,6 +114,7 @@ Aktualizacja UI z 2026-06-15:
 - Popup powitalny startuje automatycznie na stronie glownej.
 - Strona glowna nie pokazuje juz przyciskow `Sale` i `Demo` w sekcji hero.
 - Browser QA: 2048, 1440, 1024 i 390 px bez poziomego overflow; nowe tlo aktywne.
+- Aktualizacja brandingu: usunieto osobny napis `StudentSpot` z naglowka, powiekszono graficzne logo aplikacji, dodano logo StudentSpot + AHE w bialej stopce.
 
 ```bash
 python -m compileall app tests
