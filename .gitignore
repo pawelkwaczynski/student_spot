@@ -16,6 +16,9 @@ htmlcov/
 instance/
 student_spot.zip
 student_spot*.zip
+student_spot/
+student_spot_profesor/
+student_spot_dev_handoff/
 
 *.log
 docs/*.local.md
