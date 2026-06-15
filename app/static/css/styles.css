@@ -189,7 +189,7 @@ li::marker {
   margin: 0 auto;
   padding: 0.55rem clamp(1rem, 2.2vw, 2rem);
   display: grid;
-  grid-template-columns: minmax(340px, auto) minmax(600px, 1fr) auto;
+  grid-template-columns: minmax(10rem, auto) minmax(600px, 1fr) auto;
   align-items: center;
   gap: clamp(0.8rem, 1.4vw, 1.6rem);
   background: var(--ahe-white);
@@ -198,11 +198,8 @@ li::marker {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 1.2rem;
   color: var(--ahe-heading);
-  font-weight: 700;
   text-decoration: none;
-  font-size: clamp(1.7rem, 1.65vw, 2.35rem);
   line-height: 1;
   flex: 0 0 auto;
 }
@@ -219,8 +216,8 @@ li::marker {
 }
 
 .brand-logo {
-  width: clamp(6rem, 5.8vw, 7.35rem);
-  height: clamp(6rem, 5.8vw, 7.35rem);
+  width: clamp(10rem, 8.5vw, 12rem);
+  height: clamp(10rem, 8.5vw, 12rem);
   object-fit: contain;
   object-position: center;
   border-radius: 0;
@@ -1086,12 +1083,13 @@ th {
 }
 
 .site-footer {
-  border-top: 0;
-  background: var(--surface);
+  border-top: 1px solid var(--border);
+  background: var(--ahe-white);
   padding: 3rem 1rem;
-  color: var(--muted);
+  color: var(--ahe-heading);
   margin-top: 5rem;
   position: relative;
+  z-index: 1;
 }
 
 .site-footer::before {
@@ -1105,6 +1103,42 @@ th {
 .site-footer .inner {
   max-width: 1180px;
   margin: 0 auto;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-logos {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.6rem);
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  display: block;
+  object-fit: contain;
+  background: #fff;
+}
+
+.footer-logo-studentspot {
+  width: clamp(5.8rem, 8vw, 8.5rem);
+  height: clamp(5.8rem, 8vw, 8.5rem);
+}
+
+.footer-logo-ahe {
+  width: clamp(9.6rem, 14vw, 13rem);
+  height: auto;
+}
+
+.site-footer p {
+  margin: 0;
+  max-width: 58ch;
 }
 
 .sr-only {
@@ -1162,7 +1196,7 @@ th {
 
 @media (max-width: 1660px) {
   .nav {
-    grid-template-columns: minmax(270px, auto) minmax(0, 1fr);
+    grid-template-columns: minmax(10rem, auto) minmax(0, 1fr);
   }
 
   .nav-links {
@@ -1181,13 +1215,15 @@ th {
 }
 
 @media (max-width: 680px) {
-  .brand {
-    font-size: 1.2rem;
+  .brand-logo {
+    width: 5.8rem;
+    height: 5.8rem;
   }
 
-  .brand-logo {
-    width: 4.3rem;
-    height: 4.3rem;
+  .footer-inner,
+  .footer-logos {
+    justify-content: center;
+    text-align: center;
   }
 
   .calendar-slot {

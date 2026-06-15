@@ -20,14 +20,13 @@
     <header class="site-header">
       <div class="topbar">
         <div class="topbar-inner">
-          <span>StudentSpot / AHE Lodz</span>
+          <span>AHE Lodz / SKN AIRON</span>
           <span>{{ t("accessibility") }}: {{ t("contrast") }} · {{ t("larger_font") }}</span>
         </div>
       </div>
       <nav class="nav" aria-label="Primary">
-        <a class="brand" href="{{ url_for('main.index') }}">
+        <a class="brand" href="{{ url_for('main.index') }}" aria-label="{{ t('app_name') }}">
           <img class="brand-logo" src="{{ url_for('static', filename='media/brand/studentspot-logo.png') }}" alt="" aria-hidden="true">
-          <span>{{ t("app_name") }}</span>
         </a>
         <div class="nav-links">
           <a href="{{ url_for('main.index') }}">{{ t("home") }}</a>
@@ -82,7 +81,11 @@
       </button>
     </div>
     <footer class="site-footer">
-      <div class="inner">
+      <div class="inner footer-inner">
+        <div class="footer-logos" aria-label="StudentSpot i AHE">
+          <img class="footer-logo footer-logo-studentspot" src="{{ url_for('static', filename='media/brand/studentspot-logo.png') }}" alt="StudentSpot">
+          <img class="footer-logo footer-logo-ahe" src="{{ url_for('static', filename='media/brand/ahe-logo-en.png' if locale == 'en' else 'media/brand/ahe-logo-pl.png') }}" alt="{{ 'University of Humanities and Economics in Lodz' if locale == 'en' else 'Akademia Humanistyczno-Ekonomiczna w Łodzi' }}">
+        </div>
         {% if locale == "pl" %}
           <p>Nieoficjalny projekt studencki: <strong>StudentSpot</strong> by Paweł Kwaczyński / SKN AIRON / 2026</p>
         {% else %}
