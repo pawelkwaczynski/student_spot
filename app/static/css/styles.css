@@ -1339,10 +1339,57 @@ th {
   filter: brightness(0.86);
 }
 
+:root[data-theme="dark"] .hero-copy {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .hero-copy .lead,
+:root[data-theme="dark"] .hero-copy p {
+  color: var(--muted);
+}
+
+:root[data-theme="dark"] .hero-copy .button.ghost,
+:root[data-theme="dark"] .hero-copy button.ghost {
+  background: transparent;
+  border-color: #7b8bac;
+  color: var(--text);
+}
+
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4 {
+  color: var(--text);
+}
+
+:root[data-theme="dark"] table {
+  background: var(--surface);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .table-wrap {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] th {
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] td {
+  background: var(--surface);
+  color: var(--muted);
+}
+
+:root[data-theme="dark"] td strong {
+  color: var(--text);
+}
+
 :root[data-theme="dark"] .panel p,
 :root[data-theme="dark"] .card p,
 :root[data-theme="dark"] .form-card p,
-:root[data-theme="dark"] td,
 :root[data-theme="dark"] label,
 :root[data-theme="dark"] .card h2,
 :root[data-theme="dark"] .card h3,
@@ -1355,7 +1402,6 @@ th {
   color: var(--text);
 }
 
-:root[data-theme="dark"] table,
 :root[data-theme="dark"] .media-download img,
 :root[data-theme="dark"] .brand-strip img,
 :root[data-theme="dark"] .hero-art,
