@@ -362,6 +362,105 @@ li::marker {
   gap: 1.2rem;
 }
 
+.account-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.2rem;
+}
+
+.avatar-preview {
+  width: 6rem;
+  height: 6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  color: var(--ahe-navy);
+  object-fit: cover;
+  font-size: 1.75rem;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+
+.avatar-placeholder {
+  text-transform: uppercase;
+}
+
+.account-form-section + .account-form-section,
+.account-club-panel {
+  margin-top: 1.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--border);
+}
+
+.avatar-editor {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.account-club-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.account-heroes {
+  margin-top: 1rem;
+}
+
+.account-hero-card {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-top: 0.8rem;
+  min-height: 180px;
+  overflow: hidden;
+}
+
+.account-hero-image,
+.account-hero-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.account-hero-image img {
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.account-hero-card > div {
+  padding: 1rem 1rem 1rem 0;
+}
+
+.account-hero-card h4 {
+  margin: 0 0 0.45rem;
+  font-size: 1.2rem;
+}
+
+.account-hero-card .local-hero-program {
+  margin-bottom: 0.8rem;
+  font-size: 0.82rem;
+}
+
+.account-hero-card p:not(.local-hero-program) {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-body);
+  line-height: 1.55;
+}
+
 .panel,
 .card,
 .form-card {
@@ -392,6 +491,10 @@ li::marker {
 .form-card {
   max-width: 760px;
   padding: 1.5rem;
+}
+
+.account-profile-form {
+  max-width: 1040px;
 }
 
 .card h2,
@@ -995,7 +1098,7 @@ th {
 .local-hero-feature {
   display: grid;
   grid-template-columns: minmax(280px, 0.64fr) minmax(0, 1fr);
-  min-height: clamp(520px, 56vw, 690px);
+  min-height: clamp(540px, 58vw, 860px);
   background: var(--ahe-white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1042,7 +1145,7 @@ th {
 }
 
 .local-hero-copy p:not(.local-hero-program) {
-  max-width: 28ch;
+  max-width: 31ch;
   margin: 0;
   color: var(--muted);
   font-family: var(--font-body);
@@ -1082,6 +1185,54 @@ th {
   background: var(--ahe-navy);
   color: var(--ahe-white);
   border-color: var(--ahe-navy);
+}
+
+.registration-actions-next {
+  justify-content: flex-end;
+}
+
+.policy-callout {
+  border: 1px solid var(--border);
+  border-left: 7px solid var(--accent);
+  background: var(--surface-strong);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.policy-callout h2,
+.policy-callout p {
+  margin: 0;
+}
+
+.policy-callout p {
+  margin-top: 0.35rem;
+}
+
+.policy-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(9, 15, 35, 0.62);
+  padding: 1rem;
+}
+
+.policy-popup-backdrop[hidden] {
+  display: none;
+}
+
+.policy-popup {
+  width: min(520px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 1.4rem;
+}
+
+.policy-popup h2 {
+  margin-top: 0;
 }
 
 .back-to-top {
@@ -1281,7 +1432,8 @@ th {
   .demo-hero,
   .media-hero,
   .info-hero,
-  .dashboard-grid {
+  .dashboard-grid,
+  .account-club-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1339,6 +1491,21 @@ th {
 
   .nav-links a {
     padding: 0.5rem 0;
+  }
+
+  .account-summary,
+  .avatar-editor,
+  .account-hero-card {
+    grid-template-columns: 1fr;
+  }
+
+  .account-hero-card > div {
+    padding: 0 1rem 1rem;
+  }
+
+  .account-hero-image img {
+    aspect-ratio: 4 / 3;
+    height: auto;
   }
 }
 

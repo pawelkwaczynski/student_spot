@@ -8,9 +8,21 @@ from app.forms import ActivationForm, LoginForm, ProfileForm, RegistrationForm
 from app.i18n import t
 from app.models import Club, Major, User, utcnow
 from app.security import hash_password, login_required, login_user, logout_user, verify_password
-from app.services import activate_user_with_code, audit, create_activation_token
+from app.services import activate_user_with_code, audit, avatar_upload_is_allowed, create_activation_token, save_user_avatar
 
 bp = Blueprint("auth", __name__)
+
+
+def generated_nickname_for(user_or_index) -> str:
+    index_number = getattr(user_or_index, "index_number", user_or_index)
+    if index_number:
+        return f"student-{index_number}"
+    user_id = getattr(user_or_index, "id", None)
+    return f"user-{user_id}"
+
+
+def is_generated_nickname(user: User) -> bool:
+    return user.nickname in {generated_nickname_for(user), f"user-{user.id}"}
 
 
 @bp.route("/register", methods=["GET", "POST"])
@@ -32,18 +44,19 @@ def register():
         ("puw", t("study_mode_puw")),
     ]
     if form.validate_on_submit():
+        nickname = (form.nickname.data or "").strip()
         if User.query.filter_by(index_number=form.index_number.data).first():
             form.index_number.errors.append("Index already exists.")
         if User.query.filter_by(email=form.email.data.lower()).first():
             form.email.errors.append("E-mail already exists.")
-        if User.query.filter_by(nickname=form.nickname.data).first():
+        if nickname and User.query.filter_by(nickname=nickname).first():
             form.nickname.errors.append("Nickname already exists.")
         if not form.errors:
             user = User(
                 index_number=form.index_number.data,
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
-                nickname=form.nickname.data,
+                nickname=nickname or generated_nickname_for(form.index_number.data),
                 email=form.email.data.lower(),
                 password_hash=hash_password(form.password.data),
                 year_of_study=form.year_of_study.data,
@@ -127,17 +140,47 @@ def logout():
 @login_required
 def profile():
     form = ProfileForm(obj=g.user)
+    if request.method == "GET" and is_generated_nickname(g.user):
+        form.nickname.data = ""
     if form.validate_on_submit():
-        if User.query.filter(User.nickname == form.nickname.data, User.id != g.user.id).first():
+        nickname = (form.nickname.data or "").strip()
+        stored_nickname = nickname or generated_nickname_for(g.user)
+        if User.query.filter(User.nickname == stored_nickname, User.id != g.user.id).first():
             form.nickname.errors.append("Nickname already exists.")
+        password_change_requested = any(
+            [
+                form.current_password.data,
+                form.new_password.data,
+                form.confirm_new_password.data,
+            ]
+        )
+        if password_change_requested:
+            if not form.current_password.data:
+                form.current_password.errors.append("Current password is required.")
+            elif not verify_password(g.user.password_hash, form.current_password.data):
+                form.current_password.errors.append("Current password is incorrect.")
+            if not form.new_password.data:
+                form.new_password.errors.append("New password is required.")
+            if form.new_password.data != form.confirm_new_password.data:
+                form.confirm_new_password.errors.append("Passwords must match.")
+        avatar_file = form.avatar.data
+        avatar_requested = bool(avatar_file and getattr(avatar_file, "filename", ""))
+        if avatar_requested and not avatar_upload_is_allowed(avatar_file):
+            form.avatar.errors.append("Allowed formats: PNG, JPG, JPEG, WEBP.")
+        if form.errors:
+            return render_template("auth/profile.html", form=form), 400
         else:
             g.user.first_name = form.first_name.data
             g.user.last_name = form.last_name.data
-            g.user.nickname = form.nickname.data
+            g.user.nickname = stored_nickname
             g.user.preferred_language = form.preferred_language.data
             session["lang"] = form.preferred_language.data
+            if password_change_requested and not form.errors:
+                g.user.password_hash = hash_password(form.new_password.data)
+            if avatar_requested:
+                save_user_avatar(g.user, avatar_file)
             audit("profile_updated", user=g.user, object_type="user", object_id=g.user.id)
             db.session.commit()
-            flash("save", "success")
+            flash("profile_saved", "success")
             return redirect(url_for("auth.profile"))
     return render_template("auth/profile.html", form=form)

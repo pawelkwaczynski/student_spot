@@ -3,8 +3,19 @@
 {% block title %}{{ t("create_reservation") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
   <h1 class="page-title">{{ t("create_reservation") }}</h1>
+  <div class="policy-popup-backdrop" data-policy-popup hidden role="dialog" aria-modal="true" aria-labelledby="reservation-policy-title">
+    <div class="policy-popup">
+      <h2 id="reservation-policy-title">{{ t("reservation_policy_title") }}</h2>
+      <p>{{ t("reservation_policy_copy") }}</p>
+      <button class="button" type="button" data-policy-close>{{ t("understand") }}</button>
+    </div>
+  </div>
   <form class="form-card" method="post" novalidate>
     {{ form.hidden_tag() }}
+    <section class="policy-callout" aria-labelledby="reservation-access-title">
+      <h2 id="reservation-access-title">{{ t("reservation_policy_title") }}</h2>
+      <p>{{ t("reservation_policy_copy") }}</p>
+    </section>
     {{ field(form.club_id, "organization") }}
     {{ field(form.room_id, "room") }}
     {{ field(form.title) }}

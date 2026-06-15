@@ -132,6 +132,12 @@ Aktualizacja UI z 2026-06-15:
 - Zmieniono stopke na `Projekt studencki: StudentSpot...` oraz dodano w `/info` zdanie o opiece prof. dr hab. Mariana Niedzwiedzinskiego i przedmiocie projektu; Browser QA potwierdzil teksty i brak overflow.
 - Przebudowano `/local-heroes` wedlug referencji: 23 profile z nowo dodanych portretow i danych `source_info/ahe-2026-06-15.json`, duzy uklad portret + opis, bez starych placeholderow ikon. Browser QA: pierwszy profil `Adrian Makoć`, 23 profile, obrazy laduja sie, brak overflow; Playwright screenshot desktop/mobile.
 - Cleanup po poprawkach: usunieto martwy CSS starego ukladu Local Heroes, stare placeholdery `ambassador-icon.png` / `expert-icon.png`, martwe klucze tlumaczen po sekcji ambasadorow oraz lokalne cache/duplikaty ZIP. Finalny ZIP wyklucza `student_spot*.zip`.
+- Konto uzytkownika: `Dashboard` zmieniono na `Moje konto` / `My account`; konto pokazuje avatar, edycje danych, opcjonalny nick, zmiane hasla oraz sekcje filtrowane po wybranym kole.
+- Po wyborze/posiadaniu kola konto pokazuje tylko sale, aktualnosci i Local Heroes dopasowane do tego kola. Dla konta `boss@studentspot.example.com` widac AIrON, sale K200A/K320, newsy AIrON i Błażeja Strusa.
+- Rezerwacja sal pokazuje modal i note: sale moze rezerwowac tylko osoba uprawniona; backend nadal blokuje konta bez uprawnien.
+- Rejestracja: nick jest opcjonalny, a przycisk `Dalej` w kroku 1 jest wyrownany do prawej.
+- Local Heroes: pierwszy profil ustawiono na `Błażej Strus`, uklad powiekszono do referencji z portretem po lewej i trescia po prawej.
+- Browser QA 2026-06-15: `/dashboard`, `/auth/profile`, `/auth/register`, `/reservations/new`, `/local-heroes`; desktop 1440 px i mobile 390 px bez poziomego overflow. Modal rezerwacji widoczny i zamykalny.
 
 ```bash
 python -m compileall app tests
@@ -142,4 +148,4 @@ python -m pytest
 bash scripts/package_release.sh
 ```
 
-Wynik ostatni: `21 passed`. ZIP `student_spot.zip` zostal przepakowany po zmianach z 17 punktow.
+Wynik ostatni: `22 passed`. ZIP `student_spot.zip` zostal przepakowany po aktualnych zmianach konta, rezerwacji i Local Heroes.

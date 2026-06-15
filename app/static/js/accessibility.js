@@ -152,8 +152,29 @@
     if (firstInvalidStep) show(firstInvalidStep.dataset.registrationStep);
   }
 
+  function setupPolicyPopup() {
+    const popup = document.querySelector("[data-policy-popup]");
+    if (!popup) return;
+    const close = popup.querySelector("[data-policy-close]");
+    function hide() {
+      popup.hidden = true;
+    }
+    close.addEventListener("click", hide);
+    popup.addEventListener("click", (event) => {
+      if (event.target === popup) hide();
+    });
+    document.addEventListener("keydown", function onKeydown(event) {
+      if (event.key !== "Escape" || popup.hidden) return;
+      hide();
+      document.removeEventListener("keydown", onKeydown);
+    });
+    popup.hidden = false;
+    close.focus();
+  }
+
   apply();
   setupBackToTop();
   setupRegistrationSteps();
+  setupPolicyPopup();
   showWelcomePopup(window.location.pathname === "/");
 })();
