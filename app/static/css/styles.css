@@ -283,7 +283,7 @@ li::marker {
 .hero-welcome {
   grid-template-columns: 1fr;
   align-items: stretch;
-  min-height: calc(100vh - 12rem);
+  min-height: auto;
 }
 
 .hero-copy {
@@ -292,15 +292,15 @@ li::marker {
   border-left: 8px solid var(--accent);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.35rem, 3.2vw, 2.6rem);
 }
 
 .hero-welcome .hero-copy {
-  width: min(980px, 100%);
-  min-height: min(700px, 68vh);
+  width: 100%;
+  min-height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .hero-welcome .lead {

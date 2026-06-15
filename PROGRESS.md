@@ -121,6 +121,8 @@ Aktualizacja UI z 2026-06-15:
 - Przycięto aktywne logo StudentSpot z kwadratu do prostokata i zmieniono CSS tak, zeby header oraz stopka nie wymuszaly pustej kwadratowej przestrzeni.
 - Przycięto logo kola Kognitywistyczno-Eksperymentalnego do samego znaku kola, bez czerwonych podpisow i bez drugiego logo z zarowka.
 - Browser QA po poprawce: desktop 1440 px bez poziomego overflow, header zredukowany z 193 px do 102 px, menu zostaje w jednej linii.
+- Dopasowano hero strony glownej do tresci: panel ma taka sama szerokosc jak pasek trzech logotypow pod spodem i nie ma juz sztucznej wysokosci prawie calego ekranu.
+- Ponownie przycięto logo Kognitywistyczno-Eksperymentalnego zgodnie ze screenem referencyjnym: sam ptak, nazwa i podpis `Kolo Naukowe`.
 
 ```bash
 python -m compileall app tests
