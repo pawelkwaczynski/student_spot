@@ -26,6 +26,9 @@ zip -r "$OUTPUT" . \
   -x ".env.test" \
   -x "PROGRESS.md" \
   -x "IMPLEMENTATION_PLAN.md" \
+  -x "student_spot/*" \
+  -x "student_spot_profesor/*" \
+  -x "student_spot_dev_handoff/*" \
   -x "student_spot*.zip"
 
 echo "Created $OUTPUT"
