@@ -131,6 +131,7 @@ Aktualizacja UI z 2026-06-15:
 - Zmniejszono logotypy StudentSpot i AHE w stopce o ok. 30%; Browser QA `/clubs/`: oba logo 54 px wysokosci, jedna linia, brak poziomego overflow.
 - Zmieniono stopke na `Projekt studencki: StudentSpot...` oraz dodano w `/info` zdanie o opiece prof. dr hab. Mariana Niedzwiedzinskiego i przedmiocie projektu; Browser QA potwierdzil teksty i brak overflow.
 - Przebudowano `/local-heroes` wedlug referencji: 23 profile z nowo dodanych portretow i danych `source_info/ahe-2026-06-15.json`, duzy uklad portret + opis, bez starych placeholderow ikon. Browser QA: pierwszy profil `Adrian Makoć`, 23 profile, obrazy laduja sie, brak overflow; Playwright screenshot desktop/mobile.
+- Cleanup po poprawkach: usunieto martwy CSS starego ukladu Local Heroes, stare placeholdery `ambassador-icon.png` / `expert-icon.png`, martwe klucze tlumaczen po sekcji ambasadorow oraz lokalne cache/duplikaty ZIP. Finalny ZIP wyklucza `student_spot*.zip`.
 
 ```bash
 python -m compileall app tests

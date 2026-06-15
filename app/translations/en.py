@@ -1,7 +1,6 @@
 EN = {
     "app_name": "StudentSpot",
     "tagline": "Student clubs, rooms, and events in one lightweight system.",
-    "unofficial_notice": "Student project: StudentSpot by Paweł Kwaczyński / SKN AIRON / 2026",
     "dashboard": "Dashboard",
     "home": "Home",
     "info": "Info",
@@ -180,7 +179,4 @@ EN = {
     "airon_member": "Member of the AIRON Student Research Club",
     "professor_requirements": "Project requirements map",
     "kv_title": "AHE key visual",
-    "people_sources": "AHE ambassadors and experts",
-    "ambassadors_graphic": "Graphic: AHE ambassadors",
-    "experts_graphic": "Graphic: AHE ambassadors and experts",
 }

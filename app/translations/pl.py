@@ -1,7 +1,6 @@
 PL = {
     "app_name": "StudentSpot",
     "tagline": "Koła naukowe, sale i wydarzenia w jednym lekkim systemie.",
-    "unofficial_notice": "Projekt studencki: StudentSpot by Paweł Kwaczyński / SKN AIRON / 2026",
     "dashboard": "Dashboard",
     "home": "Start",
     "info": "Info",
@@ -180,7 +179,4 @@ PL = {
     "airon_member": "Członek Studenckiego Koła Naukowego AIRON",
     "professor_requirements": "Mapa wymagań projektowych",
     "kv_title": "Key visual AHE",
-    "people_sources": "Ambasadorzy i eksperci AHE",
-    "ambassadors_graphic": "Grafika: ambasadorzy AHE",
-    "experts_graphic": "Grafika: ambasadorzy i eksperci AHE",
 }
