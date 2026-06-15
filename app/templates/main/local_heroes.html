@@ -4,22 +4,28 @@
   <h1 id="heroes-title" class="page-title">{{ t("local_heroes") }}</h1>
   <section class="panel page-intro" aria-labelledby="heroes-title">
     {% if locale == "pl" %}
-      <p class="lead">Osobna przestrzeń dla lokalnych liderów, ambasadorów i ekspertów AHE. Profile są danymi demonstracyjnymi opartymi o materiały źródłowe i pokazują przyszły moduł rekomendowania gości, mentorów i osób do wydarzeń kół.</p>
+      <p class="lead">Osobna przestrzeń dla lokalnych liderów, ambasadorów i ekspertów AHE. Profile wykorzystują zdjęcia dodane do projektu oraz opisy z pliku źródłowego JSON.</p>
     {% else %}
-      <p class="lead">A dedicated space for local leaders, ambassadors, and AHE experts. These demo profiles are based on source materials and show a future module for recommending guests, mentors, and people for club events.</p>
+      <p class="lead">A dedicated space for local leaders, ambassadors, and AHE experts. Profiles use the photos added to the project and descriptions from the source JSON file.</p>
     {% endif %}
   </section>
 
-  <section class="heroes-grid" aria-label="{{ t('local_heroes') }}">
+  <section class="local-heroes-list" aria-label="{{ t('local_heroes') }}">
     {% for hero in heroes %}
-      <article class="card hero-person-card">
-        <button class="media-image-button hero-person-image" type="button" data-lightbox-src="{{ url_for('static', filename=hero.image) }}" data-lightbox-alt="{{ hero.name }}" aria-label="{{ t('open_image') }}: {{ hero.name }}">
+      <article class="local-hero-feature">
+        <button class="media-image-button local-hero-photo" type="button" data-lightbox-src="{{ url_for('static', filename=hero.image) }}" data-lightbox-alt="{{ hero.name }}" aria-label="{{ t('open_image') }}: {{ hero.name }}">
           <img src="{{ url_for('static', filename=hero.image) }}" alt="{{ hero.name }}">
         </button>
-        <h2>{{ hero.name }}</h2>
-        <p class="meta">{{ hero.role_pl if locale == "pl" else hero.role_en }}</p>
-        <p>{{ hero.bio_pl if locale == "pl" else hero.bio_en }}</p>
+        <div class="local-hero-copy">
+          <h2>{{ hero.name }}</h2>
+          <p class="local-hero-program">{{ hero.program }}</p>
+          <p>{{ hero.bio }}</p>
+        </div>
       </article>
+    {% else %}
+      <div class="panel empty-state">
+        <p>{{ t("empty_state") }}</p>
+      </div>
     {% endfor %}
   </section>
 {% endblock %}
