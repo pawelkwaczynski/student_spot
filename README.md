@@ -1,5 +1,76 @@
 # StudentSpot
 
+StudentSpot is an open-source platform for student organizations, campus accessibility and room management. It helps student clubs publish their profile, manage membership requests, send messages, find accessible rooms, submit room reservations and export approved meetings to a calendar file.
+
+The current demo was built as a student project for the academic context of AHE Lodz. It is not an official AHE system, but it shows how a lightweight management information system can support campus coordination with accessibility, bilingual UI and clear role-based workflows.
+
+Live demo:
+
+```text
+https://frog01-20412.wykr.es
+```
+
+## Why this project matters
+
+Student organizations often coordinate events across scattered emails, chat threads, spreadsheets and informal room requests. That creates friction for club leaders, guardians, property administrators and students who need accessible participation options.
+
+StudentSpot turns that process into one coherent flow:
+
+- discover student organizations and recommended clubs,
+- submit or review membership requests,
+- manage club roles and communication,
+- search rooms by capacity, equipment and accessibility needs,
+- request a room and detect schedule conflicts,
+- approve or reject reservations with an auditable status history,
+- export approved meetings to `.ics`,
+- keep the interface usable in PL/EN, dark mode, high contrast and larger text modes.
+
+## Open-source roadmap
+
+- Replace demo SQLite deployment with a production database profile.
+- Add Alembic migrations for long-term schema evolution.
+- Add e-mail delivery for activation links and notifications.
+- Add recurring reservations and calendar subscription feeds.
+- Add richer organization pages for public university communities.
+- Add WCAG audit notes and automated accessibility checks.
+- Add API endpoints for room availability and club data.
+- Add deployment recipes for low-resource VPS, Docker and managed platforms.
+
+## Contributing
+
+Contributions are welcome. Good first areas are documentation, tests, accessibility improvements, translations, UI polish and small Flask/Jinja2 features.
+
+Before opening a pull request:
+
+1. Fork the repository and create a focused branch.
+2. Keep changes small and reviewable.
+3. Do not commit secrets, real student data or private server notes.
+4. Run the test suite locally.
+5. Explain the user-facing impact in the pull request description.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the short contributor guide.
+
+## Security
+
+Please do not report security issues in public issues if they include exploit details, private data, credentials or server-specific information. Send a private report to the maintainer instead.
+
+Project security principles:
+
+- passwords and activation tokens are hashed,
+- forms use CSRF protection,
+- demo data must stay fictional,
+- real medical or disability diagnoses must not be collected,
+- access control must be enforced server-side,
+- `.env`, local access notes and credentials must stay out of Git.
+
+See [SECURITY.md](SECURITY.md) for the reporting policy.
+
+## License
+
+StudentSpot is released under the [MIT License](LICENSE).
+
+## Polish project notes
+
 StudentSpot to lekka aplikacja Flask/Jinja2 do demonstracyjnego zarzadzania kolami naukowymi, czlonkostwami, salami i rezerwacjami. Projekt jest przygotowany jako nieoficjalny prototyp studencki.
 
 ## Zakres demo
