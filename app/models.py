@@ -62,6 +62,8 @@ class User(db.Model):
     )
     notifications = db.relationship("Notification", back_populates="user", cascade="all, delete-orphan")
     reservations = db.relationship("Reservation", back_populates="created_by")
+    sent_club_messages = db.relationship("ClubMessage", back_populates="sender", foreign_keys="ClubMessage.sender_id")
+    received_club_messages = db.relationship("ClubMessageRecipient", back_populates="recipient", cascade="all, delete-orphan")
 
     @property
     def is_active(self) -> bool:
@@ -144,6 +146,7 @@ class Club(db.Model):
     memberships = db.relationship("ClubMembership", back_populates="club", cascade="all, delete-orphan")
     reservations = db.relationship("Reservation", back_populates="club")
     events = db.relationship("Event", back_populates="club")
+    messages = db.relationship("ClubMessage", back_populates="club", cascade="all, delete-orphan")
 
     @property
     def tags(self) -> list[str]:
@@ -309,6 +312,42 @@ class Notification(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=utcnow)
 
     user = db.relationship("User", back_populates="notifications")
+
+
+class ClubMessage(db.Model):
+    __tablename__ = "club_messages"
+
+    id = db.Column(db.Integer, primary_key=True)
+    club_id = db.Column(db.Integer, db.ForeignKey("clubs.id"), nullable=False, index=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    subject = db.Column(db.String(180), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=utcnow, index=True)
+
+    club = db.relationship("Club", back_populates="messages")
+    sender = db.relationship("User", foreign_keys=[sender_id], back_populates="sent_club_messages")
+    recipients = db.relationship(
+        "ClubMessageRecipient",
+        back_populates="message",
+        cascade="all, delete-orphan",
+        order_by="ClubMessageRecipient.id",
+    )
+
+
+class ClubMessageRecipient(db.Model):
+    __tablename__ = "club_message_recipients"
+    __table_args__ = (
+        db.UniqueConstraint("message_id", "recipient_id", name="uq_message_recipient"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    message_id = db.Column(db.Integer, db.ForeignKey("club_messages.id"), nullable=False, index=True)
+    recipient_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    read_at = db.Column(db.DateTime, nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=utcnow)
+
+    message = db.relationship("ClubMessage", back_populates="recipients")
+    recipient = db.relationship("User", back_populates="received_club_messages")
 
 
 class AuditLog(db.Model):

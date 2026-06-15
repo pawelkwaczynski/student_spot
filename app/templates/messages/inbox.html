@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ t("inbox") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("inbox") }}</h1>
+  <div class="dashboard-grid">
+    <section class="panel" aria-labelledby="inbox-title">
+      <div class="section-heading-row">
+        <h2 id="inbox-title">{{ t("received_messages") }}</h2>
+        {% if manageable_clubs %}
+          <a class="button" href="{{ url_for('messages.compose') }}">{{ t("new_club_message") }}</a>
+        {% endif %}
+      </div>
+      <div class="message-list">
+        {% for item in received %}
+          <article class="message-row{% if not item.read_at %} unread{% endif %}">
+            <div>
+              <h3><a href="{{ url_for('messages.detail', recipient_id=item.id) }}">{{ item.message.subject }}</a></h3>
+              <p class="meta">{{ item.message.club.name_pl if locale == "pl" else item.message.club.name_en }} · {{ item.message.sender.display_name }} · {{ item.message.created_at.strftime("%Y-%m-%d %H:%M") }}</p>
+              <p>{{ item.message.body[:180] }}{% if item.message.body|length > 180 %}...{% endif %}</p>
+            </div>
+            <span class="status {{ 'pending' if not item.read_at else 'approved' }}">{{ t("unread") if not item.read_at else t("read") }}</span>
+          </article>
+        {% else %}
+          <div class="empty-state">
+            <p>{{ t("no_messages") }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    <aside class="panel" aria-labelledby="sent-title">
+      <h2 id="sent-title">{{ t("sent_messages") }}</h2>
+      {% if manageable_clubs %}
+        <p class="meta">{{ t("club_message_hint") }}</p>
+        {% for message in sent %}
+          <p><strong>{{ message.subject }}</strong><br><span class="meta">{{ message.club.name_pl if locale == "pl" else message.club.name_en }} · {{ message.created_at.strftime("%Y-%m-%d %H:%M") }}</span></p>
+        {% else %}
+          <p class="meta">{{ t("no_sent_messages") }}</p>
+        {% endfor %}
+      {% else %}
+        <p class="meta">{{ t("member_inbox_hint") }}</p>
+      {% endif %}
+    </aside>
+  </div>
+{% endblock %}

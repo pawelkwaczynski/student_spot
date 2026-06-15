@@ -135,7 +135,7 @@ Aktualizacja oddaniowa z 2026-06-15:
 - Pasek `UP` ma szare tlo, a stopka jest nizsza; logotypy StudentSpot i AHE sa wieksze oraz wyrownane do tej samej wysokosci.
 - Dodano popup EN jako `app/static/media/visuals/welcome-popup-en.png`; strona glowna, `Info` i `Media` wybieraja grafike popupu zgodnie z jezykiem.
 - Logo Arteterapii i Pedagogiki Dziecka ustawiono jako kwadratowe 280x280, a `Koło Naukowe Pedagogiki Dziecka` przesunieto na koniec publicznej listy kol.
-- Poprawiono kontrast dark mode: hero strony glownej, przycisk `Pokaz popup`, naglowki sekcji i tabele demo nie maja juz jasnego tekstu na jasnym tle. Playwright QA: hero lead 9.54:1, `Pokaz popup` 15.98:1, tabela demo 9.54-15.98:1, bez poziomego overflow.
+- Poprawiono kontrast dark mode: hero strony glownej, przycisk `Pokaz popup`, naglowki sekcji i tabele demo nie maja juz jasnego tekstu na jasnym tle. Browser QA: hero lead 9.54:1, `Pokaz popup` 15.98:1, tabela demo 9.54-15.98:1, bez poziomego overflow.
 - Zmniejszono logotypy StudentSpot i AHE w stopce o ok. 30%; Browser QA `/clubs/`: oba logo 54 px wysokosci, jedna linia, brak poziomego overflow.
 - Zmieniono stopke na `Projekt studencki: StudentSpot...` oraz dodano w `/info` zdanie o opiece prof. dr hab. Mariana Niedzwiedzinskiego i przedmiocie projektu; Browser QA potwierdzil teksty i brak overflow.
 - Przebudowano `/local-heroes` wedlug referencji: 23 profile z nowo dodanych portretow i danych `source_info/ahe-2026-06-15.json`, duzy uklad portret + opis, bez starych placeholderow ikon. Browser QA: pierwszy profil `Adrian Makoć`, 23 profile, obrazy laduja sie, brak overflow; Playwright screenshot desktop/mobile.
@@ -146,6 +146,16 @@ Aktualizacja oddaniowa z 2026-06-15:
 - Rejestracja: nick jest opcjonalny, a przycisk `Dalej` w kroku 1 jest wyrownany do prawej.
 - Local Heroes: pierwszy profil ustawiono na `Błażej Strus`, uklad powiekszono do referencji z portretem po lewej i trescia po prawej.
 - Browser QA 2026-06-15: `/dashboard`, `/auth/profile`, `/auth/register`, `/reservations/new`, `/local-heroes`; desktop 1440 px i mobile 390 px bez poziomego overflow. Modal rezerwacji widoczny i zamykalny.
+- Strona glowna ma feed aktualnosci pod sekcja kol; lead korzysta ze wspolnego klucza PL/EN.
+- Local Heroes: opis wprowadzajacy jest rozbity na osobne linie, zgodnie z prosba uzytkownika.
+- Dodano modul wiadomosci: opiekun kola/system admin moze wyslac wiadomosc do wszystkich zatwierdzonych czlonkow wybranego kola, czlonek widzi skrzynke `/messages`, odczyt oznacza wiadomosc jako przeczytana, a powiadomienia i audyt sa zapisywane.
+- Panel opiekuna/admina ma pelna liste czlonkow kol, nie tylko oczekujace wnioski; opiekun moze zatwierdzic status i zmienic role czlonka w obrebie swoich kol.
+- Zmieniono tekst dostepnosci transportu na `Zorganizowanie bezplatnego transportu z terenu Lodzi` / `Arrange free transport from the Lodz area`.
+- Dodano `prezentacja_ustna_10_min.md` z kolejnoscia ekranow i tekstem do prezentacji przed profesorem.
+- Weryfikacja jednostkowa/integracyjna: `.venv/bin/python -m pytest tests/test_core_flows.py` = 26 passed.
+- Browser QA po module wiadomosci: strona glowna desktop 1440 px ma feed aktualnosci pod kolami i brak overflow; panel opiekuna pokazuje pelna liste czlonkow, role i przycisk wiadomosci; wysylka wiadomosci z konta opiekuna do AIrON trafia do skrzynki konta `boss`; mobile 390 px dla `/`, `/messages/`, `/local-heroes`, `/reservations/new` bez poziomego overflow.
+- Finalna weryfikacja: `.venv/bin/python -m compileall app tests`, `.venv/bin/python -m pytest`, reset i seed demo, `bash scripts/package_release.sh`, `bash scripts/package_professor_release.sh`.
+- Odtworzono `student_spot.zip` i `student_spot_profesor.zip` po aktualnych zmianach. ZIP profesorski wyklucza `.venv`, cache, lokalna baze, `.env`, `PROGRESS.md`, `IMPLEMENTATION_PLAN.md`, prywatne notatki i stare ZIP-y.
 
 ```bash
 python -m compileall app tests
@@ -156,4 +166,4 @@ python -m pytest
 bash scripts/package_release.sh
 ```
 
-Wynik ostatni: `22 passed`. ZIP `student_spot.zip` zostal przepakowany po aktualnych zmianach konta, rezerwacji i Local Heroes.
+Wynik ostatni: `26 passed`. ZIP `student_spot.zip` oraz `student_spot_profesor.zip` sa przepakowane po aktualnych zmianach wiadomosci i panelu opiekuna.

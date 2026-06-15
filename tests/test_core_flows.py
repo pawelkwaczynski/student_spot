@@ -1,7 +1,18 @@
 from datetime import datetime, timedelta
 
 from app.extensions import db
-from app.models import AuditLog, Club, ClubMembership, EmailVerificationToken, Notification, Reservation, Room, User
+from app.models import (
+    AuditLog,
+    Club,
+    ClubMembership,
+    ClubMessage,
+    ClubMessageRecipient,
+    EmailVerificationToken,
+    Notification,
+    Reservation,
+    Room,
+    User,
+)
 from app.services import has_room_conflict, search_rooms
 from tests.conftest import login
 
@@ -56,6 +67,15 @@ def test_language_switch_changes_interface(client):
     response = client.get("/set-language/en", follow_redirects=True)
     assert response.status_code == 200
     assert b'Manage club activity and room bookings without chaos.' in response.data
+
+
+def test_home_page_contains_news_feed_below_clubs(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "Koła".encode() in response.data
+    assert "Aktualności".encode() in response.data
+    assert "Roadmapa rozwoju Koła Naukowego AIRON".encode() in response.data
+    assert "Templatki aktualności kół naukowych na podstawie prawdziwych materiałów.".encode() in response.data
 
 
 def test_media_page_contains_press_note_and_downloads(client):
@@ -126,6 +146,7 @@ def test_news_calendar_and_local_heroes_pages(client):
     assert "Adrian Makoć".encode() in response.data
     assert "FACT-CHECKING I PRZECIWDZIAŁANIE DEZINFORMACJI".encode() in response.data
     assert b"adrian-makoc.webp" in response.data
+    assert "Osobna przestrzeń dla lokalnych liderów, ambasadorów i ekspertów AHE.<br>".encode() in response.data
     assert response.data.count(b'class="local-hero-feature"') == 23
     assert b"ambassador-icon.png" not in response.data
 
@@ -259,6 +280,8 @@ def test_boss_can_open_reservation_form(client):
     assert response.status_code == 200
     assert b"Create reservation" in response.data or b"Utw" in response.data
     assert b"Reservations only for authorized users" in response.data
+    assert b"Arrange free transport from the Lodz area" in response.data
+    assert b"from any place in Lodz" not in response.data
 
 
 def test_accessibility_support_requests_are_saved_in_reservation_notes(client, app):
@@ -289,7 +312,7 @@ def test_accessibility_support_requests_are_saved_in_reservation_notes(client, a
         assert "Potrzeby organizacyjne dostępności" in reservation.accessibility_notes
         assert "tłumacza języka migowego" in reservation.accessibility_notes
         assert "przewodnika dla osoby niewidomej" in reservation.accessibility_notes
-        assert "bezpłatnego transportu" in reservation.accessibility_notes
+        assert "bezpłatnego transportu z terenu Łodzi" in reservation.accessibility_notes
         assert "sprzętu wspomagającego" in reservation.accessibility_notes
 
 
@@ -368,6 +391,69 @@ def test_admin_can_approve_membership_and_audit_is_recorded(client, app):
     with app.app_context():
         assert db.session.get(ClubMembership, membership_id).status == "approved"
         assert AuditLog.query.filter_by(action="membership_status_changed").count() >= 1
+
+
+def test_guardian_sees_member_directory_and_can_update_membership(client, app):
+    login(client, "guardian@studentspot.example.com")
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert "Członkowie koła".encode() in response.data
+    assert b"boss@studentspot.example.com" in response.data
+    with app.app_context():
+        membership = (
+            ClubMembership.query.join(ClubMembership.user)
+            .filter(User.email == "pending@studentspot.example.com")
+            .one()
+        )
+        membership_id = membership.id
+    response = client.post(
+        f"/admin/memberships/{membership_id}/decision",
+        data={"action": "approve", "club_role": "secretary"},
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    with app.app_context():
+        membership = db.session.get(ClubMembership, membership_id)
+        assert membership.status == "approved"
+        assert membership.club_role == "secretary"
+
+
+def test_guardian_can_send_message_to_club_members_and_member_reads_it(client, app):
+    login(client, "guardian@studentspot.example.com")
+    with app.app_context():
+        club = Club.query.filter_by(slug="airon").one()
+        club_id = club.id
+    response = client.post(
+        "/messages/compose",
+        data={
+            "club_id": str(club_id),
+            "subject": "Plan spotkania koła",
+            "body": "Przynieście krótką listę tematów na kolejne warsztaty.",
+        },
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert "Wiadomość została wysłana do członków koła.".encode() in response.data
+    with app.app_context():
+        message = ClubMessage.query.filter_by(subject="Plan spotkania koła").one()
+        assert len(message.recipients) == 2
+        boss = User.query.filter_by(email="boss@studentspot.example.com").one()
+        boss_item = ClubMessageRecipient.query.filter_by(message_id=message.id, recipient_id=boss.id).one()
+        assert boss_item.read_at is None
+        assert Notification.query.filter(
+            Notification.user_id == boss.id,
+            Notification.message_pl.contains("Plan spotkania koła"),
+        ).count() == 1
+        boss_item_id = boss_item.id
+    login(client, "boss@studentspot.example.com")
+    response = client.get("/messages/")
+    assert response.status_code == 200
+    assert b"Plan spotkania ko" in response.data
+    response = client.get(f"/messages/{boss_item_id}")
+    assert response.status_code == 200
+    assert "Przynieście krótką listę tematów".encode() in response.data
+    with app.app_context():
+        assert db.session.get(ClubMessageRecipient, boss_item_id).read_at is not None
 
 
 def test_admin_can_confirm_hidden_club_and_send_utw_announcement(client, app):

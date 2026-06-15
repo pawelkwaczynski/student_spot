@@ -310,7 +310,7 @@ def index():
     clubs = Club.query.filter_by(is_public=True).order_by(Club.is_featured.desc(), Club.name_pl.asc()).limit(6).all()
     rooms = Room.query.filter_by(is_active=True).order_by(Room.name.asc(), Room.code.asc()).limit(4).all()
     events = Event.query.order_by(Event.starts_at.asc()).limit(4).all()
-    return render_template("main/index.html", clubs=clubs, rooms=rooms, events=events)
+    return render_template("main/index.html", clubs=clubs, rooms=rooms, events=events, posts=NEWS_POSTS[:3])
 
 
 @bp.route("/news")

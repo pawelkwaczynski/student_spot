@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_form.html" import field with context %}
+{% block title %}{{ t("new_club_message") }} - {{ t("app_name") }}{% endblock %}
+{% block content %}
+  <h1 class="page-title">{{ t("new_club_message") }}</h1>
+  <form class="form-card" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p class="meta">{{ t("club_message_hint") }}</p>
+    {{ field(form.club_id, "club") }}
+    {{ field(form.subject, "message_subject") }}
+    {{ field(form.body, "message_body") }}
+    <div class="inline-actions">
+      {{ form.submit(class_="button", value=t("send_message")) }}
+      <a class="button ghost" href="{{ url_for('messages.inbox') }}">{{ t("inbox") }}</a>
+    </div>
+  </form>
+{% endblock %}
