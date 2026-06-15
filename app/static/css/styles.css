@@ -1185,15 +1185,15 @@ th {
 
 .footer-logo-studentspot {
   width: auto;
-  height: clamp(4.9rem, 5.2vw, 5.8rem);
-  max-height: 5.8rem;
+  height: clamp(3.4rem, 3.6vw, 4.1rem);
+  max-height: 4.1rem;
 }
 
 .footer-logo-ahe {
   width: auto;
-  height: clamp(4.9rem, 5.2vw, 5.8rem);
-  max-height: 5.8rem;
-  max-width: min(20rem, 30vw);
+  height: clamp(3.4rem, 3.6vw, 4.1rem);
+  max-height: 4.1rem;
+  max-width: min(14rem, 21vw);
 }
 
 .footer-logo-studentspot,
@@ -1312,7 +1312,7 @@ th {
 
   .footer-logo-studentspot,
   .footer-logo-ahe {
-    height: 4.4rem;
+    height: 3.1rem;
     max-width: 86vw;
   }
 
