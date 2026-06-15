@@ -7,6 +7,7 @@ CLUB_LOGOS: dict[str, str] = {
     "airon": "media/clubs/airon-logo.png",
     "kognitywistyczno-eksperymentalne": "media/clubs/kognitywistyka-logo.png",
     "grafika": "media/clubs/grafika-logo.webp",
+    "warsztaty-emocji": "media/clubs/arteterapia-logo.webp",
     "progressus": "media/clubs/progressus-logo.webp",
     "wkreceni": "media/clubs/wkreceni-logo.webp",
     "pedagogika-dziecka": "media/clubs/pedagogika-dziecka-logo.png",

@@ -116,8 +116,11 @@ Aktualizacja UI z 2026-06-15:
 - Browser QA: 2048, 1440, 1024 i 390 px bez poziomego overflow; nowe tlo aktywne.
 - Aktualizacja brandingu: usunieto osobny napis `StudentSpot` z naglowka, powiekszono graficzne logo aplikacji, dodano logo StudentSpot + AHE w bialej stopce.
 - Aktualizacja stopki i zakladek: logotypy w stopce sa po prawej, AHE zmniejszone, `2026` pogrubione, stopka trzyma tekst w jednej linii na desktopie.
-- Dodano logotypy 6 kol naukowych: AIrON, Kognitywistyczno-Eksperymentalne, Grafika, Progressus, Wkreceni, Pedagogika Dziecka. Logo AIrON przyciete z kwadratu do prostokata.
+- Dodano logotypy 7 kol naukowych: AIrON, Kognitywistyczno-Eksperymentalne, Grafika, Arteterapeutyczne Warsztaty Emocji, Progressus, Wkreceni, Pedagogika Dziecka. Logo AIrON przyciete z kwadratu do prostokata.
 - Ujednolicono uklad zakladek: tytuly `Info`, `Media`, `Demo`, `Aktualnosci`, `Kalendarz`, `Local Heroes`, szczegoly kola i rezerwacji sa nad panelem, nie w szarym tle.
+- Przycięto aktywne logo StudentSpot z kwadratu do prostokata i zmieniono CSS tak, zeby header oraz stopka nie wymuszaly pustej kwadratowej przestrzeni.
+- Przycięto logo kola Kognitywistyczno-Eksperymentalnego do samego znaku kola, bez czerwonych podpisow i bez drugiego logo z zarowka.
+- Browser QA po poprawce: desktop 1440 px bez poziomego overflow, header zredukowany z 193 px do 102 px, menu zostaje w jednej linii.
 
 ```bash
 python -m compileall app tests
