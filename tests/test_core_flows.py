@@ -20,7 +20,7 @@ from tests.conftest import login
 def test_demo_seed_uses_eight_accounts_and_sterlinga_only(app):
     with app.app_context():
         emails = {user.email for user in User.query.order_by(User.email).all()}
-        assert emails == {
+        demo_emails = {
             "admin@studentspot.example.com",
             "boss@studentspot.example.com",
             "guardian@studentspot.example.com",
@@ -30,6 +30,10 @@ def test_demo_seed_uses_eight_accounts_and_sterlinga_only(app):
             "utw@studentspot.example.com",
             "vice@studentspot.example.com",
         }
+        assert demo_emails.issubset(emails)
+        assert User.query.filter(User.email.in_(demo_emails)).count() == 8
+        assert "ada.airon@studentspot.example.com" in emails
+        assert "jan.pending@studentspot.example.com" in emails
         assert {room.address for room in Room.query.all()} == {"Sterlinga 26"}
         assert Room.query.filter(Room.code.in_(("G1", "G2"))).count() == 0
         assert Room.query.filter_by(code="K320").one().floor == "II"
@@ -73,6 +77,7 @@ def test_home_page_contains_news_feed_below_clubs(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "Koła".encode() in response.data
+    assert response.data.count(b"club-logo-frame") == 7
     assert "Aktualności".encode() in response.data
     assert "Roadmapa rozwoju Koła Naukowego AIRON".encode() in response.data
     assert "Templatki aktualności kół naukowych na podstawie prawdziwych materiałów.".encode() in response.data
@@ -106,6 +111,9 @@ def test_info_page_contains_author_kv_and_project_map(client):
     assert "Wymagania funkcjonalne".encode() in response.data
     assert "Wymagania niefunkcjonalne".encode() in response.data
     assert "Projekt koncepcyjny i przepływy informacyjne".encode() in response.data
+    assert "Katalog 7 publicznie pokazanych kół AHE".encode() in response.data
+    assert "repozytorium lokalne i GitHub".encode() in response.data
+    assert "Metodyka zarządzania informacją.</p>".encode() in response.data
     assert "UTW AHE = Uniwersytet Trzeciego Wieku".encode() in response.data
     assert "Model kont UTW i komunikatów".encode() in response.data
 
@@ -130,12 +138,16 @@ def test_demo_page_mentions_accounts_and_author_context_without_kv(client):
     assert "Model kont UTW i komunikatów".encode() not in response.data
     assert "Paweł Kwaczyński".encode() in response.data
     assert b"165318" in response.data
+    assert "Szybki tutorial pokazowy".encode() in response.data
+    assert "członkowie koła, statusy, role, wiadomości".encode() in response.data
 
 
 def test_news_calendar_and_local_heroes_pages(client):
     response = client.get("/news")
     assert response.status_code == 200
     assert "Roadmapa rozwoju Koła Naukowego AIRON".encode() in response.data
+    assert "opiekunowie i osoby odpowiedzialne za komunikację koła".encode() in response.data
+    assert "bossowie".encode() not in response.data
     assert b"roadmap.png" in response.data
     response = client.get("/calendar")
     assert response.status_code == 200
@@ -280,6 +292,7 @@ def test_boss_can_open_reservation_form(client):
     assert response.status_code == 200
     assert b"Create reservation" in response.data or b"Utw" in response.data
     assert b"Reservations only for authorized users" in response.data
+    assert b"approved club representative" in response.data
     assert b"Arrange free transport from the Lodz area" in response.data
     assert b"from any place in Lodz" not in response.data
 
@@ -380,7 +393,11 @@ def test_admin_rejection_requires_reason(client, app):
 def test_admin_can_approve_membership_and_audit_is_recorded(client, app):
     login(client, "admin@studentspot.example.com")
     with app.app_context():
-        membership = ClubMembership.query.filter_by(status="pending").one()
+        membership = (
+            ClubMembership.query.join(ClubMembership.user)
+            .filter(ClubMembership.status == "pending", User.email == "pending@studentspot.example.com")
+            .one()
+        )
         membership_id = membership.id
     response = client.post(
         f"/admin/memberships/{membership_id}/decision",
@@ -418,6 +435,16 @@ def test_guardian_sees_member_directory_and_can_update_membership(client, app):
         assert membership.club_role == "secretary"
 
 
+def test_property_admin_sees_room_decisions_not_member_management(client):
+    login(client, "property@studentspot.example.com")
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert "Wnioski rezerwacyjne".encode() in response.data
+    assert "Komunikat do UTW".encode() in response.data
+    assert "Członkowie koła".encode() not in response.data
+    assert "Wnioski członkowskie".encode() not in response.data
+
+
 def test_guardian_can_send_message_to_club_members_and_member_reads_it(client, app):
     login(client, "guardian@studentspot.example.com")
     with app.app_context():
@@ -436,7 +463,7 @@ def test_guardian_can_send_message_to_club_members_and_member_reads_it(client, a
     assert "Wiadomość została wysłana do członków koła.".encode() in response.data
     with app.app_context():
         message = ClubMessage.query.filter_by(subject="Plan spotkania koła").one()
-        assert len(message.recipients) == 2
+        assert len(message.recipients) >= 4
         boss = User.query.filter_by(email="boss@studentspot.example.com").one()
         boss_item = ClubMessageRecipient.query.filter_by(message_id=message.id, recipient_id=boss.id).one()
         assert boss_item.read_at is None

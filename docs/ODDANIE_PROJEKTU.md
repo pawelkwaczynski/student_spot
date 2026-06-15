@@ -7,7 +7,7 @@
 - ID studenta: 165318
 - E-mail: kwaczynski.pawel@gmail.com
 - Afiliacja: członek Studenckiego Koła Naukowego AIRON
-- Przedmiot: Podstawy systemów informatycznych zarządzania / Metodyka zarządzania informacją - Projekt
+- Przedmiot: Podstawy systemów informatycznych zarządzania / Metodyka zarządzania informacją
 - Opieka merytoryczna: prof. dr hab. Marian Niedźwiedziński
 
 ## Repozytorium
@@ -112,3 +112,9 @@ student_spot_profesor.zip
 ```
 
 Paczka nie zawiera lokalnej bazy, środowiska `.venv`, cache, prywatnych notatek dostępowych, pliku `.env` ani roboczych checkpointów.
+
+## Dodatkowe pliki pomocnicze
+
+- `prezentacja_ustna_10_min.md` - scenariusz prezentacji na zajęcia.
+- `plan_pokazowy_student_spot.md` - praktyczna kolejność demo funkcji aplikacji.
+- `student_spot_dev_handoff.zip` - neutralna paczka techniczno-wizualna do utrzymania spójności kolejnych projektów AHE.

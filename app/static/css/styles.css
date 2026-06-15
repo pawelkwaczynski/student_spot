@@ -242,6 +242,20 @@ li::marker {
   flex-wrap: wrap;
 }
 
+.admin-heading-row {
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.admin-heading-row .button {
+  margin-left: auto;
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  white-space: normal;
+  text-align: center;
+}
+
 .nav-links {
   justify-content: center;
   flex-wrap: nowrap;
@@ -312,7 +326,14 @@ li::marker {
 }
 
 .hero-welcome .lead {
-  max-width: 74ch;
+  max-width: none;
+}
+
+@media (min-width: 981px) {
+  .hero-welcome .lead {
+    white-space: nowrap;
+    font-size: clamp(0.98rem, 1.08vw, 1.15rem);
+  }
 }
 
 .hero-art {
@@ -499,6 +520,10 @@ li::marker {
 .form-card {
   max-width: 760px;
   padding: 1.5rem;
+}
+
+.reservation-form {
+  margin-top: 1.4rem;
 }
 
 .account-profile-form {
@@ -1360,12 +1385,20 @@ th {
   position: relative;
 }
 
+.lightbox-dialog.lightbox-compact {
+  max-width: min(550px, 92vw);
+}
+
 .lightbox-dialog img {
   display: block;
   max-width: 100%;
   max-height: 82vh;
   object-fit: contain;
   border-radius: calc(var(--radius) - 2px);
+}
+
+.lightbox-dialog.lightbox-compact img {
+  max-height: 72vh;
 }
 
 .lightbox-close {
@@ -1416,6 +1449,12 @@ th {
   margin-left: auto;
   flex: 0 0 auto;
   order: 2;
+}
+
+.footer-logos a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 .footer-logo {

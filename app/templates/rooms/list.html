@@ -75,7 +75,7 @@
         <div class="inline-actions">
           <a class="button" href="{{ url_for('reservations.create', room_id=room.id) }}">{{ t("reserve_room") }}</a>
           {% if room.map_url %}
-            <a class="button secondary" href="{{ url_for('static', filename=room.map_url) }}">{{ t("building") }}</a>
+            <button class="button secondary" type="button" data-lightbox-src="{{ url_for('static', filename=room.map_url) }}" data-lightbox-alt="{{ t('building') }}: Sterlinga 26" data-lightbox-size="compact">{{ t("building") }}</button>
           {% endif %}
         </div>
       </article>

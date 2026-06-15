@@ -1,6 +1,6 @@
 # StudentSpot - postep prac
 
-Ostatnia aktualizacja: 2026-06-14
+Ostatnia aktualizacja: 2026-06-15
 
 ## Aktualny status
 
@@ -25,8 +25,9 @@ Ostatnia aktualizacja: 2026-06-14
 
 ## Aktualny checkpoint do wznowienia
 
-1. Zrobic reczny review lokalnie: `http://127.0.0.1:8000`.
-2. Po akceptacji recznej przepakowac ZIP i wgrac `student_spot.zip` na Frog dopiero po potwierdzeniu oraz ustawic `.env` wedlug `docs/FROG_DEPLOYMENT.md`.
+1. Aktualne zmiany sa po testach lokalnych: `compileall`, `pytest`, `pip check`, `flask routes` oraz Browser QA kluczowych ekranow.
+2. Przepakowac ZIP-y komendami: `bash scripts/package_release.sh`, `bash scripts/package_professor_release.sh`, `bash scripts/package_dev_handoff.sh`.
+3. Wypchnac commit do GitHub i wdrozyc aplikacje na Frog wedlug `docs/FROG_DEPLOYMENT.md`.
 
 ## Poprzedni status
 
@@ -166,4 +167,16 @@ python -m pytest
 bash scripts/package_release.sh
 ```
 
-Wynik ostatni: `26 passed`. ZIP `student_spot.zip` oraz `student_spot_profesor.zip` sa przepakowane po aktualnych zmianach wiadomosci i panelu opiekuna.
+Wynik ostatni: `27 passed`. ZIP `student_spot.zip` oraz `student_spot_profesor.zip` sa przepakowane po aktualnych zmianach wiadomosci i panelu opiekuna.
+
+Finalizacja oddaniowa 2026-06-15:
+- Punkt `Status danych: active_verified` zostal pominiety jako omylkowy; publiczna lista kol nie pokazuje juz technicznego statusu danych.
+- Strona glowna pokazuje 7 publicznych kol, lead w hero trzyma jedna linie na desktopie, a logo w stopce linkuja: StudentSpot do strony glownej, AHE do `https://www.ahe.lodz.pl/`.
+- Plan budynku Sterlinga 26 otwiera sie w kompaktowym lightboxie z przyciskiem zamkniecia, tak jak pozostale powiekszane grafiki.
+- `/demo` ma krotki tutorial pokazowy i rozpiske, co pokazac na kazdym koncie demo.
+- Seed demo dodaje dodatkowych fikcyjnych czlonkow i wnioski, zeby opiekun mogl pokazac liste czlonkow, zatwierdzanie, zmiane rol oraz wysylke wiadomosci.
+- Panel property admin nie pokazuje zarzadzania czlonkami; panel opiekuna i system admina pokazuje czlonkow i wnioski.
+- Popup welcome startuje automatycznie tylko na stronie glownej, dzieki czemu nie przykrywa logowania.
+- Dodano `scripts/package_dev_handoff.sh` i `plan_pokazowy_student_spot.md`; paczka handoff ma materialy do zachowania spojnosci kolejnych aplikacji AHE.
+- Weryfikacja: `.venv/bin/python -m compileall app tests` OK, `.venv/bin/python -m pytest` = 27 passed, `.venv/bin/python -m pip check` OK, `.venv/bin/flask --app wsgi:app routes` OK.
+- Browser QA: rezerwacja po zalogowaniu PL/EN pokazuje tekst o zatwierdzonym przedstawicielu kola, stary tekst `boss lub vice` nie wystepuje, formularz nie ma poziomego overflow, popup nie pokazuje sie automatycznie na logowaniu.

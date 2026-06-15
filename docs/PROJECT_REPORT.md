@@ -10,7 +10,7 @@ flowchart TD
   A --> C["Dział nieruchomości"]
   A --> D["Opiekunowie kół"]
   B --> E["Członkowie"]
-  B --> F["Przewodniczący / boss"]
+  B --> F["Przedstawiciele kół"]
   C --> G["Decyzje rezerwacji"]
 ```
 
@@ -31,12 +31,12 @@ potrzeba spotkania -> dopasowanie sali -> wniosek -> kontrola konfliktu -> decyz
 | property_admin | decyzje rezerwacji |
 | system_admin | administracja i audyt |
 | utw_organizer | rezerwacje dla UTW |
-| chair / vice_chair | rezerwacje w imieniu kola |
+| chair / vice_chair | rezerwacje w imieniu kola jako zatwierdzony przedstawiciel |
 | member | podglad wydarzen i statusow |
 
 ## Dane katalogowe kol AHE
 
-Seed zawiera 13 kol naukowych z oficjalnych podstron AHE. Publiczny katalog pokazuje domyslnie tylko 7 rekordow `active_verified`; 6 rekordow `official_needs_verification` pozostaje w bazie i panelu administratora do potwierdzenia aktualnosci. Nazwiska opiekunow i publiczne e-maile sa przechowywane jako metadane katalogowe, bez tworzenia kont uzytkownikow.
+Seed zawiera 7 publicznie pokazanych kol naukowych AHE oraz 6 dodatkowych rekordow ukrytych do potwierdzenia przez administratora. Nazwiska opiekunow i publiczne e-maile sa przechowywane jako metadane katalogowe, bez tworzenia kont uzytkownikow.
 
 ## ERD
 
@@ -58,7 +58,7 @@ erDiagram
 
 ```mermaid
 flowchart LR
-  S["Boss / vice / admin"] --> F["Filtry sal"]
+  S["Przedstawiciel kola / admin"] --> F["Filtry sal"]
   F --> R["Wyniki Sterlinga 26"]
   R --> W["Wniosek rezerwacyjny"]
   W --> C{"Konflikt czasu?"}
@@ -69,7 +69,7 @@ flowchart LR
   D -- odrzucona --> P["Powod + historia statusu"]
 ```
 
-## Mapa wymagan profesora w aplikacji
+## Mapa wymagan projektowych w aplikacji
 
 Widok `/info` zawiera jawna sekcje "Mapa wymagan projektowych", ktora laczy dzialajaca aplikacje z siedmioma punktami zaliczenia:
 
