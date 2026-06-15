@@ -123,6 +123,10 @@ Aktualizacja UI z 2026-06-15:
 - Browser QA po poprawce: desktop 1440 px bez poziomego overflow, header zredukowany z 193 px do 102 px, menu zostaje w jednej linii.
 - Dopasowano hero strony glownej do tresci: panel ma taka sama szerokosc jak pasek trzech logotypow pod spodem i nie ma juz sztucznej wysokosci prawie calego ekranu.
 - Ponownie przycięto logo Kognitywistyczno-Eksperymentalnego zgodnie ze screenem referencyjnym: sam ptak, nazwa i podpis `Kolo Naukowe`.
+- Odchudzono header desktopowy: logo, menu i kontrolki sa w jednej linii, z mniejszym paddingiem i nizsza belka.
+- Pasek `UP` ma szare tlo, a stopka jest nizsza; logotypy StudentSpot i AHE sa wieksze oraz wyrownane do tej samej wysokosci.
+- Dodano popup EN jako `app/static/media/visuals/welcome-popup-en.png`; strona glowna, `Info` i `Media` wybieraja grafike popupu zgodnie z jezykiem.
+- Logo Arteterapii i Pedagogiki Dziecka ustawiono jako kwadratowe 280x280, a `Koło Naukowe Pedagogiki Dziecka` przesunieto na koniec publicznej listy kol.
 
 ```bash
 python -m compileall app tests

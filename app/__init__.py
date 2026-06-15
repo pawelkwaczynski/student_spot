@@ -3,7 +3,7 @@ from __future__ import annotations
 from flask import Flask, g, redirect, request, session, url_for
 
 from app.config import Config
-from app.club_assets import club_logo_url
+from app.club_assets import club_logo_is_square, club_logo_url
 from app.extensions import csrf, db
 from app.i18n import get_locale, t
 from app.security import current_user
@@ -45,6 +45,7 @@ def create_app(config_object: type[Config] | None = None) -> Flask:
             "current_user": g.get("user"),
             "locale": g.get("locale", "pl"),
             "t": t,
+            "club_logo_is_square": club_logo_is_square,
             "club_logo_url": club_logo_url,
         }
 
