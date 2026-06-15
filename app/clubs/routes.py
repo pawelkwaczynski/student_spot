@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
-from sqlalchemy import or_
+from sqlalchemy import case, or_
 
 from app.extensions import db
 from app.forms import MembershipRequestForm
@@ -44,7 +44,11 @@ def list_clubs():
         query = query.filter(Club.majors.any(Major.slug == major_slug))
     if tag:
         query = query.filter(Club.tags_csv.ilike(f"%{tag}%"))
-    clubs = query.order_by(Club.is_featured.desc(), Club.name_pl.asc()).all()
+    clubs = query.order_by(
+        case((Club.slug == "pedagogika-dziecka", 1), else_=0),
+        Club.is_featured.desc(),
+        Club.name_pl.asc(),
+    ).all()
     public_clubs = Club.query.filter_by(is_public=True).all()
     tags = sorted({item for club in public_clubs for item in club.tags}, key=str.lower)
     majors = Major.query.order_by(Major.name_pl.asc()).all()

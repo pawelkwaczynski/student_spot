@@ -6,7 +6,7 @@
     {% set club_logo = club_logo_url(club) %}
     {% if club_logo %}
       <div class="club-detail-hero">
-        <div class="club-logo-frame">
+        <div class="club-logo-frame{% if club_logo_is_square(club) %} logo-square{% endif %}">
           <img src="{{ url_for('static', filename=club_logo) }}" alt="Logo: {{ club.name_pl if locale == 'pl' else club.name_en }}">
         </div>
         <p class="lead">{{ club.description_pl if locale == "pl" else club.description_en }}</p>

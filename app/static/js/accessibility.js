@@ -79,7 +79,9 @@
   function showWelcomePopup(force) {
     if (!document.body.classList.contains("app-guest")) return;
     if (document.querySelector(".welcome-popup")) return;
-    const key = "studentspot-welcome-popup-seen";
+    const locale = document.documentElement.lang === "en" ? "en" : "pl";
+    const imageSrc = locale === "en" ? "/static/media/visuals/welcome-popup-en.png" : "/static/media/visuals/welcome-popup.png";
+    const key = `studentspot-welcome-popup-seen-${locale}`;
     if (!force && localStorage.getItem(key) === "1") return;
     const backdrop = document.createElement("div");
     backdrop.className = "lightbox-backdrop is-open welcome-popup";
@@ -88,7 +90,7 @@
     backdrop.innerHTML = `
       <div class="lightbox-dialog">
         <button class="lightbox-close" type="button" aria-label="Close">×</button>
-        <img src="/static/media/visuals/welcome-popup.png" alt="StudentSpot welcome">
+        <img src="${imageSrc}" alt="StudentSpot welcome">
       </div>
     `;
     document.body.appendChild(backdrop);

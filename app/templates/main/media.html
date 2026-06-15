@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ t("media") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
+  {% set popup_asset = 'media/visuals/welcome-popup-en.png' if locale == 'en' else 'media/visuals/welcome-popup.png' %}
   <h1 id="media-title" class="page-title">{{ t("media") }}</h1>
   <section class="panel media-hero page-intro" aria-labelledby="media-title">
     <div>
@@ -10,8 +11,8 @@
         <p class="lead">Press materials and downloadable graphics for the unofficial StudentSpot prototype.</p>
       {% endif %}
     </div>
-    <button class="room-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
-      <img src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" alt="{{ t('demo_visual_alt') }}">
+    <button class="room-image-button" type="button" data-lightbox-src="{{ url_for('static', filename=popup_asset) }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
+      <img src="{{ url_for('static', filename=popup_asset) }}" alt="{{ t('demo_visual_alt') }}">
     </button>
   </section>
 
@@ -39,11 +40,11 @@
         <a class="button" href="{{ url_for('static', filename='media/brand/studentspot-logo.png') }}" download="studentspot-logo.png">{{ t("download_file") }}</a>
       </article>
       <article class="media-download">
-        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
-          <img src="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" alt="{{ t('demo_visual_alt') }}">
+        <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename=popup_asset) }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
+          <img src="{{ url_for('static', filename=popup_asset) }}" alt="{{ t('demo_visual_alt') }}">
         </button>
         <h3>{{ t("welcome_popup_graphic") }}</h3>
-        <a class="button" href="{{ url_for('static', filename='media/visuals/welcome-popup.png') }}" download="studentspot-popup-welcome.png">{{ t("download_file") }}</a>
+        <a class="button" href="{{ url_for('static', filename=popup_asset) }}" download="{{ 'studentspot-popup-welcome-en.png' if locale == 'en' else 'studentspot-popup-welcome.png' }}">{{ t("download_file") }}</a>
       </article>
       <article class="media-download">
         <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename='media/brand/ahe-logo-pl.png') }}" data-lightbox-alt="AHE logo PL" aria-label="{{ t('open_image') }}: AHE logo PL">
