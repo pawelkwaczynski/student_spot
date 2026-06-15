@@ -189,9 +189,9 @@ li::marker {
   margin: 0 auto;
   padding: 0.55rem clamp(1rem, 2.2vw, 2rem);
   display: grid;
-  grid-template-columns: minmax(10rem, auto) minmax(600px, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: clamp(0.8rem, 1.4vw, 1.6rem);
+  gap: clamp(0.65rem, 1vw, 1.15rem);
   background: var(--ahe-white);
 }
 
@@ -216,8 +216,9 @@ li::marker {
 }
 
 .brand-logo {
-  width: clamp(10rem, 8.5vw, 12rem);
-  height: clamp(10rem, 8.5vw, 12rem);
+  width: clamp(7.25rem, 7.4vw, 9.5rem);
+  height: auto;
+  max-height: 6.95rem;
   object-fit: contain;
   object-position: center;
   border-radius: 0;
@@ -1171,12 +1172,13 @@ th {
 }
 
 .footer-logo-studentspot {
-  width: clamp(4.5rem, 5vw, 5.7rem);
-  height: clamp(4.5rem, 5vw, 5.7rem);
+  width: clamp(5.4rem, 5.2vw, 6.2rem);
+  height: auto;
+  max-height: 4.6rem;
 }
 
 .footer-logo-ahe {
-  width: clamp(7.2rem, 8vw, 9rem);
+  width: clamp(6.4rem, 6.7vw, 7.7rem);
   height: auto;
 }
 
@@ -1241,9 +1243,9 @@ th {
   }
 }
 
-@media (max-width: 1660px) {
+@media (max-width: 1180px) {
   .nav {
-    grid-template-columns: minmax(10rem, auto) minmax(0, 1fr);
+    grid-template-columns: minmax(8rem, auto) minmax(0, 1fr);
   }
 
   .nav-links {
@@ -1263,8 +1265,9 @@ th {
 
 @media (max-width: 680px) {
   .brand-logo {
-    width: 5.8rem;
-    height: 5.8rem;
+    width: 6rem;
+    height: auto;
+    max-height: 4.5rem;
   }
 
   .footer-inner,
