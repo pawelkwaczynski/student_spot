@@ -18,3 +18,4 @@ student_spot.zip
 student_spot*.zip
 
 *.log
+docs/*.local.md
