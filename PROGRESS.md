@@ -128,6 +128,7 @@ Aktualizacja UI z 2026-06-15:
 - Dodano popup EN jako `app/static/media/visuals/welcome-popup-en.png`; strona glowna, `Info` i `Media` wybieraja grafike popupu zgodnie z jezykiem.
 - Logo Arteterapii i Pedagogiki Dziecka ustawiono jako kwadratowe 280x280, a `Koło Naukowe Pedagogiki Dziecka` przesunieto na koniec publicznej listy kol.
 - Poprawiono kontrast dark mode: hero strony glownej, przycisk `Pokaz popup`, naglowki sekcji i tabele demo nie maja juz jasnego tekstu na jasnym tle. Playwright QA: hero lead 9.54:1, `Pokaz popup` 15.98:1, tabela demo 9.54-15.98:1, bez poziomego overflow.
+- Zmniejszono logotypy StudentSpot i AHE w stopce o ok. 30%; Browser QA `/clubs/`: oba logo 54 px wysokosci, jedna linia, brak poziomego overflow.
 
 ```bash
 python -m compileall app tests
