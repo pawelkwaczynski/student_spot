@@ -1,7 +1,7 @@
 EN = {
     "app_name": "StudentSpot",
     "tagline": "Student clubs, rooms, and events in one lightweight system.",
-    "unofficial_notice": "Unofficial student project: StudentSpot by Paweł Kwaczyński / SKN AIRON / 2026",
+    "unofficial_notice": "Student project: StudentSpot by Paweł Kwaczyński / SKN AIRON / 2026",
     "dashboard": "Dashboard",
     "home": "Home",
     "info": "Info",

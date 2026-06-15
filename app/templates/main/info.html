@@ -7,8 +7,10 @@
     <div>
       {% if locale == "pl" %}
         <p class="lead">Kontekst projektu, autor, źródła danych i identyfikacja wizualna zastosowana w prototypie StudentSpot.</p>
+        <p class="meta">Projekt studencki pod opieką prof. dr hab. Mariana Niedźwiedzińskiego w ramach przedmiotu: Podstawy systemów informatycznych zarządzania / Metodyka zarządzania informacją - Projekt</p>
       {% else %}
         <p class="lead">Project context, author details, data sources, and visual identity used in the StudentSpot prototype.</p>
+        <p class="meta">Student project supervised by Prof. Marian Niedźwiedziński, PhD, DSc, as part of the course: Fundamentals of Management Information Systems / Information Management Methodology - Project.</p>
       {% endif %}
     </div>
     <button class="room-image-button" type="button" data-lightbox-src="{{ url_for('static', filename=popup_asset) }}" data-lightbox-alt="{{ t('demo_visual_alt') }}" aria-label="{{ t('open_image') }}: {{ t('demo_visual_alt') }}">
