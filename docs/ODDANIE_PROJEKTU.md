@@ -16,6 +16,12 @@
 https://github.com/pawelkwaczynski/student_spot
 ```
 
+## Publiczne demo
+
+```text
+https://frog01-20412.wykr.es
+```
+
 ## Zakres aplikacji
 
 StudentSpot jest nieoficjalnym prototypem studenckim dla środowiska AHE w Łodzi. Aplikacja wspiera katalog kół naukowych, wybór koła, listę członków u opiekuna, zatwierdzanie statusów i ról, wiadomości do członków koła, rezerwacje sal w budynku Sterlinga 26, decyzje administracyjne, powiadomienia, eksport spotkania do kalendarza oraz ustawienia dostępności.
@@ -60,14 +66,16 @@ StudentSpot123!
 
 ## Frog / Mikrus
 
-Planowane środowisko wdrożeniowe:
+Aktualne środowisko wdrożeniowe:
 
 - VPS: Mikrus Frog
 - serwer: frog01.mikr.us
 - port SSH: 10412
-- publiczny adres po uruchomieniu aplikacji: `https://frog01-APP_PORT.wykr.es`
-- baza docelowa: współdzielony MySQL Froga, dane dostępowe z `/root/mysql.txt`
-- proces aplikacji: Gunicorn na przydzielonym porcie `APP_PORT`
+- publiczny adres aplikacji: `https://frog01-20412.wykr.es`
+- port aplikacji: `20412`
+- baza demo: SQLite w katalogu aplikacji na serwerze
+- baza docelowa opcjonalna: współdzielony MySQL Froga przez `DATABASE_URL`
+- proces aplikacji: Gunicorn na przydzielonym porcie
 
 Hasła, plik `.env` i dane dostępowe do bazy nie są umieszczane w repozytorium ani w paczce ZIP.
 

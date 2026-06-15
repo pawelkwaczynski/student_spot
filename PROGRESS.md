@@ -27,7 +27,7 @@ Ostatnia aktualizacja: 2026-06-15
 
 1. Aktualne zmiany sa po testach lokalnych: `compileall`, `pytest`, `pip check`, `flask routes` oraz Browser QA kluczowych ekranow.
 2. Przepakowac ZIP-y komendami: `bash scripts/package_release.sh`, `bash scripts/package_professor_release.sh`, `bash scripts/package_dev_handoff.sh`.
-3. Wypchnac commit do GitHub i wdrozyc aplikacje na Frog wedlug `docs/FROG_DEPLOYMENT.md`.
+3. Ostatni deploy Frog dziala pod adresem `https://frog01-20412.wykr.es`; po kolejnych zmianach powtorzyc commit, push i deploy z paczki profesorskiej.
 
 ## Poprzedni status
 
@@ -180,3 +180,6 @@ Finalizacja oddaniowa 2026-06-15:
 - Dodano `scripts/package_dev_handoff.sh` i `plan_pokazowy_student_spot.md`; paczka handoff ma materialy do zachowania spojnosci kolejnych aplikacji AHE.
 - Weryfikacja: `.venv/bin/python -m compileall app tests` OK, `.venv/bin/python -m pytest` = 27 passed, `.venv/bin/python -m pip check` OK, `.venv/bin/flask --app wsgi:app routes` OK.
 - Browser QA: rezerwacja po zalogowaniu PL/EN pokazuje tekst o zatwierdzonym przedstawicielu kola, stary tekst `boss lub vice` nie wystepuje, formularz nie ma poziomego overflow, popup nie pokazuje sie automatycznie na logowaniu.
+- GitHub: `main` wypchniety do `https://github.com/pawelkwaczynski/student_spot`, commit `85190eb`.
+- Frog: aplikacja uruchomiona przez Gunicorn na porcie `20412`, publiczny adres `https://frog01-20412.wykr.es`, health check zwraca `{"service":"studentspot","status":"ok"}`.
+- Publiczny Browser QA: home ma popup, 7 publicznych kol i brak overflow; logowanie `guardian@studentspot.example.com` dziala; panel opiekuna pokazuje czlonkow i przycisk wiadomosci.
