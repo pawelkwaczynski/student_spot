@@ -7,6 +7,7 @@ from app.club_assets import club_logo_is_square, club_logo_url
 from app.extensions import csrf, db
 from app.i18n import get_locale, t
 from app.security import current_user
+from app.services import avatar_relative_path_for_user
 
 
 def create_app(config_object: type[Config] | None = None) -> Flask:
@@ -45,6 +46,7 @@ def create_app(config_object: type[Config] | None = None) -> Flask:
             "current_user": g.get("user"),
             "locale": g.get("locale", "pl"),
             "t": t,
+            "avatar_relative_path_for_user": avatar_relative_path_for_user,
             "club_logo_is_square": club_logo_is_square,
             "club_logo_url": club_logo_url,
         }

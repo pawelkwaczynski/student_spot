@@ -45,7 +45,11 @@ def test_club_filters_and_dashboard_recommendations(client):
     login(client, "boss@studentspot.example.com")
     response = client.get("/dashboard")
     assert response.status_code == 200
+    assert b"My account" in response.data
     assert b"AIrON" in response.data
+    assert "Błażej Strus".encode() in response.data
+    assert b"Sala K320" in response.data
+    assert b"AIrON development roadmap" in response.data
 
 
 def test_language_switch_changes_interface(client):
@@ -187,6 +191,32 @@ def test_registration_activation_flow(client, app):
         assert EmailVerificationToken.query.filter_by(user_id=user.id).one().used_at is not None
 
 
+def test_registration_allows_blank_nickname(client, app):
+    response = client.post(
+        "/auth/register",
+        data={
+            "index_number": "165398",
+            "first_name": "No",
+            "last_name": "Nickname",
+            "nickname": "",
+            "email": "blank-nickname@studentspot.example.com",
+            "password": "VeryStrong123!",
+            "confirm_password": "VeryStrong123!",
+            "major_id": "1",
+            "year_of_study": "1",
+            "study_level": "first_cycle",
+            "study_mode": "part_time",
+            "accept_terms": "y",
+            "accept_privacy": "y",
+        },
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    with app.app_context():
+        user = User.query.filter_by(email="blank-nickname@studentspot.example.com").one()
+        assert user.nickname == "student-165398"
+
+
 def test_activation_code_is_hidden_when_dev_display_disabled(client, app):
     app.config["SHOW_DEV_ACTIVATION_CODE"] = False
     response = client.post(
@@ -228,6 +258,7 @@ def test_boss_can_open_reservation_form(client):
     response = client.get("/reservations/new")
     assert response.status_code == 200
     assert b"Create reservation" in response.data or b"Utw" in response.data
+    assert b"Reservations only for authorized users" in response.data
 
 
 def test_approved_meeting_can_be_downloaded_as_ics(client, app):

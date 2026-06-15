@@ -2,9 +2,26 @@
 {% block title %}{{ t("dashboard") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
   <h1 class="page-title">{{ t("dashboard") }}</h1>
+  {% set avatar_path = avatar_relative_path_for_user(current_user) %}
+  {% set can_reserve = current_user.global_role in ["system_admin", "property_admin", "club_guardian", "utw_organizer"] or (primary_membership and primary_membership.status == "approved" and primary_membership.club_role in ["chair", "vice_chair"]) %}
   <div class="dashboard-grid">
     <section class="panel" aria-labelledby="summary-title">
-      <h2 id="summary-title">{{ current_user.display_name }}</h2>
+      <div class="account-summary">
+        {% if avatar_path %}
+          <img class="avatar-preview" src="{{ url_for('static', filename=avatar_path) }}" alt="{{ t('avatar_alt') }}">
+        {% else %}
+          <div class="avatar-preview avatar-placeholder" aria-hidden="true">
+            {{ current_user.first_name[:1] }}{{ current_user.last_name[:1] }}
+          </div>
+        {% endif %}
+        <div>
+          <h2 id="summary-title">{{ current_user.display_name }}</h2>
+          <p class="meta">{{ current_user.email }}</p>
+          <div class="inline-actions">
+            <a class="button ghost" href="{{ url_for('auth.profile') }}">{{ t("edit_account") }}</a>
+          </div>
+        </div>
+      </div>
       <div class="grid">
         <article class="card">
           <h3>{{ t("next_meeting") }}</h3>
@@ -37,9 +54,64 @@
         <article class="card">
           <h3>{{ t("need_accessible_room") }}</h3>
           <p class="meta">{{ t("privacy_hint") }}</p>
-          <a class="button" href="{{ url_for('rooms.list_rooms') }}">{{ t("reserve_room") }}</a>
+          {% if can_reserve %}
+            <a class="button" href="{{ url_for('reservations.create') }}">{{ t("reserve_room") }}</a>
+          {% else %}
+            <p class="meta">{{ t("reservation_policy_copy") }}</p>
+            <a class="button ghost" href="{{ url_for('rooms.list_rooms') }}">{{ t("rooms") }}</a>
+          {% endif %}
         </article>
       </div>
+
+      <section class="account-club-panel" aria-labelledby="my-club-title">
+        <h2 id="my-club-title">{{ t("my_club") }}</h2>
+        {% if my_club %}
+          <p><strong>{{ my_club.name_pl if locale == "pl" else my_club.name_en }}</strong>
+            {% if primary_membership %}
+              <span class="status {{ primary_membership.status }}">{{ t(primary_membership.status) }}</span>
+              {{ primary_membership.club_role }}
+            {% endif %}
+          </p>
+          <div class="account-club-grid">
+            <article class="card">
+              <h3>{{ t("club_rooms") }}</h3>
+              {% for room in club_rooms %}
+                <p><a href="{{ url_for('rooms.list_rooms', participants=room.capacity) }}">{{ room.name }}</a> · {{ t("capacity") }} {{ room.capacity }}</p>
+              {% else %}
+                <p class="meta">{{ t("no_club_rooms") }}</p>
+              {% endfor %}
+            </article>
+            <article class="card">
+              <h3>{{ t("club_news") }}</h3>
+              {% for post in club_news %}
+                <p><a href="{{ url_for('main.news') }}">{{ post.title_pl if locale == "pl" else post.title_en }}</a></p>
+              {% else %}
+                <p class="meta">{{ t("no_club_news") }}</p>
+              {% endfor %}
+            </article>
+          </div>
+          <section class="account-heroes" aria-labelledby="club-heroes-title">
+            <h3 id="club-heroes-title">{{ t("club_local_heroes") }}</h3>
+            {% for hero in club_heroes %}
+              <article class="account-hero-card">
+                <button class="media-image-button account-hero-image" type="button" data-lightbox-src="{{ url_for('static', filename=hero.image) }}" data-lightbox-alt="{{ hero.name }}" aria-label="{{ t('open_image') }}: {{ hero.name }}">
+                  <img src="{{ url_for('static', filename=hero.image) }}" alt="{{ hero.name }}">
+                </button>
+                <div>
+                  <h4>{{ hero.name }}</h4>
+                  <p class="local-hero-program">{{ hero.program }}</p>
+                  <p>{{ hero.bio }}</p>
+                </div>
+              </article>
+            {% else %}
+              <p class="meta">{{ t("no_club_heroes") }}</p>
+            {% endfor %}
+          </section>
+        {% else %}
+          <p class="meta">{{ t("no_selected_club") }}</p>
+          <a class="button" href="{{ url_for('auth.choose_club') }}">{{ t("find_your_club") }}</a>
+        {% endif %}
+      </section>
     </section>
     <aside class="panel" aria-labelledby="notifications-title">
       <h2 id="notifications-title">{{ t("notifications") }}</h2>
@@ -58,7 +130,11 @@
       <hr>
       <div class="inline-actions">
         <a class="button" href="{{ url_for('clubs.list_clubs') }}">{{ t("clubs") }}</a>
-        <a class="button secondary" href="{{ url_for('reservations.create') }}">{{ t("reserve_room") }}</a>
+        {% if can_reserve %}
+          <a class="button secondary" href="{{ url_for('reservations.create') }}">{{ t("reserve_room") }}</a>
+        {% else %}
+          <a class="button secondary" href="{{ url_for('rooms.list_rooms') }}">{{ t("rooms") }}</a>
+        {% endif %}
       </div>
     </aside>
   </div>

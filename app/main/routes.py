@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import json
+import unicodedata
 from pathlib import Path
 
-from flask import Blueprint, current_app, render_template
+from flask import Blueprint, current_app, g, render_template
 
 from app.models import Club, Event, Notification, Reservation, Room
 from app.security import login_required
@@ -193,6 +194,33 @@ LOCAL_HERO_NAME_OVERRIDES = {
     "Mariuszu Nguyen": "Mariusz Nguyen",
 }
 
+LOCAL_HERO_FEATURED_ORDER = {
+    "Błażej Strus": 0,
+}
+
+CLUB_HERO_KEYWORDS = {
+    "airon": ("informatyka", "technologie przetwarzania danych", "machine learning", "computer vision", "programowanie"),
+    "grafika": ("grafika", "komunikacja wizualna", "game art", "multimedia", "projektowanie graficzne"),
+    "kognitywistyczno-eksperymentalne": ("kognitywistyka", "neurodydaktyka", "psychologia", "fact-checking"),
+    "progressus": ("zarządzanie", "ekonomia", "audyt", "biznes"),
+    "wkreceni": ("kulturoznawstwo", "kultura", "menedżer kultury", "producent"),
+    "warsztaty-emocji": ("arteterapia", "terapia pedagogiczna", "pedagogika"),
+    "pedagogika-dziecka": ("pedagogika", "dydaktyka", "psychologia rozwoju"),
+    "mlodzi-dziennikarze": ("dziennikarstwo", "komunikacja społeczna", "media"),
+    "pielegniarstwo": ("pielęgniarstwo", "kosmetologia medyczna"),
+    "europa-nostra": ("politologia", "administracja", "samorząd"),
+    "mlody-samorzadowiec": ("politologia", "administracja", "samorząd"),
+}
+
+
+def normalize_text(value: str | None) -> str:
+    normalized = unicodedata.normalize("NFKD", value or "").replace("ł", "l").replace("Ł", "L")
+    return "".join(character for character in normalized if not unicodedata.combining(character)).casefold()
+
+
+def local_hero_sort_key(hero: dict[str, str]) -> tuple[int, str]:
+    return (LOCAL_HERO_FEATURED_ORDER.get(hero["name"], 1), normalize_text(hero["name"]))
+
 
 def load_local_heroes() -> list[dict[str, str]]:
     source_path = Path(current_app.root_path).parent / "source_info" / "ahe-2026-06-15.json"
@@ -213,7 +241,68 @@ def load_local_heroes() -> list[dict[str, str]]:
                 "image": image,
             }
         )
-    return sorted(heroes, key=lambda hero: hero["name"].casefold())
+    return sorted(heroes, key=local_hero_sort_key)
+
+
+def primary_membership_for(user):
+    approved = [membership for membership in user.memberships if membership.status == "approved"]
+    pending = [membership for membership in user.memberships if membership.status == "pending"]
+    memberships = approved or pending
+    return sorted(memberships, key=lambda membership: membership.created_at or 0)[0] if memberships else None
+
+
+def news_posts_for_club(club: Club | None) -> list[dict[str, str]]:
+    if club is None:
+        return []
+    club_terms = [club.slug, club.name_pl, club.name_en, *club.tags]
+    normalized_terms = [normalize_text(term) for term in club_terms if len(normalize_text(term)) > 2]
+    posts = []
+    for post in NEWS_POSTS:
+        post_club = normalize_text(post["club"])
+        if any(post_club in term or term in post_club for term in normalized_terms):
+            posts.append(post)
+    return posts
+
+
+def rooms_for_club(club: Club | None) -> list[Room]:
+    if club is None:
+        return []
+    suggested = [normalize_text(room) for room in club.suggested_rooms]
+    rooms = Room.query.filter_by(is_active=True).order_by(Room.name.asc(), Room.code.asc()).all()
+    matched_rooms = []
+    for room in rooms:
+        room_terms = {normalize_text(room.code), normalize_text(room.name)}
+        for wanted in suggested:
+            is_training_room_alias = "szkoleniow" in wanted and room.code == "S01"
+            if is_training_room_alias or wanted in room_terms or any(wanted in term or term in wanted for term in room_terms):
+                matched_rooms.append(room)
+                break
+    return matched_rooms
+
+
+def hero_keywords_for_club(club: Club) -> list[str]:
+    explicit_keywords = CLUB_HERO_KEYWORDS.get(club.slug, ())
+    fallback_keywords = [
+        club.name_pl,
+        club.name_en,
+        *club.tags,
+        *(major.name_pl for major in club.majors),
+        *(major.name_en for major in club.majors),
+    ]
+    keywords = [normalize_text(keyword) for keyword in (*explicit_keywords, *fallback_keywords)]
+    return sorted({keyword for keyword in keywords if len(keyword) > 3}, key=len, reverse=True)
+
+
+def local_heroes_for_club(club: Club | None, limit: int = 3) -> list[dict[str, str]]:
+    if club is None:
+        return []
+    keywords = hero_keywords_for_club(club)
+    matches = []
+    for hero in load_local_heroes():
+        haystack = normalize_text(" ".join([hero["name"], hero["program"], hero["bio"]]))
+        if any(keyword in haystack for keyword in keywords):
+            matches.append(hero)
+    return sorted(matches, key=local_hero_sort_key)[:limit]
 
 
 @bp.route("/")
@@ -257,10 +346,10 @@ def media():
 @bp.route("/dashboard")
 @login_required
 def dashboard():
-    from flask import g
-
     user = g.user
     memberships = user.memberships
+    primary_membership = primary_membership_for(user)
+    my_club = primary_membership.club if primary_membership else None
     club_ids = [membership.club_id for membership in memberships if membership.status == "approved"]
     next_event = (
         Event.query.filter(Event.club_id.in_(club_ids)).order_by(Event.starts_at.asc()).first()
@@ -278,6 +367,11 @@ def dashboard():
     return render_template(
         "main/dashboard.html",
         memberships=memberships,
+        primary_membership=primary_membership,
+        my_club=my_club,
+        club_news=news_posts_for_club(my_club),
+        club_rooms=rooms_for_club(my_club),
+        club_heroes=local_heroes_for_club(my_club),
         next_event=next_event,
         reservations=reservations,
         notifications=notifications,

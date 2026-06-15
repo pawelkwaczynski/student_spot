@@ -3,12 +3,46 @@
 {% block title %}{{ t("profile") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
   <h1 class="page-title">{{ t("profile") }}</h1>
-  <form class="form-card" method="post" novalidate>
+  <form class="form-card account-profile-form" method="post" enctype="multipart/form-data" novalidate>
     {{ form.hidden_tag() }}
-    {{ field(form.first_name) }}
-    {{ field(form.last_name) }}
-    {{ field(form.nickname) }}
-    {{ field(form.preferred_language, "language") }}
-    {{ form.submit(class_="button", value=t("save")) }}
+    <section class="account-form-section" aria-labelledby="profile-data-title">
+      <h2 id="profile-data-title">{{ t("personal_data") }}</h2>
+      <div class="avatar-editor">
+        {% set avatar_path = avatar_relative_path_for_user(current_user) %}
+        {% if avatar_path %}
+          <img class="avatar-preview" src="{{ url_for('static', filename=avatar_path) }}" alt="{{ t('avatar_alt') }}">
+        {% else %}
+          <div class="avatar-preview avatar-placeholder" aria-hidden="true">
+            {{ current_user.first_name[:1] }}{{ current_user.last_name[:1] }}
+          </div>
+        {% endif %}
+        <div>
+          {{ field(form.avatar, "avatar") }}
+          <p class="meta">{{ t("avatar_hint") }}</p>
+        </div>
+      </div>
+      <div class="grid">
+        {{ field(form.first_name) }}
+        {{ field(form.last_name) }}
+        {{ field(form.nickname) }}
+        {{ field(form.preferred_language, "language") }}
+      </div>
+      <p class="meta">{{ t("nickname_optional_hint") }}</p>
+    </section>
+
+    <section class="account-form-section" aria-labelledby="profile-password-title">
+      <h2 id="profile-password-title">{{ t("change_password") }}</h2>
+      <div class="grid">
+        {{ field(form.current_password) }}
+        {{ field(form.new_password) }}
+        {{ field(form.confirm_new_password) }}
+      </div>
+      <p class="meta">{{ t("password_change_hint") }}</p>
+    </section>
+
+    <div class="inline-actions">
+      {{ form.submit(class_="button", value=t("save")) }}
+      <a class="button ghost" href="{{ url_for('main.dashboard') }}">{{ t("dashboard") }}</a>
+    </div>
   </form>
 {% endblock %}

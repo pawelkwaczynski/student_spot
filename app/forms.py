@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
 from wtforms import (
     BooleanField,
     DateField,
@@ -20,7 +21,7 @@ class RegistrationForm(FlaskForm):
     index_number = StringField("index_number", validators=[DataRequired(), Regexp(r"^\d{6}$")])
     first_name = StringField("first_name", validators=[DataRequired(), Length(max=80)])
     last_name = StringField("last_name", validators=[DataRequired(), Length(max=80)])
-    nickname = StringField("nickname", validators=[DataRequired(), Length(min=3, max=80)])
+    nickname = StringField("nickname", validators=[Optional(), Length(min=3, max=80)])
     email = StringField("email", validators=[DataRequired(), Email(), Length(max=255)])
     password = PasswordField("password", validators=[DataRequired(), Length(min=12, max=128)])
     confirm_password = PasswordField(
@@ -66,8 +67,15 @@ class ActivationForm(FlaskForm):
 class ProfileForm(FlaskForm):
     first_name = StringField("first_name", validators=[DataRequired(), Length(max=80)])
     last_name = StringField("last_name", validators=[DataRequired(), Length(max=80)])
-    nickname = StringField("nickname", validators=[DataRequired(), Length(min=3, max=80)])
+    nickname = StringField("nickname", validators=[Optional(), Length(min=3, max=80)])
     preferred_language = SelectField("language", choices=[("pl", "PL"), ("en", "EN")])
+    avatar = FileField("avatar")
+    current_password = PasswordField("current_password", validators=[Optional(), Length(max=128)])
+    new_password = PasswordField("new_password", validators=[Optional(), Length(min=12, max=128)])
+    confirm_new_password = PasswordField(
+        "confirm_new_password",
+        validators=[Optional(), EqualTo("new_password", message="Passwords must match.")],
+    )
     submit = SubmitField("save")
 
 

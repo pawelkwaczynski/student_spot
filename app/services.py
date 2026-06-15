@@ -6,10 +6,12 @@ import secrets
 import smtplib
 from datetime import datetime, timedelta
 from email.message import EmailMessage
+from pathlib import Path
 from typing import Iterable
 
 from flask import current_app, has_request_context, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 
 from app.extensions import db
 from app.models import (
@@ -25,6 +27,8 @@ from app.models import (
     RoomFeature,
     utcnow,
 )
+
+ALLOWED_AVATAR_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
 
 def anonymize_ip(ip_address: str | None) -> str | None:
@@ -51,6 +55,37 @@ def audit(action: str, user=None, object_type: str | None = None, object_id: obj
 
 def notify(user, message_pl: str, message_en: str) -> None:
     db.session.add(Notification(user=user, message_pl=message_pl, message_en=message_en))
+
+
+def avatar_relative_path_for_user(user) -> str | None:
+    if not user or not getattr(user, "id", None):
+        return None
+    avatar_dir = Path(current_app.static_folder) / "media" / "avatars"
+    for extension in sorted(ALLOWED_AVATAR_EXTENSIONS):
+        path = avatar_dir / f"user-{user.id}.{extension}"
+        if path.exists():
+            return f"media/avatars/user-{user.id}.{extension}"
+    return None
+
+
+def avatar_upload_is_allowed(storage) -> bool:
+    filename = secure_filename(storage.filename or "")
+    extension = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    return extension in ALLOWED_AVATAR_EXTENSIONS
+
+
+def save_user_avatar(user, storage) -> bool:
+    filename = secure_filename(storage.filename or "")
+    extension = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if not avatar_upload_is_allowed(storage):
+        return False
+    avatar_dir = Path(current_app.static_folder) / "media" / "avatars"
+    avatar_dir.mkdir(parents=True, exist_ok=True)
+    for old_path in avatar_dir.glob(f"user-{user.id}.*"):
+        if old_path.suffix.lstrip(".").lower() in ALLOWED_AVATAR_EXTENSIONS:
+            old_path.unlink()
+    storage.save(avatar_dir / f"user-{user.id}.{extension}")
+    return True
 
 
 class ConsoleEmailService:
