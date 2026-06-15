@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ t("info") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <section class="panel info-hero" aria-labelledby="info-title">
+  <h1 id="info-title" class="page-title">{{ t("info") }}</h1>
+  <section class="panel info-hero page-intro" aria-labelledby="info-title">
     <div>
-      <h1 id="info-title" class="page-title">{{ t("info") }}</h1>
       {% if locale == "pl" %}
         <p class="lead">Kontekst projektu, autor, źródła danych i identyfikacja wizualna zastosowana w prototypie StudentSpot.</p>
       {% else %}

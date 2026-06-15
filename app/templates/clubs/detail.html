@@ -1,9 +1,19 @@
 {% extends "base.html" %}
 {% block title %}{{ club.name_pl }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <article class="panel">
-    <h1 class="page-title">{{ club.name_pl if locale == "pl" else club.name_en }}</h1>
-    <p class="lead">{{ club.description_pl if locale == "pl" else club.description_en }}</p>
+  <h1 class="page-title">{{ club.name_pl if locale == "pl" else club.name_en }}</h1>
+  <article class="panel page-intro">
+    {% set club_logo = club_logo_url(club) %}
+    {% if club_logo %}
+      <div class="club-detail-hero">
+        <div class="club-logo-frame">
+          <img src="{{ url_for('static', filename=club_logo) }}" alt="Logo: {{ club.name_pl if locale == 'pl' else club.name_en }}">
+        </div>
+        <p class="lead">{{ club.description_pl if locale == "pl" else club.description_en }}</p>
+      </div>
+    {% else %}
+      <p class="lead">{{ club.description_pl if locale == "pl" else club.description_en }}</p>
+    {% endif %}
     <div class="meta-grid">
       <p><strong>{{ t("major") }}:</strong>
         {% for major in club.majors %}

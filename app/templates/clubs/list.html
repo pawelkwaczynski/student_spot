@@ -35,6 +35,12 @@
   <div class="grid">
     {% for club in clubs %}
       <article class="card">
+        {% set club_logo = club_logo_url(club) %}
+        {% if club_logo %}
+          <div class="club-logo-frame">
+            <img src="{{ url_for('static', filename=club_logo) }}" alt="Logo: {{ club.name_pl if locale == 'pl' else club.name_en }}">
+          </div>
+        {% endif %}
         <h2>{{ club.name_pl if locale == "pl" else club.name_en }}</h2>
         <p>{{ club.description_pl if locale == "pl" else club.description_en }}</p>
         <p class="meta">

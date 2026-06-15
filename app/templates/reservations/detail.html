@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ reservation.title }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <article class="panel">
-    <h1 class="page-title">{{ reservation.title }}</h1>
+  <h1 class="page-title">{{ reservation.title }}</h1>
+  <article class="panel page-intro">
     <p><span class="status {{ reservation.status }}">{{ t(reservation.status) }}</span></p>
     <p>{{ reservation.description }}</p>
     <p class="meta">{{ reservation.starts_at.strftime("%Y-%m-%d %H:%M") }} - {{ reservation.ends_at.strftime("%H:%M") }} · {{ reservation.room.name }}</p>

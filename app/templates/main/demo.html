@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ t("demo") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <section class="panel demo-hero demo-hero-compact" aria-labelledby="demo-title">
+  <h1 id="demo-title" class="page-title">{{ t("demo") }}</h1>
+  <section class="panel demo-hero demo-hero-compact page-intro" aria-labelledby="demo-title">
     <div>
-      <h1 id="demo-title" class="page-title">{{ t("demo") }}</h1>
       <p class="lead">{{ t("demo_project_copy") }}</p>
     </div>
   </section>

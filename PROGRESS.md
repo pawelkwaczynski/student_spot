@@ -115,6 +115,9 @@ Aktualizacja UI z 2026-06-15:
 - Strona glowna nie pokazuje juz przyciskow `Sale` i `Demo` w sekcji hero.
 - Browser QA: 2048, 1440, 1024 i 390 px bez poziomego overflow; nowe tlo aktywne.
 - Aktualizacja brandingu: usunieto osobny napis `StudentSpot` z naglowka, powiekszono graficzne logo aplikacji, dodano logo StudentSpot + AHE w bialej stopce.
+- Aktualizacja stopki i zakladek: logotypy w stopce sa po prawej, AHE zmniejszone, `2026` pogrubione, stopka trzyma tekst w jednej linii na desktopie.
+- Dodano logotypy 6 kol naukowych: AIrON, Kognitywistyczno-Eksperymentalne, Grafika, Progressus, Wkreceni, Pedagogika Dziecka. Logo AIrON przyciete z kwadratu do prostokata.
+- Ujednolicono uklad zakladek: tytuly `Info`, `Media`, `Demo`, `Aktualnosci`, `Kalendarz`, `Local Heroes`, szczegoly kola i rezerwacji sa nad panelem, nie w szarym tle.
 
 ```bash
 python -m compileall app tests
