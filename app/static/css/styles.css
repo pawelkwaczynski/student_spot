@@ -800,11 +800,6 @@ th {
   opacity: 0.9;
 }
 
-.media-download img.people-preview {
-  height: clamp(180px, 22vw, 260px);
-  object-position: center top;
-}
-
 .media-download h3 {
   margin: 0;
 }
@@ -925,8 +920,7 @@ th {
   font-weight: 600;
 }
 
-.news-grid,
-.heroes-grid {
+.news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
@@ -988,20 +982,6 @@ th {
 .calendar-time {
   color: var(--muted);
   font-family: var(--font-body);
-}
-
-.hero-person-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.hero-person-image img {
-  width: 100%;
-  height: clamp(170px, 23vw, 250px);
-  object-fit: cover;
-  object-position: center top;
-  border: 1px solid var(--border);
-  background: #fff;
 }
 
 .local-heroes-list {
