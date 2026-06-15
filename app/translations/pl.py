@@ -1,7 +1,7 @@
 PL = {
     "app_name": "StudentSpot",
     "tagline": "Koła naukowe, sale i wydarzenia w jednym lekkim systemie.",
-    "unofficial_notice": "Nieoficjalny projekt studencki: StudentSpot by Paweł Kwaczyński / SKN AIRON / 2026",
+    "unofficial_notice": "Projekt studencki: StudentSpot by Paweł Kwaczyński / SKN AIRON / 2026",
     "dashboard": "Dashboard",
     "home": "Start",
     "info": "Info",
