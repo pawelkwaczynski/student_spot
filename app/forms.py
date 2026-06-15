@@ -107,6 +107,10 @@ class ReservationForm(FlaskForm):
     requires_elevator = BooleanField("elevator")
     requires_induction_loop = BooleanField("induction_loop")
     requires_accessible_computer = BooleanField("accessible_computer")
+    requires_sign_language_interpreter = BooleanField("sign_language_interpreter")
+    requires_blind_guide = BooleanField("blind_guide")
+    requires_accessible_transport = BooleanField("accessible_transport")
+    requires_assistive_equipment = BooleanField("assistive_equipment")
     accessibility_notes = TextAreaField("accessibility_notes", validators=[Optional(), Length(max=1000)])
     submit = SubmitField("create_reservation")
 

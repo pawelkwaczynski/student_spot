@@ -6,6 +6,7 @@ from flask import Blueprint, Response, abort, flash, g, redirect, render_templat
 
 from app.extensions import db
 from app.forms import ReservationForm
+from app.i18n import t
 from app.models import Club, ClubMembership, Reservation, ReservationStatusHistory, Room, RoomFeature, User
 from app.security import login_required
 from app.services import audit, features_by_codes, has_room_conflict, notify, user_can_reserve_for_club
@@ -55,6 +56,23 @@ def escape_ics(value: str) -> str:
 
 def format_ics_datetime(value: datetime) -> str:
     return value.strftime("%Y%m%dT%H%M%S")
+
+
+def accessibility_support_notes(form: ReservationForm) -> str | None:
+    selected = []
+    if form.requires_sign_language_interpreter.data:
+        selected.append(t("sign_language_interpreter"))
+    if form.requires_blind_guide.data:
+        selected.append(t("blind_guide"))
+    if form.requires_accessible_transport.data:
+        selected.append(t("accessible_transport"))
+    if form.requires_assistive_equipment.data:
+        selected.append(t("assistive_equipment"))
+    if not selected:
+        return (form.accessibility_notes.data or "").strip() or None
+    notes = (form.accessibility_notes.data or "").strip()
+    support_block = "\n".join([f"{t('accessibility_support_requests')}:", *[f"- {item}" for item in selected]])
+    return "\n\n".join([part for part in [notes, support_block] if part])
 
 
 @bp.route("/new", methods=["GET", "POST"])
@@ -111,7 +129,7 @@ def create():
                 requires_elevator=form.requires_elevator.data,
                 requires_induction_loop=form.requires_induction_loop.data,
                 requires_accessible_computer=form.requires_accessible_computer.data,
-                accessibility_notes=form.accessibility_notes.data,
+                accessibility_notes=accessibility_support_notes(form),
             )
             reservation.required_features = features_by_codes(all_required_codes)
             db.session.add(reservation)

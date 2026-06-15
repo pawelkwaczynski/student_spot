@@ -30,7 +30,7 @@ Ostatnia aktualizacja: 2026-06-14
 
 ## Poprzedni status
 
-- Przeczytano materialy startowe: README, specyfikacje MVP, dane/zrodla, prompt Codex, prompt Claude oraz dokument DOCX.
+- Przeczytano materialy startowe: README, specyfikacje MVP, dane/zrodla oraz dokument DOCX.
 - Ustalono stack: Flask/Jinja2/SQLAlchemy/SQLite lokalnie/PyMySQL na Frog.
 - Przyjeto zakres: kompletne MVP z PL/EN, dark mode, high contrast, wieksza czcionka, testami, dokumentacja i ZIP.
 - Utworzono plan realizacji w `IMPLEMENTATION_PLAN.md`.
@@ -118,6 +118,14 @@ Aktualizacja UI z 2026-06-15:
 - Aktualizacja stopki i zakladek: logotypy w stopce sa po prawej, AHE zmniejszone, `2026` pogrubione, stopka trzyma tekst w jednej linii na desktopie.
 - Dodano logotypy 7 kol naukowych: AIrON, Kognitywistyczno-Eksperymentalne, Grafika, Arteterapeutyczne Warsztaty Emocji, Progressus, Wkreceni, Pedagogika Dziecka. Logo AIrON przyciete z kwadratu do prostokata.
 - Ujednolicono uklad zakladek: tytuly `Info`, `Media`, `Demo`, `Aktualnosci`, `Kalendarz`, `Local Heroes`, szczegoly kola i rezerwacji sa nad panelem, nie w szarym tle.
+
+Aktualizacja oddaniowa z 2026-06-15:
+- W rezerwacji sal dodano cztery potrzeby organizacyjne dostępności: tłumacz języka migowego, przewodnik dla osoby niewidomej, bezpłatny transport z Łodzi i użyczenie sprzętu wspomagającego dydaktykę.
+- Zmieniono nazewnictwo UTW na neutralny "komunikat do UTW" w UI, testach i dokumentacji.
+- Dodano `docs/ODDANIE_PROJEKTU.md` z opisem dla profesora, GitHubem, instrukcją lokalną, Frog bez haseł oraz kontami demo.
+- Dodano `scripts/package_professor_release.sh`; skrypt pomija prywatne notatki, `.env`, cache, bazę lokalną i robocze checkpointy.
+- Usunięto z `source_info/` robocze pliki startowe i wyczyszczono checkpoint ze śladów narzędzi.
+- Weryfikacja: `compileall` OK, `pytest` = 23 passed, Browser QA formularza rezerwacji i panelu admina bez błędów konsoli.
 - Przycięto aktywne logo StudentSpot z kwadratu do prostokata i zmieniono CSS tak, zeby header oraz stopka nie wymuszaly pustej kwadratowej przestrzeni.
 - Przycięto logo kola Kognitywistyczno-Eksperymentalnego do samego znaku kola, bez czerwonych podpisow i bez drugiego logo z zarowka.
 - Browser QA po poprawce: desktop 1440 px bez poziomego overflow, header zredukowany z 193 px do 102 px, menu zostaje w jednej linii.

@@ -23,7 +23,7 @@ StudentSpot to lekka aplikacja Flask/Jinja2 do demonstracyjnego zarzadzania kola
 - Strona `/local-heroes` z demonstracyjnymi profilami lokalnych liderow, ambasadorow i ekspertow AHE.
 - Lightbox zdjec sal oraz znak wodny `TEMPLATRE` dla roboczych sal komputerowych K200A/K320.
 - Lightbox grafik na stronach Info, Media, Aktualnosci i Local Heroes.
-- Panel admina do potwierdzania danych kol i wysylania apeli do kont UTW.
+- Panel admina do potwierdzania danych kol i wysylania komunikatow do kont UTW.
 - Powiadomienia w aplikacji i podstawowy audyt.
 
 ## Szybki start lokalny
@@ -69,13 +69,27 @@ StudentSpot123!
 python -m pytest
 ```
 
-Aktualnie testy sprawdzaja m.in. seed 8 kont, 13 kol AHE, ukrywanie kol wymagajacych weryfikacji, ograniczenie sal do Sterlinga, rejestracje, aktywacje, duplikaty, uprawnienia, filtrowanie sal i kol, najlepsze dopasowanie pojemnosci, konflikt rezerwacji, eksport `.ics`, apel UTW, decyzje admina, audyt, strony `/news`, `/calendar`, `/local-heroes` oraz polska i angielska wersje mapy wymagan projektowych w `/info`.
+Aktualnie testy sprawdzaja m.in. seed 8 kont, 13 kol AHE, ukrywanie kol wymagajacych weryfikacji, ograniczenie sal do Sterlinga, rejestracje, aktywacje, duplikaty, uprawnienia, filtrowanie sal i kol, najlepsze dopasowanie pojemnosci, konflikt rezerwacji, eksport `.ics`, komunikat UTW, decyzje admina, audyt, strony `/news`, `/calendar`, `/local-heroes` oraz polska i angielska wersje mapy wymagan projektowych w `/info`.
 
 ## Materialy zrodlowe
 
 Folder `source_info/` przechowuje materialy dostarczone do projektu, w tym wytyczne KV AHE, dane kol naukowych, paczke `studentspot_people_package.zip`, paczke `blog_package.zip` oraz dokument `Prezentacja i projekt ZDW_latest.docx`. Interfejs KV zostal dopasowany do AHE na podstawie CSS strony AHE wskazanego w `/info`.
 
 ## Pakowanie ZIP
+
+Paczka dla profesora:
+
+```bash
+bash scripts/package_professor_release.sh
+```
+
+Wynik:
+
+```text
+student_spot_profesor.zip
+```
+
+Pełna paczka robocza:
 
 ```bash
 bash scripts/package_release.sh
@@ -87,7 +101,7 @@ Skrypt tworzy:
 student_spot.zip
 ```
 
-Do ZIP nie trafia `.venv`, cache Pythona, lokalna baza SQLite ani pliki systemowe `.DS_Store`.
+Do ZIP nie trafia `.venv`, cache Pythona, lokalna baza SQLite, lokalne notatki z dostępami, plik `.env` ani pliki systemowe `.DS_Store`.
 
 ## Wdrozenie Frog
 

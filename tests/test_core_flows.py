@@ -87,7 +87,7 @@ def test_info_page_contains_author_kv_and_project_map(client):
     assert "Wymagania niefunkcjonalne".encode() in response.data
     assert "Projekt koncepcyjny i przepływy informacyjne".encode() in response.data
     assert "UTW AHE = Uniwersytet Trzeciego Wieku".encode() in response.data
-    assert "Model kont UTW i apeli".encode() in response.data
+    assert "Model kont UTW i komunikatów".encode() in response.data
 
 
 def test_info_page_professor_map_is_translated_to_english(client):
@@ -107,7 +107,7 @@ def test_demo_page_mentions_accounts_and_author_context_without_kv(client):
     assert "Konta demo".encode() in response.data
     assert "Key visual AHE".encode() not in response.data
     assert b"keyvisual_info.md" not in response.data
-    assert "Model kont UTW i apeli".encode() not in response.data
+    assert "Model kont UTW i komunikatów".encode() not in response.data
     assert "Paweł Kwaczyński".encode() in response.data
     assert b"165318" in response.data
 
@@ -261,6 +261,38 @@ def test_boss_can_open_reservation_form(client):
     assert b"Reservations only for authorized users" in response.data
 
 
+def test_accessibility_support_requests_are_saved_in_reservation_notes(client, app):
+    login(client, "vice@studentspot.example.com")
+    response = client.post(
+        "/reservations/new",
+        data={
+            "club_id": "1",
+            "room_id": "1",
+            "title": "Test dostępności",
+            "description": "Spotkanie testowe z potrzebami organizacyjnymi dostępności.",
+            "event_type": "meeting",
+            "date": "2026-12-20",
+            "start_time": "10:00",
+            "end_time": "11:00",
+            "participants": "12",
+            "requires_sign_language_interpreter": "y",
+            "requires_blind_guide": "y",
+            "requires_accessible_transport": "y",
+            "requires_assistive_equipment": "y",
+            "accessibility_notes": "Prośba o kontakt z uczestnikiem dzień wcześniej.",
+        },
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    with app.app_context():
+        reservation = Reservation.query.filter_by(title="Test dostępności").one()
+        assert "Potrzeby organizacyjne dostępności" in reservation.accessibility_notes
+        assert "tłumacza języka migowego" in reservation.accessibility_notes
+        assert "przewodnika dla osoby niewidomej" in reservation.accessibility_notes
+        assert "bezpłatnego transportu" in reservation.accessibility_notes
+        assert "sprzętu wspomagającego" in reservation.accessibility_notes
+
+
 def test_approved_meeting_can_be_downloaded_as_ics(client, app):
     login(client, "vice@studentspot.example.com")
     with app.app_context():
@@ -338,7 +370,7 @@ def test_admin_can_approve_membership_and_audit_is_recorded(client, app):
         assert AuditLog.query.filter_by(action="membership_status_changed").count() >= 1
 
 
-def test_admin_can_confirm_hidden_club_and_send_utw_appeal(client, app):
+def test_admin_can_confirm_hidden_club_and_send_utw_announcement(client, app):
     login(client, "admin@studentspot.example.com")
     with app.app_context():
         club = Club.query.filter_by(slug="moja-psychologia").one()
@@ -350,7 +382,7 @@ def test_admin_can_confirm_hidden_club_and_send_utw_appeal(client, app):
         club = db.session.get(Club, club_id)
         assert club.is_public
         assert club.verification_status == "active_verified"
-    response = client.post("/admin/utw-appeals", data={"message": "Spotkanie organizacyjne"}, follow_redirects=True)
+    response = client.post("/admin/utw-announcements", data={"message": "Spotkanie organizacyjne"}, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
         utw = User.query.filter_by(email="utw@studentspot.example.com").one()

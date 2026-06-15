@@ -99,9 +99,9 @@ def confirm_club(club_id: int):
     return redirect(url_for("admin.dashboard"))
 
 
-@bp.route("/utw-appeals", methods=["POST"])
+@bp.route("/utw-announcements", methods=["POST"])
 @login_required
-def send_utw_appeal():
+def send_utw_announcement():
     if g.user.global_role not in {"system_admin", "property_admin"}:
         abort(403)
     message = (request.form.get("message") or "").strip()
@@ -112,10 +112,10 @@ def send_utw_appeal():
     for recipient in recipients:
         notify(
             recipient,
-            f"Apel do UTW: {message}",
-            f"UTW announcement: {message}",
+            f"Komunikat do UTW: {message}",
+            f"UTW admin message: {message}",
         )
-    audit("utw_appeal_sent", user=g.user, object_type="utw", object_id="organizers", count=len(recipients))
+    audit("utw_announcement_sent", user=g.user, object_type="utw", object_id="organizers", count=len(recipients))
     db.session.commit()
-    flash("utw_appeal_sent", "success")
+    flash("utw_announcement_sent", "success")
     return redirect(url_for("admin.dashboard"))

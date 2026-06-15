@@ -22,16 +22,9 @@ StudentSpot jest lekkim systemem webowym wspierającym:
 2. `02_STUDENTSPOT_DANE_I_ZRODLA.md`  
    Dane startowe o salach, kołach naukowych, dostępności, kontaktach, logotypach i mapach. Zawiera rozróżnienie danych potwierdzonych oraz roboczych.
 
-3. `03_PROMPT_CLAUDE_CODE.md`  
-   Prompt do Claude Code prowadzący przez analizę, budowę, testy i dokumentację aplikacji.
-
-4. `04_PROMPT_CODEX.md`  
-   Prompt do Codex przeznaczony do wdrożenia aplikacji w repozytorium, z naciskiem na działający kod, testy i deployment.
-
 ## Zalecana kolejność
 
-1. Przekaż agentowi wszystkie cztery pliki.
-2. Poproś o przeczytanie ich przed modyfikacją repozytorium.
+1. Przeczytaj pliki źródłowe przed modyfikacją repozytorium.
 3. Najpierw zbuduj wersję lokalną.
 4. Uruchom testy automatyczne.
 5. Zasil bazę danymi demonstracyjnymi.
@@ -39,7 +32,7 @@ StudentSpot jest lekkim systemem webowym wspierającym:
 
 ## Najważniejsza zasada zakresu
 
-MVP ma być **małe, kompletne i działające**. Nie wolno komplikować projektu mikroserwisami, Reactem, Keycloakiem, kolejkami zadań ani lokalnym silnikiem AI. Wersja na zaliczenie ma dobrze realizować główny proces zarządczy:
+MVP ma być **małe, kompletne i działające**. Nie wolno komplikować projektu mikroserwisami, Reactem, Keycloakiem ani kolejkami zadań. Wersja na zaliczenie ma dobrze realizować główny proces zarządczy:
 
 > zgłoszenie potrzeby → dopasowanie sali → wniosek o rezerwację → kontrola konfliktu → decyzja administratora → powiadomienie → widoczność wydarzenia.
 
