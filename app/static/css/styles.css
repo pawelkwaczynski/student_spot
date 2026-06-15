@@ -334,6 +334,11 @@ li::marker {
   margin-top: 1.4rem;
 }
 
+.page-intro .lead {
+  margin-top: 0;
+  max-width: none;
+}
+
 .lead {
   color: var(--muted);
   font-size: 1.15rem;
@@ -405,6 +410,41 @@ td {
   font-weight: 300;
   line-height: 1.8;
   color: var(--ahe-text);
+}
+
+.club-logo-frame {
+  width: 100%;
+  min-height: 6.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ahe-white);
+  border: 1px solid var(--border);
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.club-logo-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 5.4rem;
+  object-fit: contain;
+}
+
+.club-detail-hero {
+  display: grid;
+  grid-template-columns: minmax(180px, 270px) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.club-detail-hero .club-logo-frame {
+  min-height: 8.75rem;
+  margin-bottom: 0;
+}
+
+.club-detail-hero .club-logo-frame img {
+  max-height: 7.2rem;
 }
 
 .room-thumb {
@@ -1110,14 +1150,18 @@ th {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .footer-logos {
   display: flex;
   align-items: center;
-  gap: clamp(1rem, 2vw, 1.6rem);
-  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: clamp(0.8rem, 1.4vw, 1.2rem);
+  flex-wrap: nowrap;
+  margin-left: auto;
+  flex: 0 0 auto;
+  order: 2;
 }
 
 .footer-logo {
@@ -1127,18 +1171,21 @@ th {
 }
 
 .footer-logo-studentspot {
-  width: clamp(5.8rem, 8vw, 8.5rem);
-  height: clamp(5.8rem, 8vw, 8.5rem);
+  width: clamp(4.5rem, 5vw, 5.7rem);
+  height: clamp(4.5rem, 5vw, 5.7rem);
 }
 
 .footer-logo-ahe {
-  width: clamp(9.6rem, 14vw, 13rem);
+  width: clamp(7.2rem, 8vw, 9rem);
   height: auto;
 }
 
 .site-footer p {
   margin: 0;
-  max-width: 58ch;
+  max-width: none;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  order: 1;
 }
 
 .sr-only {
@@ -1224,6 +1271,21 @@ th {
   .footer-logos {
     justify-content: center;
     text-align: center;
+  }
+
+  .footer-inner,
+  .footer-logos,
+  .club-detail-hero {
+    grid-template-columns: 1fr;
+    flex-wrap: wrap;
+  }
+
+  .footer-logos {
+    margin-left: 0;
+  }
+
+  .site-footer p {
+    white-space: normal;
   }
 
   .calendar-slot {

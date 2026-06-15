@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ t("local_heroes") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <section class="panel" aria-labelledby="heroes-title">
-    <h1 id="heroes-title" class="page-title">{{ t("local_heroes") }}</h1>
+  <h1 id="heroes-title" class="page-title">{{ t("local_heroes") }}</h1>
+  <section class="panel page-intro" aria-labelledby="heroes-title">
     {% if locale == "pl" %}
       <p class="lead">Osobna przestrzeń dla lokalnych liderów, ambasadorów i ekspertów AHE. Profile są danymi demonstracyjnymi opartymi o materiały źródłowe i pokazują przyszły moduł rekomendowania gości, mentorów i osób do wydarzeń kół.</p>
     {% else %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ t("news") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <section class="panel" aria-labelledby="news-title">
-    <h1 id="news-title" class="page-title">{{ t("news") }}</h1>
+  <h1 id="news-title" class="page-title">{{ t("news") }}</h1>
+  <section class="panel page-intro" aria-labelledby="news-title">
     {% if locale == "pl" %}
       <p class="lead">Templatki aktualności kół naukowych na podstawie prawdziwych materiałów. W docelowym systemie takie wpisy mogą publikować opiekunowie, bossowie i osoby odpowiedzialne za komunikację koła.</p>
     {% else %}

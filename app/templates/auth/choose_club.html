@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ t("find_your_club") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <section class="panel" aria-labelledby="find-club-title">
-    <h1 id="find-club-title" class="page-title">{{ t("find_your_club") }}</h1>
+  <h1 id="find-club-title" class="page-title">{{ t("find_your_club") }}</h1>
+  <section class="panel page-intro" aria-labelledby="find-club-title">
     {% if locale == "pl" %}
       <p class="lead">Konto jest aktywne. System proponuje koła powiązane z Twoim kierunkiem, a rola w kole zostanie później potwierdzona przez administratora albo opiekuna koła.</p>
     {% else %}
@@ -13,6 +13,12 @@
   <section class="grid" aria-label="{{ t('recommended_clubs') }}">
     {% for club in recommended_clubs %}
       <article class="card">
+        {% set club_logo = club_logo_url(club) %}
+        {% if club_logo %}
+          <div class="club-logo-frame">
+            <img src="{{ url_for('static', filename=club_logo) }}" alt="Logo: {{ club.name_pl if locale == 'pl' else club.name_en }}">
+          </div>
+        {% endif %}
         <h2>{{ club.name_pl if locale == "pl" else club.name_en }}</h2>
         <p>{{ club.description_pl if locale == "pl" else club.description_en }}</p>
         <p>

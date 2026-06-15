@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ t("calendar") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <section class="panel calendar-intro" aria-labelledby="calendar-title">
-    <h1 id="calendar-title" class="page-title">{{ t("calendar") }}</h1>
+  <h1 id="calendar-title" class="page-title">{{ t("calendar") }}</h1>
+  <section class="panel calendar-intro page-intro" aria-labelledby="calendar-title">
     {% if locale == "pl" %}
       <p class="lead">Przykładowy widok zarezerwowanych sal i slotów godzinowych na czerwiec oraz lipiec 2026. Dane są demonstracyjne i pokazują, jak można czytać obciążenie sal Sterlinga 26.</p>
     {% else %}

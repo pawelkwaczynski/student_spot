@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ t("media") }} - {{ t("app_name") }}{% endblock %}
 {% block content %}
-  <section class="panel media-hero" aria-labelledby="media-title">
+  <h1 id="media-title" class="page-title">{{ t("media") }}</h1>
+  <section class="panel media-hero page-intro" aria-labelledby="media-title">
     <div>
-      <h1 id="media-title" class="page-title">{{ t("media") }}</h1>
       {% if locale == "pl" %}
         <p class="lead">Materiały prasowe i pliki graficzne do prezentacji nieoficjalnego prototypu StudentSpot.</p>
       {% else %}
