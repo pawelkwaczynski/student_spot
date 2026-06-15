@@ -78,6 +78,7 @@
 
   function showWelcomePopup(force) {
     if (!document.body.classList.contains("app-guest")) return;
+    if (document.querySelector(".welcome-popup")) return;
     const key = "studentspot-welcome-popup-seen";
     if (!force && localStorage.getItem(key) === "1") return;
     const backdrop = document.createElement("div");
@@ -152,5 +153,5 @@
   apply();
   setupBackToTop();
   setupRegistrationSteps();
-  showWelcomePopup();
+  showWelcomePopup(window.location.pathname === "/");
 })();

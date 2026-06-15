@@ -7,6 +7,7 @@ cd "$ROOT_DIR"
 rm -f student_spot.zip
 
 zip -r student_spot.zip . \
+  -x ".git/*" \
   -x ".venv/*" \
   -x "__pycache__/*" \
   -x "*/__pycache__/*" \
