@@ -2,6 +2,34 @@
 
 Instrukcja zaklada Alpine Linux, przydzielony port aplikacji w `APP_PORT` oraz wspoldzielony MySQL Froga.
 
+## Parametry i ograniczenia Froga
+
+Notatki na podstawie publicznej dokumentacji Mikrus Frog:
+
+- system: Linux Alpine,
+- zasoby: 256 MB RAM i 3 GB dysku,
+- technologia: LXC,
+- dostep root,
+- baza danych: wspoldzielony MySQL, dane dostepowe w `/root/mysql.txt`,
+- publiczny HTTPS dla aplikacji webowej przez subdomene `wykr.es`,
+- aplikacja na VPS powinna sluchac po HTTP na jednym z przydzielonych portow IPv4,
+- nie uzywac domyslnego portu 80 dla publicznego adresu Froga,
+- ograniczony ruch wychodzacy, ale porty `80`, `443`, `3306`, `53`, `22` sa dostepne,
+- nie stawiac serwerow gier/glosowych i nie skanowac portow.
+
+Przykladowy format publicznej domeny:
+
+```text
+https://frog01-APP_PORT.wykr.es
+```
+
+Dokumentacja pomocnicza:
+
+- https://wiki.mikr.us/
+- https://wiki.mikr.us/frog/faq
+- https://wiki.mikr.us/frog/alpine
+- https://ssp.mikr.us/
+
 ## 1. Wgranie plikow
 
 Wgraj `student_spot.zip` na konto Frog i rozpakuj:
