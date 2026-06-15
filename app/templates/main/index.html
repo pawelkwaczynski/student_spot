@@ -12,8 +12,6 @@
           <a class="button" href="{{ url_for('auth.login') }}">{{ t("login") }}</a>
           <a class="button secondary" href="{{ url_for('auth.register') }}">{{ t("register") }}</a>
         {% endif %}
-        <a class="button ghost" href="{{ url_for('rooms.list_rooms') }}">{{ t("rooms") }}</a>
-        <a class="button secondary" href="{{ url_for('main.demo') }}">{{ t("demo") }}</a>
         <button class="ghost" type="button" data-show-welcome-popup>{{ t("show_welcome_popup") }}</button>
       </div>
     </div>

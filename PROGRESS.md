@@ -106,6 +106,15 @@ Nastepnie kontynuuj od pierwszego niezrobionego punktu w sekcji `Najblizszy krok
 
 ## Wyniki ostatniej weryfikacji
 
+Aktualizacja UI z 2026-06-15:
+- Podmieniono aktywne tlo aplikacji na `app/static/media/visuals/background-new.png` z `source_info/background_new.png`.
+- Powiekszono logotyp StudentSpot w naglowku i poprawiono responsive header, zeby `Media` nie spadalo samotnie do kolejnego rzedu.
+- Dodano `Zarejestruj sie` obok `Zaloguj sie` w pasku gornym.
+- Przycisk `UP` przeniesiono na biale tlo nad stopka i dodano strzalke.
+- Popup powitalny startuje automatycznie na stronie glownej.
+- Strona glowna nie pokazuje juz przyciskow `Sale` i `Demo` w sekcji hero.
+- Browser QA: 2048, 1440, 1024 i 390 px bez poziomego overflow; nowe tlo aktywne.
+
 ```bash
 python -m compileall app tests
 flask --app wsgi:app init-db --reset
