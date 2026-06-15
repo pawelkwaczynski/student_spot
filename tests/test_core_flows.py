@@ -139,6 +139,8 @@ def test_demo_page_mentions_accounts_and_author_context_without_kv(client):
     assert "Paweł Kwaczyński".encode() in response.data
     assert b"165318" in response.data
     assert "Szybki tutorial pokazowy".encode() in response.data
+    assert "Sugerowane workflow: demo MVP pozwala odtworzyć pełny przepływ".encode() in response.data
+    assert "Zachęcam do testowania!".encode() in response.data
     assert "członkowie koła, statusy, role, wiadomości".encode() in response.data
 
 

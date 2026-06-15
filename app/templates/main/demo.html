@@ -48,29 +48,29 @@
   </div>
 
   <section class="panel" aria-labelledby="demo-walkthrough-title">
-    <h2 id="demo-walkthrough-title">Szybki tutorial pokazowy</h2>
+    <h2 id="demo-walkthrough-title">{{ "Szybki tutorial pokazowy" if locale == "pl" else "Quick demo tutorial" }}</h2>
     {% if locale == "pl" %}
       <ol class="flow-steps demo-flow-steps">
-        <li>Wejdź w <strong>Start</strong>: pokaż logo, popup welcome, sale, 7 publicznych kół i feed aktualności pod kołami.</li>
-        <li>Wejdź w <strong>Info</strong>: pokaż mapę wymagań projektowych, role, wymagania funkcjonalne/niefunkcjonalne i KV AHE.</li>
-        <li>Zaloguj <strong>guardian@studentspot.example.com</strong>: w panelu administracji pokaż listę członków, wnioski, zmianę roli i przycisk wiadomości.</li>
-        <li>Wyślij wiadomość do AIrON, potem zaloguj <strong>boss@studentspot.example.com</strong> i pokaż skrzynkę <strong>Wiadomości</strong>.</li>
-        <li>Jako przedstawiciel koła pokaż <strong>Utwórz rezerwację</strong>: uprawnienia, dostępność, transport z terenu Łodzi i zapis do kolejki admina.</li>
-        <li>Zaloguj <strong>property@studentspot.example.com</strong>: pokaż decyzje rezerwacyjne, ukryte koła do potwierdzenia i komunikat do UTW.</li>
-        <li>Na końcu pokaż <strong>Kalendarz</strong>, <strong>Aktualności</strong>, <strong>Local Heroes</strong>, <strong>Media</strong> i przełączniki PL/EN, dark mode, kontrast, A+.</li>
+        <li>Wejdź w <strong>Start</strong>: zobacz logo, popup welcome, sale, 7 publicznych kół i feed aktualności pod kołami.</li>
+        <li>Wejdź w <strong>Info</strong>: zobacz mapę wymagań projektowych, role, wymagania funkcjonalne/niefunkcjonalne i KV AHE.</li>
+        <li>Zaloguj <strong>guardian@studentspot.example.com</strong>: w panelu administracji i zobacz listę członków, wnioski, zmianę roli i przycisk wiadomości.</li>
+        <li>Wyślij wiadomość do AIrON, potem zaloguj <strong>boss@studentspot.example.com</strong> i zobacz skrzynkę <strong>Wiadomości</strong>.</li>
+        <li>Jako przedstawiciel koła zobacz <strong>Utwórz rezerwację</strong>: uprawnienia, dostępność, transport z terenu Łodzi i zapis do kolejki admina.</li>
+        <li>Zaloguj <strong>property@studentspot.example.com</strong>: zobacz decyzje rezerwacyjne, ukryte koła do potwierdzenia i komunikat do UTW.</li>
+        <li>Na końcu zajrzyj i zobacz <strong>Kalendarz</strong>, <strong>Aktualności</strong>, <strong>Local Heroes</strong>, <strong>Media</strong> i przełączniki PL/EN, dark mode, kontrast, A+.</li>
       </ol>
-      <p class="meta">Efekt wow: pokaż pełny przepływ od koła i członkostwa, przez wiadomość i rezerwację, do decyzji administracyjnej, powiadomień i eksportu wydarzenia do kalendarza.</p>
+      <p class="meta">Sugerowane workflow: demo MVP pozwala odtworzyć pełny przepływ &gt; od koła i członkostwa, przez wiadomość i rezerwację, do decyzji administracyjnej, powiadomień i eksportu wydarzenia do kalendarza. Zachęcam do testowania!</p>
     {% else %}
       <ol class="flow-steps demo-flow-steps">
-        <li>Open <strong>Home</strong>: show the logo, welcome popup, rooms, 7 public clubs, and the news feed under clubs.</li>
-        <li>Open <strong>Info</strong>: show the project requirements map, roles, functional/non-functional requirements, and AHE key visual.</li>
-        <li>Log in as <strong>guardian@studentspot.example.com</strong>: show the member list, requests, role changes, and the message button.</li>
-        <li>Send a message to AIrON, then log in as <strong>boss@studentspot.example.com</strong> and show the <strong>Messages</strong> inbox.</li>
-        <li>As a club representative, show <strong>Create reservation</strong>: permissions, accessibility, transport from the Lodz area, and admin queue.</li>
-        <li>Log in as <strong>property@studentspot.example.com</strong>: show reservation decisions, hidden clubs for confirmation, and UTW messages.</li>
-        <li>Finish with <strong>Calendar</strong>, <strong>News</strong>, <strong>Local Heroes</strong>, <strong>Media</strong>, and PL/EN, dark mode, contrast, A+ controls.</li>
+        <li>Go to <strong>Home</strong>: see the logo, welcome popup, rooms, 7 public clubs, and the news feed under clubs.</li>
+        <li>Go to <strong>Info</strong>: see the project requirements map, roles, functional/non-functional requirements, and AHE key visual.</li>
+        <li>Log in as <strong>guardian@studentspot.example.com</strong>: in the administration panel, see the member list, requests, role changes, and the message button.</li>
+        <li>Send a message to AIrON, then log in as <strong>boss@studentspot.example.com</strong> and see the <strong>Messages</strong> inbox.</li>
+        <li>As a club representative, see <strong>Create reservation</strong>: permissions, accessibility, transport from the Lodz area, and admin queue.</li>
+        <li>Log in as <strong>property@studentspot.example.com</strong>: see reservation decisions, hidden clubs for confirmation, and UTW messages.</li>
+        <li>At the end, check and see <strong>Calendar</strong>, <strong>News</strong>, <strong>Local Heroes</strong>, <strong>Media</strong>, and PL/EN, dark mode, contrast, A+ controls.</li>
       </ol>
-      <p class="meta">Strong demo path: show the full flow from club and membership through message and booking to admin decision, notifications, and calendar export.</p>
+      <p class="meta">Suggested workflow: the MVP demo lets you recreate the full flow &gt; from club and membership through message and reservation to an administrative decision, notifications, and calendar export. Feel free to test it!</p>
     {% endif %}
   </section>
 
