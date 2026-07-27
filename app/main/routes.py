@@ -6,7 +6,7 @@ from pathlib import Path
 
 from flask import Blueprint, current_app, g, render_template
 
-from app.models import Club, Event, Notification, Reservation, Room
+from app.models import Club, Event, Notification, Reservation, Room, utcnow
 from app.security import login_required
 
 bp = Blueprint("main", __name__)
@@ -84,82 +84,6 @@ NEWS_POSTS = [
         "source_url": "https://www.ahe.lodz.pl/kognitywistyka/kolo-naukowe",
         "excerpt_pl": "Koło rozwija zainteresowania umysłem, poznaniem, badaniami eksperymentalnymi i neurodydaktyką. Wpis stanowi templatkę dla kół spoza informatyki.",
         "excerpt_en": "The group develops interests in mind, cognition, experimental research, and neurodidactics. This post is a template for clubs outside computer science.",
-    },
-]
-
-
-CALENDAR_SLOTS = [
-    {
-        "date": "2026-06-16",
-        "time": "09:00-10:30",
-        "room": "Sala K320",
-        "club": "AIrON",
-        "title_pl": "Sprint projektowy AI",
-        "title_en": "AI project sprint",
-        "status": "approved",
-    },
-    {
-        "date": "2026-06-18",
-        "time": "12:00-14:00",
-        "room": "Aula A03",
-        "club": "Progressus",
-        "title_pl": "Warsztat zarządzania projektem",
-        "title_en": "Project management workshop",
-        "status": "approved",
-    },
-    {
-        "date": "2026-06-23",
-        "time": "15:15-17:00",
-        "room": "Sala K200A",
-        "club": "Grafika",
-        "title_pl": "Portfolio review",
-        "title_en": "Portfolio review",
-        "status": "pending",
-    },
-    {
-        "date": "2026-06-25",
-        "time": "10:00-11:30",
-        "room": "Sala szkoleniowa Sterlinga",
-        "club": "UTW AHE",
-        "title_pl": "Spotkanie organizacyjne UTW",
-        "title_en": "UTW organization meeting",
-        "status": "approved",
-    },
-    {
-        "date": "2026-07-02",
-        "time": "13:00-15:00",
-        "room": "Aula A01",
-        "club": "Wkręceni",
-        "title_pl": "Prelekcja o kulturze cyfrowej",
-        "title_en": "Digital culture talk",
-        "status": "approved",
-    },
-    {
-        "date": "2026-07-07",
-        "time": "16:00-18:00",
-        "room": "Aula A02",
-        "club": "Kognitywistyka",
-        "title_pl": "Seminarium neurodydaktyczne",
-        "title_en": "Neurodidactics seminar",
-        "status": "pending",
-    },
-    {
-        "date": "2026-07-15",
-        "time": "09:30-12:00",
-        "room": "Sala K320",
-        "club": "AIrON",
-        "title_pl": "Laboratorium aplikacji webowych",
-        "title_en": "Web app lab",
-        "status": "approved",
-    },
-    {
-        "date": "2026-07-22",
-        "time": "11:00-12:30",
-        "room": "Sala szkoleniowa Sterlinga",
-        "club": "Pedagogika Dziecka",
-        "title_pl": "Spotkanie metodyczne",
-        "title_en": "Teaching methods meeting",
-        "status": "approved",
     },
 ]
 
@@ -320,7 +244,16 @@ def news():
 
 @bp.route("/calendar")
 def calendar():
-    return render_template("main/calendar.html", slots=CALENDAR_SLOTS)
+    reservations = (
+        Reservation.query.filter(
+            Reservation.status.in_(("approved", "pending")),
+            Reservation.ends_at >= utcnow(),
+        )
+        .order_by(Reservation.starts_at.asc())
+        .limit(60)
+        .all()
+    )
+    return render_template("main/calendar.html", reservations=reservations)
 
 
 @bp.route("/local-heroes")

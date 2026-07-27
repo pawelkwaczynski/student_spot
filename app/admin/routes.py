@@ -56,7 +56,7 @@ def dashboard():
 @bp.route("/memberships/<int:membership_id>/decision", methods=["POST"])
 @login_required
 def decide_membership(membership_id: int):
-    membership = ClubMembership.query.get_or_404(membership_id)
+    membership = db.get_or_404(ClubMembership, membership_id)
     if not user_can_manage_club(g.user, membership.club):
         abort(403)
     action = request.form.get("action")
@@ -77,7 +77,7 @@ def decide_membership(membership_id: int):
 def decide_reservation(reservation_id: int):
     if g.user.global_role not in {"system_admin", "property_admin"}:
         abort(403)
-    reservation = Reservation.query.get_or_404(reservation_id)
+    reservation = db.get_or_404(Reservation, reservation_id)
     action = request.form.get("action")
     reason = (request.form.get("rejection_reason") or "").strip()
     if action == "approve":
@@ -99,7 +99,7 @@ def decide_reservation(reservation_id: int):
 def confirm_club(club_id: int):
     if g.user.global_role not in {"system_admin", "property_admin"}:
         abort(403)
-    club = Club.query.get_or_404(club_id)
+    club = db.get_or_404(Club, club_id)
     club.verification_status = "active_verified"
     club.last_verified_at = date.today()
     club.is_public = True

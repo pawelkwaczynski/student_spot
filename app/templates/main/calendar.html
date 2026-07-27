@@ -4,24 +4,28 @@
   <h1 id="calendar-title" class="page-title">{{ t("calendar") }}</h1>
   <section class="panel calendar-intro page-intro" aria-labelledby="calendar-title">
     {% if locale == "pl" %}
-      <p class="lead">Przykładowy widok zarezerwowanych sal i slotów godzinowych na czerwiec oraz lipiec 2026.<br>Dane są demonstracyjne i pokazują, jak można czytać obciążenie sal Sterlinga 26.</p>
+      <p class="lead">Nadchodzące rezerwacje sal i spotkania kół naukowych.<br>Wpisy pojawiają się automatycznie na podstawie wniosków rezerwacyjnych.</p>
     {% else %}
-      <p class="lead">A sample view of booked rooms and time slots for June and July 2026.<br>The data is demonstrational and shows how Sterlinga 26 room usage can be read at a glance.</p>
+      <p class="lead">Upcoming room reservations and student club meetings.<br>Entries appear automatically based on reservation requests.</p>
     {% endif %}
   </section>
 
   <section class="calendar-list" aria-label="{{ t('calendar') }}">
-    {% for slot in slots %}
+    {% for reservation in reservations %}
       <article class="calendar-slot">
         <div>
-          <p class="calendar-date">{{ slot.date }}</p>
-          <p class="calendar-time">{{ slot.time }}</p>
+          <p class="calendar-date">{{ reservation.starts_at.strftime("%Y-%m-%d") }}</p>
+          <p class="calendar-time">{{ reservation.starts_at.strftime("%H:%M") }}-{{ reservation.ends_at.strftime("%H:%M") }}</p>
         </div>
         <div>
-          <h2>{{ slot.title_pl if locale == "pl" else slot.title_en }}</h2>
-          <p class="meta">{{ slot.room }} · {{ slot.club }}</p>
+          <h2>{{ reservation.title }}</h2>
+          <p class="meta">{{ reservation.room.name }} · {{ reservation.club.name_pl if locale == "pl" else reservation.club.name_en }}</p>
         </div>
-        <span class="status {{ slot.status }}">{{ t(slot.status) }}</span>
+        <span class="status {{ reservation.status }}">{{ t(reservation.status) }}</span>
+      </article>
+    {% else %}
+      <article class="panel">
+        <p class="meta">{{ t("calendar_empty") }}</p>
       </article>
     {% endfor %}
   </section>

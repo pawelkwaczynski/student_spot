@@ -92,7 +92,7 @@ def compose():
 @bp.route("/<int:recipient_id>")
 @login_required
 def detail(recipient_id: int):
-    recipient = ClubMessageRecipient.query.get_or_404(recipient_id)
+    recipient = db.get_or_404(ClubMessageRecipient, recipient_id)
     if recipient.recipient_id != g.user.id and recipient.message.sender_id != g.user.id:
         abort(403)
     if recipient.recipient_id == g.user.id and recipient.read_at is None:

@@ -147,8 +147,11 @@ def test_news_calendar_and_local_heroes_pages(client):
     assert b"roadmap.png" in response.data
     response = client.get("/calendar")
     assert response.status_code == 200
-    assert b"2026-06-16" in response.data
+    assert "Warsztat AIrON".encode() in response.data
     assert "Sala K320".encode() in response.data
+    assert "Zatwierdzone".encode() in response.data
+    assert "Oczekuje".encode() in response.data
+    assert "Odrzucony test terminu".encode() not in response.data
     response = client.get("/local-heroes")
     assert response.status_code == 200
     assert "Adrian Makoć".encode() in response.data

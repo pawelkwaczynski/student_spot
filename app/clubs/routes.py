@@ -65,7 +65,7 @@ def list_clubs():
 
 @bp.route("/<int:club_id>", methods=["GET", "POST"])
 def detail(club_id: int):
-    club = Club.query.get_or_404(club_id)
+    club = db.get_or_404(Club, club_id)
     if not can_view_hidden_club(club):
         abort(404)
     if request.method == "POST" and not g.get("user"):

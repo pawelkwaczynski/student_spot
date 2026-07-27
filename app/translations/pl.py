@@ -160,6 +160,7 @@ PL = {
     "privacy_hint": "Podaj wyłącznie potrzeby organizacyjne wydarzenia.",
     "open_dashboard": "Otwórz moje konto",
     "demo_visual_alt": "Grafika powitalna StudentSpot z logo AHE i funkcjami systemu.",
+    "calendar_empty": "Brak nadchodzących rezerwacji. Nowe wpisy pojawią się po zatwierdzeniu wniosków rezerwacyjnych.",
     "utw_model_title": "Model kont UTW i komunikatów",
     "utw_model_copy": "W MVP Uniwersytet Trzeciego Wieku ma konto organizatora, które może rezerwować sale i odbierać komunikaty z panelu admina jako powiadomienia. W kolejnej wersji można dodać wiele kont organizatorów UTW bez numeru indeksu, z osobną walidacją i listą grup.",
     "utw_model_note": "Nie tworzymy kont dla seniorów z danych publicznych. Konta UTW zakłada administrator albo opiekun procesu.",

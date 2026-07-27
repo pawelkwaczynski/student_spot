@@ -160,6 +160,7 @@ EN = {
     "privacy_hint": "Only describe event organization needs.",
     "open_dashboard": "Open my account",
     "demo_visual_alt": "StudentSpot welcome graphic with AHE branding and system features.",
+    "calendar_empty": "No upcoming reservations. New entries will appear once reservation requests are approved.",
     "utw_model_title": "UTW accounts and admin messages",
     "utw_model_copy": "In the MVP, the University of the Third Age has an organizer account that can reserve rooms and receive admin announcements as in-app notifications. A later version can add multiple UTW organizer accounts without student index numbers, with separate validation and group lists.",
     "utw_model_note": "The app does not create senior accounts from public data. UTW accounts are created by an administrator or process guardian.",
