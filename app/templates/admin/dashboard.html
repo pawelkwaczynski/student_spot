@@ -157,6 +157,28 @@
     </section>
   {% endif %}
 
+  {% if current_user.global_role in ["system_admin", "club_guardian"] %}
+    <section class="panel" aria-labelledby="add-news-title">
+      <h2 id="add-news-title">{{ t("add_news") }}</h2>
+      <form method="post" action="{{ url_for('admin.create_news') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="news-club">{{ t("news_club") }}</label>
+        <input id="news-club" name="club" maxlength="160" required>
+        <label for="news-title-pl">{{ t("news_title_pl") }}</label>
+        <input id="news-title-pl" name="title_pl" maxlength="200" required>
+        <label for="news-title-en">{{ t("news_title_en") }}</label>
+        <input id="news-title-en" name="title_en" maxlength="200" required>
+        <label for="news-excerpt-pl">{{ t("news_excerpt_pl") }}</label>
+        <textarea id="news-excerpt-pl" name="excerpt_pl" rows="3" maxlength="600" required></textarea>
+        <label for="news-excerpt-en">{{ t("news_excerpt_en") }}</label>
+        <textarea id="news-excerpt-en" name="excerpt_en" rows="3" maxlength="600" required></textarea>
+        <label for="news-source-url">{{ t("news_source_url") }}</label>
+        <input id="news-source-url" name="source_url" maxlength="500">
+        <button type="submit">{{ t("publish_news") }}</button>
+      </form>
+    </section>
+  {% endif %}
+
   <section class="panel" aria-labelledby="audit-title">
     <h2 id="audit-title">{{ t("audit_log") }}</h2>
     <ul>

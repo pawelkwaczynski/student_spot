@@ -17,12 +17,89 @@ from app.models import (
     ReservationStatusHistory,
     Room,
     RoomFeature,
+    NewsPost,
     User,
     utcnow,
 )
 from app.security import hash_password
 
 DEMO_PASSWORD = "***REMOVED***"
+
+NEWS_SOURCE_DATA = [
+    {
+        "slug": "rada-programowa-informatyki",
+        "date_pl": "2 kwietnia 2026",
+        "date_en": "2 April 2026",
+        "title_pl": "Student koła w Radzie Programowej Informatyki",
+        "title_en": "Club student in the Computer Science Programme Council",
+        "club": "AIrON",
+        "image": "media/news/student_council.png",
+        "source_url": "https://airon.ahe.lodz.pl/news/student-kola-w-radzie-programowej-informatyki/",
+        "excerpt_pl": "Dawid Tomaszewski z koła AIrON reprezentuje studentów w Radzie Programowej kierunku Informatyka. To przykład, jak aktywność koła może przekładać się na realny wpływ na program studiów i współpracę z otoczeniem branżowym.",
+        "excerpt_en": "Dawid Tomaszewski from AIrON represents students in the Computer Science Programme Council. It shows how club activity can influence study programmes and industry-facing cooperation.",
+    },
+    {
+        "slug": "roadmapa-airon",
+        "date_pl": "28 marca 2026",
+        "date_en": "28 March 2026",
+        "title_pl": "Roadmapa rozwoju Koła Naukowego AIRON",
+        "title_en": "AIrON development roadmap",
+        "club": "AIrON",
+        "image": "media/news/roadmap.png",
+        "source_url": "https://airon.ahe.lodz.pl/news/roadmapa-rozwoju-kola-naukowego-airon/",
+        "excerpt_pl": "Plan rozwoju koła obejmuje warsztaty, projekty AI, gry, hackathony, konferencje i budowanie partnerstw. W StudentSpot taki wpis działa jako templatka aktualności koła naukowego.",
+        "excerpt_en": "The club roadmap covers workshops, AI projects, games, hackathons, conferences, and partnerships. In StudentSpot this works as a template news item for a student club.",
+    },
+    {
+        "slug": "slovian-salvation",
+        "date_pl": "28 marca 2026",
+        "date_en": "28 March 2026",
+        "title_pl": "Slovian Salvation na Poznań Game Arena 2025",
+        "title_en": "Slovian Salvation at Poznan Game Arena 2025",
+        "club": "AIrON",
+        "image": "media/news/slovian_salvation.png",
+        "source_url": "https://airon.ahe.lodz.pl/news/slovian-salvation-na-poznan-game-arena-2025/",
+        "excerpt_pl": "Projekt gry Grzegorza Piechowskiego i Gabriela Gosika łączy słowiański folklor z psychologicznym horrorem. To dobry przykład aktualności projektowej, którą koło może promować w aplikacji.",
+        "excerpt_en": "The game project by Grzegorz Piechowski and Gabriel Gosik blends Slavic folklore with psychological horror. It is a strong example of a project update a club can promote in the app.",
+    },
+    {
+        "slug": "hackathon-fcp",
+        "date_pl": "28 marca 2026",
+        "date_en": "28 March 2026",
+        "title_pl": "Studenci koła AIrON AHE na Hackathonie FCP",
+        "title_en": "AIrON AHE students at the FCP Hackathon",
+        "club": "AIrON",
+        "image": "media/news/hackathon.png",
+        "source_url": "https://airon.ahe.lodz.pl/news/studenci-kola-naukowego-airon-ahe-na-hackathonie-fcp/",
+        "excerpt_pl": "Zespół stworzył portal do obsługi usług miejskich z modułem AI klasyfikującym opinie. Wpis pokazuje, jak aktualności mogą dokumentować proces, role w zespole i efekt wydarzenia.",
+        "excerpt_en": "The team built a city services portal with an AI opinion-classification module. The post shows how news can document process, team roles, and event outcomes.",
+    },
+    {
+        "slug": "google-education-summit",
+        "date_pl": "2 kwietnia 2026",
+        "date_en": "2 April 2026",
+        "title_pl": "Google for Education Higher Education Summit",
+        "title_en": "Google for Education Higher Education Summit",
+        "club": "AIrON",
+        "image": "media/news/google_event.png",
+        "source_url": "https://airon.ahe.lodz.pl/news/google-for-education-higher-education-summit-nowa-rzeczywistosc-nowe-mozliwosci/",
+        "excerpt_pl": "Zapowiedź udziału w wydarzeniu edukacyjnym pokazuje, że StudentSpot może wspierać komunikację przed konferencją, warsztatem albo wyjazdem koła.",
+        "excerpt_en": "The event announcement shows how StudentSpot can support communication before a conference, workshop, or club trip.",
+    },
+    {
+        "slug": "kognitywistyka-inauguracja",
+        "date_pl": "12 kwietnia 2025",
+        "date_en": "12 April 2025",
+        "title_pl": "Inauguracja Kognitywistyczno-Eksperymentalnego Koła Naukowego",
+        "title_en": "Launch of the Cognitive and Experimental Research Group",
+        "club": "Kognitywistyka",
+        "image": "media/news/kognitywistyka.png",
+        "source_url": "https://www.ahe.lodz.pl/kognitywistyka/kolo-naukowe",
+        "excerpt_pl": "Koło rozwija zainteresowania umysłem, poznaniem, badaniami eksperymentalnymi i neurodydaktyką. Wpis stanowi templatkę dla kół spoza informatyki.",
+        "excerpt_en": "The group develops interests in mind, cognition, experimental research, and neurodidactics. This post is a template for clubs outside computer science.",
+    },
+]
+
 
 MAJOR_SOURCE_DATA = [
     ("informatyka", "Informatyka", "Computer Science", "https://www.ahe.lodz.pl/informatyka"),
@@ -317,6 +394,28 @@ def register_cli(app: Flask) -> None:
         click.echo(f"System admin ready: {email}")
 
 
+
+def seed_news() -> None:
+    base_created_at = datetime(2026, 6, 14, 12, 0)
+    for index, data in enumerate(NEWS_SOURCE_DATA):
+        get_or_create(
+            NewsPost,
+            slug=data["slug"],
+            defaults={
+                "created_at": base_created_at - timedelta(minutes=index),
+                "club": data["club"],
+                "title_pl": data["title_pl"],
+                "title_en": data["title_en"],
+                "excerpt_pl": data["excerpt_pl"],
+                "excerpt_en": data["excerpt_en"],
+                "date_pl": data["date_pl"],
+                "date_en": data["date_en"],
+                "image": data["image"],
+                "source_url": data["source_url"],
+            },
+        )
+
+
 def seed_catalog() -> None:
     db.create_all()
     source_date = date(2026, 6, 14)
@@ -324,6 +423,7 @@ def seed_catalog() -> None:
     features = seed_features()
     seed_rooms(features)
     seed_clubs(None, majors, source_date)
+    seed_news()
     db.session.commit()
 
 
@@ -558,6 +658,7 @@ def seed_demo() -> None:
     features = seed_features()
 
     clubs = seed_clubs(users["guardian"], majors, source_date)
+    seed_news()
 
     membership(users["boss"], clubs["airon"], "approved", "chair")
     membership(users["vice"], clubs["airon"], "approved", "vice_chair")

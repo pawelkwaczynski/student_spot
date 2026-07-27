@@ -13,16 +13,20 @@
   <section class="news-grid" aria-label="{{ t('news') }}">
     {% for post in posts %}
       <article class="card news-card">
+        {% if post.image %}
         <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename=post.image) }}" data-lightbox-alt="{{ post.title_pl if locale == 'pl' else post.title_en }}" aria-label="{{ t('open_image') }}: {{ post.title_pl if locale == 'pl' else post.title_en }}">
           <img class="news-thumb" src="{{ url_for('static', filename=post.image) }}" alt="{{ post.title_pl if locale == 'pl' else post.title_en }}">
         </button>
+        {% endif %}
         <div class="news-card-body">
           <p class="meta">{{ post.date_pl if locale == "pl" else post.date_en }} · {{ post.club }}</p>
           <h2>{{ post.title_pl if locale == "pl" else post.title_en }}</h2>
           <p>{{ post.excerpt_pl if locale == "pl" else post.excerpt_en }}</p>
+          {% if post.source_url %}
           <div class="inline-actions">
             <a class="button ghost" href="{{ post.source_url }}">{{ t("official_source") }}</a>
           </div>
+          {% endif %}
         </div>
       </article>
     {% endfor %}

@@ -93,6 +93,32 @@ class ConsoleEmailService:
         current_app.logger.info("ConsoleEmailService queued subject=%s", subject)
 
 
+class ResendEmailService:
+    def send(self, to: str, subject: str, body: str) -> None:
+        import json
+        import urllib.request
+
+        payload = json.dumps(
+            {
+                "from": current_app.config["MAIL_DEFAULT_SENDER"],
+                "to": [to],
+                "subject": subject,
+                "text": body,
+            }
+        ).encode("utf-8")
+        request = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=payload,
+            headers={
+                "Authorization": f"Bearer {current_app.config['RESEND_API_KEY']}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(request, timeout=15) as response:
+            current_app.logger.info("ResendEmailService sent status=%s", response.status)
+
+
 class SmtpEmailService:
     def send(self, to: str, subject: str, body: str) -> None:
         message = EmailMessage()
@@ -109,9 +135,15 @@ class SmtpEmailService:
 
 
 def email_service():
+    if current_app.config.get("RESEND_API_KEY"):
+        return ResendEmailService()
     if current_app.config.get("MAIL_SERVER"):
         return SmtpEmailService()
     return ConsoleEmailService()
+
+
+def has_real_mailer() -> bool:
+    return not isinstance(email_service(), ConsoleEmailService)
 
 
 def create_activation_token(user) -> str | None:
@@ -127,7 +159,7 @@ def create_activation_token(user) -> str | None:
         "StudentSpot activation",
         f"Your StudentSpot activation code is: {code}",
     )
-    if current_app.config.get("SHOW_DEV_ACTIVATION_CODE"):
+    if current_app.config.get("SHOW_DEV_ACTIVATION_CODE") or not has_real_mailer():
         session["dev_activation_code"] = code
         return code
     session.pop("dev_activation_code", None)

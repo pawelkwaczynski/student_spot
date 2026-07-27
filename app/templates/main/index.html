@@ -74,9 +74,11 @@
     <div class="news-grid home-news-grid">
       {% for post in posts %}
         <article class="news-card">
+          {% if post.image %}
           <button class="media-image-button" type="button" data-lightbox-src="{{ url_for('static', filename=post.image) }}" data-lightbox-alt="{{ post.title_pl if locale == 'pl' else post.title_en }}" aria-label="{{ t('open_image') }}: {{ post.title_pl if locale == 'pl' else post.title_en }}">
             <img class="news-thumb" src="{{ url_for('static', filename=post.image) }}" alt="{{ post.title_pl if locale == 'pl' else post.title_en }}">
           </button>
+          {% endif %}
           <div class="news-card-body">
             <p class="meta">{{ post.date_pl if locale == "pl" else post.date_en }} · {{ post.club }}</p>
             <h3>{{ post.title_pl if locale == "pl" else post.title_en }}</h3>

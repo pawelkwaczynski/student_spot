@@ -301,6 +301,23 @@ class Event(db.Model):
     room = db.relationship("Room")
 
 
+class NewsPost(db.Model):
+    __tablename__ = "news_posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    slug = db.Column(db.String(160), unique=True, nullable=False, index=True)
+    club = db.Column(db.String(160), nullable=False)
+    title_pl = db.Column(db.String(200), nullable=False)
+    title_en = db.Column(db.String(200), nullable=False)
+    excerpt_pl = db.Column(db.Text, nullable=False)
+    excerpt_en = db.Column(db.Text, nullable=False)
+    date_pl = db.Column(db.String(60), nullable=False)
+    date_en = db.Column(db.String(60), nullable=False)
+    image = db.Column(db.String(255), nullable=True)
+    source_url = db.Column(db.String(500), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=utcnow)
+
+
 class Notification(db.Model):
     __tablename__ = "notifications"
 
