@@ -18,6 +18,7 @@ from app.models import (
     Room,
     RoomFeature,
     User,
+    utcnow,
 )
 from app.security import hash_password
 
@@ -311,7 +312,7 @@ def register_cli(app: Flask) -> None:
         user.password_hash = hash_password(password)
         user.global_role = "system_admin"
         user.account_status = "active"
-        user.email_verified_at = user.email_verified_at or datetime.utcnow()
+        user.email_verified_at = user.email_verified_at or utcnow()
         db.session.commit()
         click.echo(f"System admin ready: {email}")
 
@@ -569,7 +570,7 @@ def seed_demo() -> None:
 
     rooms = seed_rooms(features)
 
-    now = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+    now = utcnow().replace(minute=0, second=0, microsecond=0)
     create_reservation(
         users["vice"],
         clubs["airon"],

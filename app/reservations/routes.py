@@ -7,7 +7,7 @@ from flask import Blueprint, Response, abort, flash, g, redirect, render_templat
 from app.extensions import db
 from app.forms import ReservationForm
 from app.i18n import t
-from app.models import Club, ClubMembership, Reservation, ReservationStatusHistory, Room, RoomFeature, User
+from app.models import Club, ClubMembership, Reservation, ReservationStatusHistory, Room, RoomFeature, User, utcnow
 from app.security import login_required
 from app.services import audit, features_by_codes, has_room_conflict, notify, user_can_reserve_for_club
 
@@ -156,7 +156,7 @@ def create():
 @bp.route("/<int:reservation_id>")
 @login_required
 def detail(reservation_id: int):
-    reservation = Reservation.query.get_or_404(reservation_id)
+    reservation = db.get_or_404(Reservation, reservation_id)
     if reservation.created_by_id != g.user.id and g.user.global_role not in {"system_admin", "property_admin"}:
         abort(403)
     return render_template("reservations/detail.html", reservation=reservation)
@@ -165,7 +165,7 @@ def detail(reservation_id: int):
 @bp.route("/<int:reservation_id>/calendar.ics")
 @login_required
 def calendar_ics(reservation_id: int):
-    reservation = Reservation.query.get_or_404(reservation_id)
+    reservation = db.get_or_404(Reservation, reservation_id)
     if not can_download_calendar(g.user, reservation):
         abort(403)
     location = f"{reservation.room.name}, {reservation.room.address}"
@@ -178,7 +178,7 @@ def calendar_ics(reservation_id: int):
             "METHOD:PUBLISH",
             "BEGIN:VEVENT",
             f"UID:studentspot-reservation-{reservation.id}@studentspot.local",
-            f"DTSTAMP:{format_ics_datetime(datetime.utcnow())}",
+            f"DTSTAMP:{format_ics_datetime(utcnow())}",
             f"DTSTART:{format_ics_datetime(reservation.starts_at)}",
             f"DTEND:{format_ics_datetime(reservation.ends_at)}",
             f"SUMMARY:{escape_ics(reservation.title)}",
