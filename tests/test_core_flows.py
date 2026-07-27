@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from app.extensions import db
 from app.models import (
@@ -38,6 +38,19 @@ def test_demo_seed_uses_eight_accounts_and_sterlinga_only(app):
         assert Room.query.filter(Room.code.in_(("G1", "G2"))).count() == 0
         assert Room.query.filter_by(code="K320").one().floor == "II"
         assert Room.query.filter_by(code="K200A").one().floor == "II"
+
+
+def test_seed_catalog_creates_data_without_any_users(app):
+    from app.cli import seed_catalog
+
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+        seed_catalog()
+        assert User.query.count() == 0
+        assert Club.query.count() == 13
+        assert Room.query.count() == 7
+        assert Reservation.query.count() == 0
 
 
 def test_scientific_club_seed_public_visibility_and_hidden_records(client, app):
@@ -96,52 +109,33 @@ def test_media_page_contains_press_note_and_downloads(client):
     assert response.data.count(b"download=") == 6
 
 
-def test_info_page_contains_author_kv_and_project_map(client):
+def test_info_page_contains_author_and_kv_without_project_mentions(client):
     response = client.get("/info")
     assert response.status_code == 200
-    assert "Kontekst projektu".encode() in response.data
+    assert "O aplikacji".encode() in response.data
     assert "Paweł Kwaczyński".encode() in response.data
-    assert b"165318" in response.data
     assert b"kwaczynski.pawel@gmail.com" in response.data
-    assert "Członek Studenckiego Koła Naukowego AIRON".encode() in response.data
     assert b"view-source:https://www.ahe.lodz.pl//themes/custom/ahe/css/style.css" in response.data
     assert b"source_info/studentspot_people_package" not in response.data
-    assert "Mapa wymagań projektowych".encode() in response.data
-    assert "Schemat organizacyjny AHE".encode() in response.data
-    assert "Wymagania funkcjonalne".encode() in response.data
-    assert "Wymagania niefunkcjonalne".encode() in response.data
-    assert "Projekt koncepcyjny i przepływy informacyjne".encode() in response.data
-    assert "Katalog 7 publicznie pokazanych kół AHE".encode() in response.data
-    assert "repozytorium lokalne i GitHub".encode() in response.data
-    assert "Metodyka zarządzania informacją.</p>".encode() in response.data
-    assert "UTW AHE = Uniwersytet Trzeciego Wieku".encode() in response.data
+    assert b"165318" not in response.data
+    assert "Mapa wymagań projektowych".encode() not in response.data
+    assert "Niedźwiedzińskiego".encode() not in response.data
+    assert "Metodyka zarządzania informacją".encode() not in response.data
+    assert "Projekt studencki".encode() not in response.data
     assert "Model kont UTW i komunikatów".encode() in response.data
 
 
-def test_info_page_professor_map_is_translated_to_english(client):
-    client.get("/set-language/en")
-    response = client.get("/info")
-    assert response.status_code == 200
-    assert b"Project requirements map" in response.data
-    assert b"Usage place and organization" in response.data
-    assert b"Functional requirements" in response.data
-    assert b"Non-functional requirements" in response.data
-    assert b"Conceptual design and information flows" in response.data
-
-
-def test_demo_page_mentions_accounts_and_author_context_without_kv(client):
+def test_demo_page_is_removed(client):
     response = client.get("/demo")
+    assert response.status_code == 404
+
+
+def test_footer_has_no_student_project_mention(client):
+    response = client.get("/")
     assert response.status_code == 200
-    assert "Konta demo".encode() in response.data
-    assert "Key visual AHE".encode() not in response.data
-    assert b"keyvisual_info.md" not in response.data
-    assert "Model kont UTW i komunikatów".encode() not in response.data
-    assert "Paweł Kwaczyński".encode() in response.data
-    assert b"165318" in response.data
-    assert "Szybki tutorial pokazowy".encode() in response.data
-    assert "Sugerowane workflow: demo MVP pozwala odtworzyć pełny przepływ".encode() in response.data
-    assert "Zachęcam do testowania!".encode() in response.data
-    assert "członkowie koła, statusy, role, wiadomości".encode() in response.data
+    assert "Projekt studencki".encode() not in response.data
+    assert b"SKN AIRON</span>" not in response.data
+    assert "nie jest oficjalnym systemem AHE".encode() in response.data
 
 
 def test_news_calendar_and_local_heroes_pages(client):

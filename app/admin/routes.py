@@ -5,7 +5,6 @@ from datetime import date
 from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
 
 from app.extensions import db
-from app.forms import AdminDecisionForm
 from app.models import AuditLog, Club, ClubMembership, Reservation, User
 from app.security import login_required
 from app.services import audit, change_reservation_status, notify, set_membership_status, user_can_manage_club

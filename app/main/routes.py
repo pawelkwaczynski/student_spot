@@ -328,11 +328,6 @@ def local_heroes():
     return render_template("main/local_heroes.html", heroes=load_local_heroes())
 
 
-@bp.route("/demo")
-def demo():
-    return render_template("main/demo.html")
-
-
 @bp.route("/info")
 def info():
     return render_template("main/info.html")

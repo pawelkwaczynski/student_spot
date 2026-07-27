@@ -2,15 +2,15 @@
 
 StudentSpot is an open-source platform for student organizations, campus accessibility and room management. It helps student clubs publish their profile, manage membership requests, send messages, find accessible rooms, submit room reservations and export approved meetings to a calendar file.
 
-The current demo was built as a student project for the academic context of AHE Lodz. It is not an official AHE system, but it shows how a lightweight management information system can support campus coordination with accessibility, bilingual UI and clear role-based workflows.
+StudentSpot is not an official AHE system. It shows how a lightweight management information system can support campus coordination with accessibility, bilingual UI and clear role-based workflows.
 
-Live demo:
+Live instance:
 
 ```text
 https://frog01-20412.wykr.es
 ```
 
-## Why this project matters
+## Why it matters
 
 Student organizations often coordinate events across scattered emails, chat threads, spreadsheets and informal room requests. That creates friction for club leaders, guardians, property administrators and students who need accessible participation options.
 
@@ -25,195 +25,81 @@ StudentSpot turns that process into one coherent flow:
 - export approved meetings to `.ics`,
 - keep the interface usable in PL/EN, dark mode, high contrast and larger text modes.
 
-## Open-source roadmap
+## Features (current scope)
 
-- Replace demo SQLite deployment with a production database profile.
-- Add Alembic migrations for long-term schema evolution.
-- Add e-mail delivery for activation links and notifications.
-- Add recurring reservations and calendar subscription feeds.
-- Add richer organization pages for public university communities.
-- Add WCAG audit notes and automated accessibility checks.
-- Add API endpoints for room availability and club data.
-- Add deployment recipes for low-resource VPS, Docker and managed platforms.
+- Rooms limited to the Sterlinga 26 building.
+- PL/EN interface, dark mode, high contrast, larger font.
+- Two-step registration with e-mail activation, consents and club selection.
+- Membership requests and admin/guardian decisions.
+- Room catalog with photos, filters, building map and best-capacity matching.
+- Catalog of 7 public AHE clubs plus hidden records awaiting admin confirmation.
+- Reservations with conflict detection, admin decisions and status history.
+- `.ics` export of approved meetings.
+- `/news`, `/calendar`, `/local-heroes`, `/info` and `/media` pages.
+- In-app messaging: guardians message approved club members.
+- UTW organizer accounts and admin announcements.
+- In-app notifications and a basic audit log.
 
-## Contributing
+## Roadmap
 
-Contributions are welcome. Good first areas are documentation, tests, accessibility improvements, translations, UI polish and small Flask/Jinja2 features.
+- Alembic migrations for long-term schema evolution.
+- E-mail delivery for activation links and notifications.
+- Recurring reservations and calendar subscription feeds.
+- Richer organization pages for public university communities.
+- WCAG audit notes and automated accessibility checks.
+- API endpoints for room availability and club data.
+- Deployment recipes for low-resource VPS, Docker and managed platforms.
 
-Before opening a pull request:
-
-1. Fork the repository and create a focused branch.
-2. Keep changes small and reviewable.
-3. Do not commit secrets, real student data or private server notes.
-4. Run the test suite locally.
-5. Explain the user-facing impact in the pull request description.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the short contributor guide.
-
-## Security
-
-Please do not report security issues in public issues if they include exploit details, private data, credentials or server-specific information. Send a private report to the maintainer instead.
-
-Project security principles:
-
-- passwords and activation tokens are hashed,
-- forms use CSRF protection,
-- demo data must stay fictional,
-- real medical or disability diagnoses must not be collected,
-- access control must be enforced server-side,
-- `.env`, local access notes and credentials must stay out of Git.
-
-See [SECURITY.md](SECURITY.md) for the reporting policy.
-
-## License
-
-StudentSpot is released under the [MIT License](LICENSE).
-
-## Polish project notes
-
-StudentSpot to lekka aplikacja Flask/Jinja2 do demonstracyjnego zarzadzania kolami naukowymi, czlonkostwami, salami i rezerwacjami. Projekt jest przygotowany jako nieoficjalny prototyp studencki.
-
-## Zakres demo
-
-- Tylko sale i budynek przy ul. Sterlinga 26.
-- Interfejs PL/EN.
-- Dark mode, wysoki kontrast i wieksza czcionka.
-- Rejestracja, aktywacja konta, logowanie.
-- Rejestracja 2-krokowa: dane studenckie, bezpieczenstwo, zgody, status `pending_verification`, potwierdzenie e-maila i ekran wyboru kola.
-- Wnioski czlonkowskie i decyzje administratora/opiekuna.
-- Katalog sal ze zdjeciami, filtrowaniem i mapa budynku.
-- Dopasowanie sal po liczbie osob: najpierw sale z najmniejsza sensowna nadwyzka miejsc.
-- Katalog 7 publicznie pokazanych kol AHE oraz 6 ukrytych rekordow do potwierdzenia przez admina.
-- Rezerwacje sal, konflikt terminow, decyzje admina i historia statusow.
-- Eksport zatwierdzonego spotkania kola do pliku `.ics`.
-- Strona `/news` z templatkami aktualnosci kol naukowych na podstawie paczki blogowej.
-- Strona `/calendar` z demonstracyjnymi rezerwacjami sal na czerwiec/lipiec 2026.
-- Strona `/info` z kontekstem projektu, danymi autora, zrodlem KV AHE z `view-source`, modelem UTW oraz jawna mapa wymagan projektowych: organizacja, problem, role, zalozenia, wymagania funkcjonalne, niefunkcjonalne i przeplywy informacyjne.
-- Strona `/demo` z kontami demo, opisem projektu i tech stackiem.
-- Strona `/media` z notatka prasowa oraz downloadami logo, grafiki welcome i logotypow AHE/Samorzadu/UTW.
-- Strona `/local-heroes` z demonstracyjnymi profilami lokalnych liderow, ambasadorow i ekspertow AHE.
-- Lightbox zdjec sal oraz znak wodny `TEMPLATRE` dla roboczych sal komputerowych K200A/K320.
-- Lightbox grafik na stronach Info, Media, Aktualnosci i Local Heroes.
-- Panel admina/opiekuna do potwierdzania danych kol, obslugi wnioskow czlonkowskich, listy czlonkow kola, zmiany statusu/roli oraz wysylania wiadomosci do czlonkow.
-- Skrzynka wiadomosci w aplikacji: opiekun kola wysyla komunikat do zatwierdzonych czlonkow, a czlonek odbiera go w `/messages`.
-- Panel admina do wysylania komunikatow do kont UTW.
-- Powiadomienia w aplikacji i podstawowy audyt.
-- Plik `prezentacja_ustna_10_min.md` z gotowym scenariuszem prezentacji przed profesorem.
-
-## Szybki start lokalny
+## Local development
 
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements.txt
 flask --app wsgi:app init-db --reset
-flask --app wsgi:app seed-demo
+flask --app wsgi:app seed-demo   # development/test data only
 flask --app wsgi:app run --port 8000
 ```
 
-Otworz:
+Open `http://127.0.0.1:8000`.
 
-```text
-http://127.0.0.1:8000
+## Production setup
+
+Production uses a single canonical database: MySQL configured via `DATABASE_URL` in `.env` (see `.env.example`). SQLite is a local development fallback only.
+
+```bash
+flask --app wsgi:app init-db
+flask --app wsgi:app seed-catalog                      # majors, clubs, rooms — no user accounts
+flask --app wsgi:app create-admin --email admin@example.com   # prompts for a password
+gunicorn --workers 1 --threads 2 --timeout 60 --bind 0.0.0.0:${APP_PORT} wsgi:app
 ```
 
-Publiczne demo na Mikrus Frog:
+Deployment details: `docs/FROG_DEPLOYMENT.md`.
 
-```text
-https://frog01-20412.wykr.es
-```
-
-## Konta demo
-
-Wszystkie konta maja haslo:
-
-```text
-StudentSpot123!
-```
-
-| Konto | Rola |
-|---|---|
-| admin@studentspot.example.com | administrator systemu |
-| property@studentspot.example.com | administrator nieruchomosci |
-| guardian@studentspot.example.com | opiekun kola |
-| boss@studentspot.example.com | przewodniczacy AIrON |
-| vice@studentspot.example.com | wiceprzewodniczacy AIrON |
-| member@studentspot.example.com | zwykly czlonek kola |
-| pending@studentspot.example.com | student z oczekujacym wnioskiem |
-| utw@studentspot.example.com | organizator UTW |
-
-## Testy
+## Tests
 
 ```bash
 . .venv/bin/activate
 python -m pytest
 ```
 
-Aktualnie testy sprawdzaja m.in. seed 8 kont, 13 kol AHE, ukrywanie kol wymagajacych weryfikacji, ograniczenie sal do Sterlinga, rejestracje, aktywacje, duplikaty, uprawnienia, filtrowanie sal i kol, najlepsze dopasowanie pojemnosci, konflikt rezerwacji, potrzeby dostepnosciowe, eksport `.ics`, komunikat UTW, decyzje admina, pelna liste czlonkow u opiekuna, wiadomosci do czlonkow, audyt, strony `/news`, `/calendar`, `/local-heroes` oraz polska i angielska wersje mapy wymagan projektowych w `/info`.
+## Contributing
 
-## Materialy zrodlowe
+Contributions are welcome. Good first areas are documentation, tests, accessibility improvements, translations, UI polish and small Flask/Jinja2 features. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Folder `source_info/` przechowuje materialy dostarczone do projektu, w tym wytyczne KV AHE, dane kol naukowych, paczke `studentspot_people_package.zip`, paczke `blog_package.zip` oraz dokument `Prezentacja i projekt ZDW_latest.docx`. Interfejs KV zostal dopasowany do AHE na podstawie CSS strony AHE wskazanego w `/info`.
+## Security
 
-## Pakowanie ZIP
+Please do not report security issues in public issues if they include exploit details, private data, credentials or server-specific information. Send a private report to the maintainer instead. See [SECURITY.md](SECURITY.md).
 
-Paczka dla profesora:
+Security principles:
 
-```bash
-bash scripts/package_professor_release.sh
-```
+- passwords and activation tokens are hashed,
+- forms use CSRF protection,
+- seeded data must stay fictional,
+- real medical or disability diagnoses must not be collected,
+- access control must be enforced server-side,
+- `.env`, local access notes and credentials must stay out of Git.
 
-Wynik:
+## License
 
-```text
-student_spot_profesor.zip
-```
-
-Pełna paczka robocza:
-
-```bash
-bash scripts/package_release.sh
-```
-
-Skrypt tworzy:
-
-```text
-student_spot.zip
-```
-
-Paczka dev handoff do przenoszenia stylu AHE/KV i dobrych praktyk do kolejnych projektow:
-
-```bash
-bash scripts/package_dev_handoff.sh
-```
-
-Wynik:
-
-```text
-student_spot_dev_handoff.zip
-```
-
-Do ZIP nie trafia `.venv`, cache Pythona, lokalna baza SQLite, lokalne notatki z dostępami, plik `.env` ani pliki systemowe `.DS_Store`.
-
-## Wdrozenie Frog
-
-Szczegolowa instrukcja jest w:
-
-```text
-docs/FROG_DEPLOYMENT.md
-```
-
-Minimalny start Gunicorn na Frog:
-
-```bash
-gunicorn --workers 1 --threads 2 --timeout 60 --bind 0.0.0.0:${APP_PORT} wsgi:app
-```
-
-Aktualne demo dziala na porcie `20412` i korzysta z SQLite w katalogu aplikacji. Konfiguracja MySQL przez `DATABASE_URL` zostaje opisana jako wariant docelowy w dokumentacji.
-
-## Wazne zasady
-
-- To nie jest oficjalny system AHE.
-- Nie zbieramy danych medycznych; wymagania dostepnosciowe opisuja organizacje wydarzenia.
-- Sekrety sa tylko w zmiennych srodowiskowych.
-- Produkcyjny SMTP i MySQL wymagaja konfiguracji w `.env`.
+StudentSpot is released under the [MIT License](LICENSE).
