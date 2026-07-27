@@ -20,6 +20,7 @@ class Config:
     SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "0") == "1"
     PERMANENT_SESSION_LIFETIME = 60 * 60 * 8
     SHOW_DEV_ACTIVATION_CODE = os.environ.get("SHOW_DEV_ACTIVATION_CODE", "1") == "1"
+    RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
     MAIL_SERVER = os.environ.get("MAIL_SERVER", "")
     MAIL_PORT = int(os.environ.get("MAIL_PORT", "587"))
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME", "")

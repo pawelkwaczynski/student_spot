@@ -249,34 +249,107 @@ def test_registration_allows_blank_nickname(client, app):
         assert user.nickname == "student-165398"
 
 
-def test_activation_code_is_hidden_when_dev_display_disabled(client, app):
+REGISTER_DATA_HIDDEN_CODE = {
+    "index_number": "165397",
+    "first_name": "Hidden",
+    "last_name": "Code",
+    "nickname": "hidden-code",
+    "email": "hidden-code@studentspot.example.com",
+    "password": "VeryStrong123!",
+    "confirm_password": "VeryStrong123!",
+    "major_id": "1",
+    "year_of_study": "1",
+    "study_level": "first_cycle",
+    "study_mode": "part_time",
+    "accept_terms": "y",
+    "accept_privacy": "y",
+}
+
+
+def test_activation_code_is_hidden_when_real_mailer_sends_email(client, app, monkeypatch):
+    from app import services
+
     app.config["SHOW_DEV_ACTIVATION_CODE"] = False
+    app.config["MAIL_SERVER"] = "smtp.example.com"
+    sent = {}
+    monkeypatch.setattr(
+        services.SmtpEmailService,
+        "send",
+        lambda self, to, subject, body: sent.update({"to": to, "subject": subject, "body": body}),
+    )
+    response = client.post("/auth/register", data=REGISTER_DATA_HIDDEN_CODE, follow_redirects=True)
+    assert response.status_code == 200
+    assert "Twój kod aktywacyjny".encode() not in response.data
+    with client.session_transaction() as sess:
+        assert "dev_activation_code" not in sess
+    assert sent["to"] == "hidden-code@studentspot.example.com"
+    assert "activation code" in sent["body"]
+    with app.app_context():
+        user = User.query.filter_by(email="hidden-code@studentspot.example.com").one()
+        assert EmailVerificationToken.query.filter_by(user_id=user.id).count() == 1
+
+
+def test_activation_code_shown_on_screen_when_no_mailer_configured(client, app):
+    app.config["SHOW_DEV_ACTIVATION_CODE"] = False
+    response = client.post("/auth/register", data=REGISTER_DATA_HIDDEN_CODE, follow_redirects=True)
+    assert response.status_code == 200
+    assert "Twój kod aktywacyjny".encode() in response.data
+    with client.session_transaction() as sess:
+        assert "dev_activation_code" in sess
+
+
+def test_email_service_prefers_resend_over_smtp(app):
+    from app.services import ConsoleEmailService, ResendEmailService, SmtpEmailService, email_service
+
+    with app.app_context():
+        assert isinstance(email_service(), ConsoleEmailService)
+        app.config["MAIL_SERVER"] = "smtp.example.com"
+        assert isinstance(email_service(), SmtpEmailService)
+        app.config["RESEND_API_KEY"] = "re_test_key"
+        assert isinstance(email_service(), ResendEmailService)
+
+
+def test_admin_can_publish_news_post_visible_on_news_page(client, app):
+    login(client, "admin@studentspot.example.com")
     response = client.post(
-        "/auth/register",
+        "/admin/news",
         data={
-            "index_number": "165397",
-            "first_name": "Hidden",
-            "last_name": "Code",
-            "nickname": "hidden-code",
-            "email": "hidden-code@studentspot.example.com",
-            "password": "VeryStrong123!",
-            "confirm_password": "VeryStrong123!",
-            "major_id": "1",
-            "year_of_study": "1",
-            "study_level": "first_cycle",
-            "study_mode": "part_time",
-            "accept_terms": "y",
-            "accept_privacy": "y",
+            "club": "AIrON",
+            "title_pl": "Nowe warsztaty koła",
+            "title_en": "New club workshops",
+            "excerpt_pl": "Zapraszamy na warsztaty projektowe w K320.",
+            "excerpt_en": "Join the project workshops in K320.",
+            "source_url": "",
         },
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert b"Test code:" not in response.data
-    with client.session_transaction() as sess:
-        assert "dev_activation_code" not in sess
+    assert "Aktualność została opublikowana.".encode() in response.data
+    response = client.get("/news")
+    assert "Nowe warsztaty koła".encode() in response.data
+    response = client.get("/")
+    assert "Nowe warsztaty koła".encode() in response.data
     with app.app_context():
-        user = User.query.filter_by(email="hidden-code@studentspot.example.com").one()
-        assert EmailVerificationToken.query.filter_by(user_id=user.id).count() == 1
+        from app.models import NewsPost
+
+        post = NewsPost.query.filter_by(slug="nowe-warsztaty-kola").one()
+        assert post.image is None
+        assert post.source_url is None
+
+
+def test_regular_member_cannot_publish_news(client):
+    login(client, "member@studentspot.example.com")
+    response = client.post(
+        "/admin/news",
+        data={
+            "club": "X",
+            "title_pl": "A",
+            "title_en": "B",
+            "excerpt_pl": "C",
+            "excerpt_en": "D",
+        },
+    )
+    assert response.status_code == 403
 
 
 def test_student_without_approved_role_cannot_reserve(client):

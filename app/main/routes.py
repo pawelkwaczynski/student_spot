@@ -6,86 +6,10 @@ from pathlib import Path
 
 from flask import Blueprint, current_app, g, render_template
 
-from app.models import Club, Event, Notification, Reservation, Room, utcnow
+from app.models import Club, Event, NewsPost, Notification, Reservation, Room, utcnow
 from app.security import login_required
 
 bp = Blueprint("main", __name__)
-
-
-NEWS_POSTS = [
-    {
-        "slug": "rada-programowa-informatyki",
-        "date_pl": "2 kwietnia 2026",
-        "date_en": "2 April 2026",
-        "title_pl": "Student koła w Radzie Programowej Informatyki",
-        "title_en": "Club student in the Computer Science Programme Council",
-        "club": "AIrON",
-        "image": "media/news/student_council.png",
-        "source_url": "https://airon.ahe.lodz.pl/news/student-kola-w-radzie-programowej-informatyki/",
-        "excerpt_pl": "Dawid Tomaszewski z koła AIrON reprezentuje studentów w Radzie Programowej kierunku Informatyka. To przykład, jak aktywność koła może przekładać się na realny wpływ na program studiów i współpracę z otoczeniem branżowym.",
-        "excerpt_en": "Dawid Tomaszewski from AIrON represents students in the Computer Science Programme Council. It shows how club activity can influence study programmes and industry-facing cooperation.",
-    },
-    {
-        "slug": "roadmapa-airon",
-        "date_pl": "28 marca 2026",
-        "date_en": "28 March 2026",
-        "title_pl": "Roadmapa rozwoju Koła Naukowego AIRON",
-        "title_en": "AIrON development roadmap",
-        "club": "AIrON",
-        "image": "media/news/roadmap.png",
-        "source_url": "https://airon.ahe.lodz.pl/news/roadmapa-rozwoju-kola-naukowego-airon/",
-        "excerpt_pl": "Plan rozwoju koła obejmuje warsztaty, projekty AI, gry, hackathony, konferencje i budowanie partnerstw. W StudentSpot taki wpis działa jako templatka aktualności koła naukowego.",
-        "excerpt_en": "The club roadmap covers workshops, AI projects, games, hackathons, conferences, and partnerships. In StudentSpot this works as a template news item for a student club.",
-    },
-    {
-        "slug": "slovian-salvation",
-        "date_pl": "28 marca 2026",
-        "date_en": "28 March 2026",
-        "title_pl": "Slovian Salvation na Poznań Game Arena 2025",
-        "title_en": "Slovian Salvation at Poznan Game Arena 2025",
-        "club": "AIrON",
-        "image": "media/news/slovian_salvation.png",
-        "source_url": "https://airon.ahe.lodz.pl/news/slovian-salvation-na-poznan-game-arena-2025/",
-        "excerpt_pl": "Projekt gry Grzegorza Piechowskiego i Gabriela Gosika łączy słowiański folklor z psychologicznym horrorem. To dobry przykład aktualności projektowej, którą koło może promować w aplikacji.",
-        "excerpt_en": "The game project by Grzegorz Piechowski and Gabriel Gosik blends Slavic folklore with psychological horror. It is a strong example of a project update a club can promote in the app.",
-    },
-    {
-        "slug": "hackathon-fcp",
-        "date_pl": "28 marca 2026",
-        "date_en": "28 March 2026",
-        "title_pl": "Studenci koła AIrON AHE na Hackathonie FCP",
-        "title_en": "AIrON AHE students at the FCP Hackathon",
-        "club": "AIrON",
-        "image": "media/news/hackathon.png",
-        "source_url": "https://airon.ahe.lodz.pl/news/studenci-kola-naukowego-airon-ahe-na-hackathonie-fcp/",
-        "excerpt_pl": "Zespół stworzył portal do obsługi usług miejskich z modułem AI klasyfikującym opinie. Wpis pokazuje, jak aktualności mogą dokumentować proces, role w zespole i efekt wydarzenia.",
-        "excerpt_en": "The team built a city services portal with an AI opinion-classification module. The post shows how news can document process, team roles, and event outcomes.",
-    },
-    {
-        "slug": "google-education-summit",
-        "date_pl": "2 kwietnia 2026",
-        "date_en": "2 April 2026",
-        "title_pl": "Google for Education Higher Education Summit",
-        "title_en": "Google for Education Higher Education Summit",
-        "club": "AIrON",
-        "image": "media/news/google_event.png",
-        "source_url": "https://airon.ahe.lodz.pl/news/google-for-education-higher-education-summit-nowa-rzeczywistosc-nowe-mozliwosci/",
-        "excerpt_pl": "Zapowiedź udziału w wydarzeniu edukacyjnym pokazuje, że StudentSpot może wspierać komunikację przed konferencją, warsztatem albo wyjazdem koła.",
-        "excerpt_en": "The event announcement shows how StudentSpot can support communication before a conference, workshop, or club trip.",
-    },
-    {
-        "slug": "kognitywistyka-inauguracja",
-        "date_pl": "12 kwietnia 2025",
-        "date_en": "12 April 2025",
-        "title_pl": "Inauguracja Kognitywistyczno-Eksperymentalnego Koła Naukowego",
-        "title_en": "Launch of the Cognitive and Experimental Research Group",
-        "club": "Kognitywistyka",
-        "image": "media/news/kognitywistyka.png",
-        "source_url": "https://www.ahe.lodz.pl/kognitywistyka/kolo-naukowe",
-        "excerpt_pl": "Koło rozwija zainteresowania umysłem, poznaniem, badaniami eksperymentalnymi i neurodydaktyką. Wpis stanowi templatkę dla kół spoza informatyki.",
-        "excerpt_en": "The group develops interests in mind, cognition, experimental research, and neurodidactics. This post is a template for clubs outside computer science.",
-    },
-]
 
 
 LOCAL_HERO_IMAGE_FILES = {
@@ -175,14 +99,14 @@ def primary_membership_for(user):
     return sorted(memberships, key=lambda membership: membership.created_at or 0)[0] if memberships else None
 
 
-def news_posts_for_club(club: Club | None) -> list[dict[str, str]]:
+def news_posts_for_club(club: Club | None) -> list[NewsPost]:
     if club is None:
         return []
     club_terms = [club.slug, club.name_pl, club.name_en, *club.tags]
     normalized_terms = [normalize_text(term) for term in club_terms if len(normalize_text(term)) > 2]
     posts = []
-    for post in NEWS_POSTS:
-        post_club = normalize_text(post["club"])
+    for post in NewsPost.query.order_by(NewsPost.id.asc()).all():
+        post_club = normalize_text(post.club)
         if any(post_club in term or term in post_club for term in normalized_terms):
             posts.append(post)
     return posts
@@ -234,12 +158,14 @@ def index():
     clubs = Club.query.filter_by(is_public=True).order_by(Club.is_featured.desc(), Club.name_pl.asc()).limit(7).all()
     rooms = Room.query.filter_by(is_active=True).order_by(Room.name.asc(), Room.code.asc()).limit(4).all()
     events = Event.query.order_by(Event.starts_at.asc()).limit(4).all()
-    return render_template("main/index.html", clubs=clubs, rooms=rooms, events=events, posts=NEWS_POSTS[:3])
+    posts = NewsPost.query.order_by(NewsPost.created_at.desc(), NewsPost.id.desc()).limit(3).all()
+    return render_template("main/index.html", clubs=clubs, rooms=rooms, events=events, posts=posts)
 
 
 @bp.route("/news")
 def news():
-    return render_template("main/news.html", posts=NEWS_POSTS)
+    posts = NewsPost.query.order_by(NewsPost.created_at.desc(), NewsPost.id.desc()).all()
+    return render_template("main/news.html", posts=posts)
 
 
 @bp.route("/calendar")
