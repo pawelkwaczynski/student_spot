@@ -24,7 +24,6 @@ zip -r student_spot.zip . \
   -x ".env.development" \
   -x ".env.test" \
   -x "student_spot/*" \
-  -x "student_spot_profesor/*" \
   -x "student_spot_dev_handoff/*" \
   -x "student_spot*.zip"
 

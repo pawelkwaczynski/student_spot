@@ -32,7 +32,6 @@ cp -R app/static/media/brand "$PACKAGE_DIR/app/static/media-brand"
 cp -R app/static/media/visuals "$PACKAGE_DIR/app/static/media-visuals"
 cp app/templates/base.html "$PACKAGE_DIR/app/templates/"
 cp app/templates/main/info.html "$PACKAGE_DIR/app/templates/main/"
-cp app/templates/main/demo.html "$PACKAGE_DIR/app/templates/main/"
 cp app/translations/pl.py "$PACKAGE_DIR/app/translations/"
 cp app/translations/en.py "$PACKAGE_DIR/app/translations/"
 

@@ -20,7 +20,7 @@ Include:
 
 ## Scope
 
-StudentSpot is a student project and open-source prototype. The public demo uses fictional demo data. Reports about authentication, authorization, CSRF, stored data exposure, unsafe file handling, dependency risks and deployment configuration are welcome.
+StudentSpot is an open-source project. The public instance uses fictional data. Reports about authentication, authorization, CSRF, stored data exposure, unsafe file handling, dependency risks and deployment configuration are welcome.
 
 ## Out of scope
 

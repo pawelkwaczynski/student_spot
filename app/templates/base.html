@@ -20,7 +20,7 @@
     <header class="site-header">
       <div class="topbar">
         <div class="topbar-inner">
-          <span>AHE Lodz / SKN AIRON</span>
+          <span>{{ 'AHE Lodz' if locale == 'en' else 'AHE Łódź' }}</span>
           <span>{{ t("accessibility") }}: {{ t("contrast") }} · {{ t("larger_font") }}</span>
         </div>
       </div>
@@ -36,7 +36,6 @@
           <a href="{{ url_for('rooms.list_rooms') }}">{{ t("rooms") }}</a>
           <a href="{{ url_for('main.local_heroes') }}">{{ t("local_heroes") }}</a>
           <a href="{{ url_for('main.info') }}">{{ t("info") }}</a>
-          <a href="{{ url_for('main.demo') }}">{{ t("demo") }}</a>
           <a href="{{ url_for('main.media') }}">{{ t("media") }}</a>
           {% if current_user %}
             <a href="{{ url_for('messages.inbox') }}">{{ t("inbox") }}</a>
@@ -92,9 +91,9 @@
           </a>
         </div>
         {% if locale == "pl" %}
-          <p>Projekt studencki: <strong>StudentSpot</strong> by Paweł Kwaczyński / SKN AIRON / <strong>2026</strong></p>
+          <p><strong>StudentSpot</strong> © 2026 · StudentSpot nie jest oficjalnym systemem AHE.</p>
         {% else %}
-          <p>Student project: <strong>StudentSpot</strong> by Paweł Kwaczyński / SKN AIRON / <strong>2026</strong></p>
+          <p><strong>StudentSpot</strong> © 2026 · StudentSpot is not an official AHE system.</p>
         {% endif %}
       </div>
     </footer>

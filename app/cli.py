@@ -288,6 +288,43 @@ def register_cli(app: Flask) -> None:
         seed_demo()
         click.echo("Demo data seeded.")
 
+    @app.cli.command("seed-catalog")
+    def seed_catalog_command() -> None:
+        """Seed production catalog data: majors, room features, rooms, and clubs (no users)."""
+        seed_catalog()
+        click.echo("Catalog data seeded.")
+
+    @app.cli.command("create-admin")
+    @click.option("--email", required=True)
+    @click.option("--first-name", default="Admin")
+    @click.option("--last-name", default="StudentSpot")
+    @click.password_option()
+    def create_admin_command(email: str, first_name: str, last_name: str, password: str) -> None:
+        """Create or update an active system administrator account."""
+        db.create_all()
+        user = User.query.filter_by(email=email).first()
+        if user is None:
+            user = User(email=email, nickname=email.split("@")[0])
+            db.session.add(user)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.password_hash = hash_password(password)
+        user.global_role = "system_admin"
+        user.account_status = "active"
+        user.email_verified_at = user.email_verified_at or datetime.utcnow()
+        db.session.commit()
+        click.echo(f"System admin ready: {email}")
+
+
+def seed_catalog() -> None:
+    db.create_all()
+    source_date = date(2026, 6, 14)
+    majors = seed_majors(source_date)
+    features = seed_features()
+    seed_rooms(features)
+    seed_clubs(None, majors, source_date)
+    db.session.commit()
+
 
 def get_or_create(model, defaults: dict | None = None, **lookup):
     instance = model.query.filter_by(**lookup).first()
@@ -517,29 +554,7 @@ def seed_demo() -> None:
         user.terms_accepted_at = user.terms_accepted_at or datetime(2026, 6, 14, 12, 0)
         user.privacy_accepted_at = user.privacy_accepted_at or datetime(2026, 6, 14, 12, 0)
 
-    features = {
-        "projector": feature("projector", "Projektor", "Projector"),
-        "screen": feature("screen", "Ekran", "Screen"),
-        "sound": feature("sound", "Nagłośnienie", "Sound system"),
-        "microphone": feature("microphone", "Mikrofon", "Microphone"),
-        "computers": feature("computers", "Komputery", "Computers"),
-        "wifi": feature("wifi", "Wi-Fi", "Wi-Fi"),
-        "whiteboard": feature("whiteboard", "Tablica", "Whiteboard"),
-        "flipchart": feature("flipchart", "Flipchart", "Flipchart"),
-        "air_conditioning": feature("air_conditioning", "Klimatyzacja", "Air conditioning"),
-        "stage": feature("stage", "Scena / podest", "Stage"),
-        "induction_loop": feature("induction_loop", "Pętla indukcyjna", "Induction loop", "accessibility"),
-        "elevator": feature("elevator", "Dostęp windą", "Elevator access", "accessibility"),
-        "step_free": feature("step_free", "Bezstopniowy dostęp", "Step-free access", "accessibility"),
-        "accessible_toilet": feature("accessible_toilet", "Toaleta dostępna", "Accessible toilet", "accessibility"),
-        "wide_passages": feature("wide_passages", "Szerokie przejścia", "Wide passages", "accessibility"),
-        "accessible_computer": feature(
-            "accessible_computer",
-            "Dostosowane stanowisko komputerowe",
-            "Accessible computer station",
-            "accessibility",
-        ),
-    }
+    features = seed_features()
 
     clubs = seed_clubs(users["guardian"], majors, source_date)
 
@@ -552,126 +567,7 @@ def seed_demo() -> None:
     membership(sample_members["oliwia_design"], clubs["grafika"], "approved", "treasurer")
     membership(users["pending"], clubs["warsztaty-emocji"], "pending", "member")
 
-    rooms = {
-        "A01": room(
-            "A01",
-            "Aula A01",
-            "K",
-            "Sterlinga 26",
-            47,
-            "aula",
-            "Kameralna aula do spotkań i prezentacji. Szczegółowe wyposażenie wymaga potwierdzenia.",
-            "Small lecture hall for meetings and presentations. Detailed equipment requires confirmation.",
-            [features["projector"], features["screen"], features["wifi"], features["step_free"], features["elevator"]],
-            "https://www.mojekonferencje.pl/lodz/akademia-humanistyczno-ekonomiczna-w-lodzi",
-            "unverified",
-            photo_url="media/rooms/aula-a01.webp",
-        ),
-        "A02": room(
-            "A02",
-            "Aula A02",
-            "K",
-            "Sterlinga 26",
-            138,
-            "aula",
-            "Aula z projektorem i układem do większych prezentacji.",
-            "Lecture hall with a projector and layout for larger presentations.",
-            [
-                features["projector"],
-                features["screen"],
-                features["wifi"],
-                features["air_conditioning"],
-                features["stage"],
-                features["step_free"],
-                features["elevator"],
-            ],
-            "https://www.konferencje.pl/o/akademia-humanistyczno-ekonomiczna-w-lodzi.html",
-            "verified",
-            photo_url="media/rooms/aula-a02.webp",
-        ),
-        "A03": room(
-            "A03",
-            "Aula A03",
-            "K",
-            "Sterlinga 26",
-            73,
-            "aula",
-            "Aula z potwierdzoną klimatyzacją, Wi-Fi i projektorem.",
-            "Lecture hall with confirmed air conditioning, Wi-Fi, and projector.",
-            [
-                features["projector"],
-                features["screen"],
-                features["sound"],
-                features["wifi"],
-                features["air_conditioning"],
-                features["whiteboard"],
-                features["flipchart"],
-                features["step_free"],
-                features["elevator"],
-            ],
-            "https://www.konferencje.pl/o/akademia-humanistyczno-ekonomiczna-w-lodzi/28883-aula-a03.html",
-            "verified",
-            photo_url="media/rooms/aula-a03.webp",
-        ),
-        "A04": room(
-            "A04",
-            "Aula A04",
-            "K",
-            "Sterlinga 26",
-            84,
-            "aula",
-            "Aula do wykładów i spotkań. Pozostałe wyposażenie niepotwierdzone.",
-            "Lecture hall for classes and meetings. Remaining equipment is unverified.",
-            [features["projector"], features["wifi"], features["step_free"], features["elevator"]],
-            "https://www.mojekonferencje.pl/lodz/akademia-humanistyczno-ekonomiczna-w-lodzi",
-            "unverified",
-            photo_url="media/rooms/aula-a04.webp",
-        ),
-        "K320": room(
-            "K320",
-            "Sala K320",
-            "K",
-            "Sterlinga 26",
-            35,
-            "computer_lab",
-            "Robocza sala komputerowa dla warsztatów informatycznych i graficznych.",
-            "Working computer room for IT and graphic workshops.",
-            [features["computers"], features["projector"], features["wifi"], features["elevator"]],
-            None,
-            "unverified",
-            floor="II",
-            photo_url="media/rooms/computer-lab.avif",
-        ),
-        "K200A": room(
-            "K200A",
-            "Sala K200A",
-            "K",
-            "Sterlinga 26",
-            45,
-            "computer_lab",
-            "Przestronniejsza robocza sala komputerowa do warsztatów.",
-            "Larger working computer room for workshops.",
-            [features["computers"], features["projector"], features["wifi"], features["elevator"]],
-            None,
-            "unverified",
-            floor="II",
-            photo_url="media/rooms/computer-lab.avif",
-        ),
-        "S01": room(
-            "S01",
-            "Sala szkoleniowa Sterlinga",
-            "K",
-            "Sterlinga 26",
-            30,
-            "training_room",
-            "Sala szkoleniowa do mniejszych spotkań, warsztatów i konsultacji.",
-            "Training room for smaller meetings, workshops, and consultations.",
-            [features["projector"], features["screen"], features["wifi"], features["whiteboard"], features["step_free"], features["elevator"]],
-            "https://www.mojekonferencje.pl/lodz/akademia-humanistyczno-ekonomiczna-w-lodzi",
-            "unverified",
-            photo_url="media/rooms/sale-szkoleniowe.webp",
-        ),
-    }
+    rooms = seed_rooms(features)
 
     now = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
     create_reservation(
@@ -713,8 +609,8 @@ def seed_demo() -> None:
             db.session.add(
                 Notification(
                     user=user,
-                    message_pl="Witaj w wersji demonstracyjnej StudentSpot.",
-                    message_en="Welcome to the StudentSpot demo.",
+                    message_pl="Witaj w StudentSpot.",
+                    message_en="Welcome to StudentSpot.",
                 )
             )
 
@@ -750,7 +646,7 @@ def seed_majors(source_date: date) -> dict[str, Major]:
     return majors
 
 
-def seed_clubs(guardian: User, majors: dict[str, Major], source_date: date) -> dict[str, Club]:
+def seed_clubs(guardian: User | None, majors: dict[str, Major], source_date: date) -> dict[str, Club]:
     clubs: dict[str, Club] = {}
     for data in CLUB_SOURCE_DATA:
         linked_majors = [majors[slug] for slug in data["major_slugs"]]
@@ -784,7 +680,7 @@ def club(
     description_pl: str,
     description_en: str,
     contact_email: str | None,
-    guardian: User,
+    guardian: User | None,
     majors: list[Major],
     source_url: str | None,
     website_url: str | None,
@@ -949,3 +845,152 @@ def create_reservation(
             )
         )
     return item
+
+
+def seed_features() -> dict[str, RoomFeature]:
+    return {
+        "projector": feature("projector", "Projektor", "Projector"),
+        "screen": feature("screen", "Ekran", "Screen"),
+        "sound": feature("sound", "Nagłośnienie", "Sound system"),
+        "microphone": feature("microphone", "Mikrofon", "Microphone"),
+        "computers": feature("computers", "Komputery", "Computers"),
+        "wifi": feature("wifi", "Wi-Fi", "Wi-Fi"),
+        "whiteboard": feature("whiteboard", "Tablica", "Whiteboard"),
+        "flipchart": feature("flipchart", "Flipchart", "Flipchart"),
+        "air_conditioning": feature("air_conditioning", "Klimatyzacja", "Air conditioning"),
+        "stage": feature("stage", "Scena / podest", "Stage"),
+        "induction_loop": feature("induction_loop", "Pętla indukcyjna", "Induction loop", "accessibility"),
+        "elevator": feature("elevator", "Dostęp windą", "Elevator access", "accessibility"),
+        "step_free": feature("step_free", "Bezstopniowy dostęp", "Step-free access", "accessibility"),
+        "accessible_toilet": feature("accessible_toilet", "Toaleta dostępna", "Accessible toilet", "accessibility"),
+        "wide_passages": feature("wide_passages", "Szerokie przejścia", "Wide passages", "accessibility"),
+        "accessible_computer": feature(
+            "accessible_computer",
+            "Dostosowane stanowisko komputerowe",
+            "Accessible computer station",
+            "accessibility",
+        ),
+    }
+
+
+def seed_rooms(features: dict[str, RoomFeature]) -> dict[str, Room]:
+    return {
+        "A01": room(
+            "A01",
+            "Aula A01",
+            "K",
+            "Sterlinga 26",
+            47,
+            "aula",
+            "Kameralna aula do spotkań i prezentacji. Szczegółowe wyposażenie wymaga potwierdzenia.",
+            "Small lecture hall for meetings and presentations. Detailed equipment requires confirmation.",
+            [features["projector"], features["screen"], features["wifi"], features["step_free"], features["elevator"]],
+            "https://www.mojekonferencje.pl/lodz/akademia-humanistyczno-ekonomiczna-w-lodzi",
+            "unverified",
+            photo_url="media/rooms/aula-a01.webp",
+        ),
+        "A02": room(
+            "A02",
+            "Aula A02",
+            "K",
+            "Sterlinga 26",
+            138,
+            "aula",
+            "Aula z projektorem i układem do większych prezentacji.",
+            "Lecture hall with a projector and layout for larger presentations.",
+            [
+                features["projector"],
+                features["screen"],
+                features["wifi"],
+                features["air_conditioning"],
+                features["stage"],
+                features["step_free"],
+                features["elevator"],
+            ],
+            "https://www.konferencje.pl/o/akademia-humanistyczno-ekonomiczna-w-lodzi.html",
+            "verified",
+            photo_url="media/rooms/aula-a02.webp",
+        ),
+        "A03": room(
+            "A03",
+            "Aula A03",
+            "K",
+            "Sterlinga 26",
+            73,
+            "aula",
+            "Aula z potwierdzoną klimatyzacją, Wi-Fi i projektorem.",
+            "Lecture hall with confirmed air conditioning, Wi-Fi, and projector.",
+            [
+                features["projector"],
+                features["screen"],
+                features["sound"],
+                features["wifi"],
+                features["air_conditioning"],
+                features["whiteboard"],
+                features["flipchart"],
+                features["step_free"],
+                features["elevator"],
+            ],
+            "https://www.konferencje.pl/o/akademia-humanistyczno-ekonomiczna-w-lodzi/28883-aula-a03.html",
+            "verified",
+            photo_url="media/rooms/aula-a03.webp",
+        ),
+        "A04": room(
+            "A04",
+            "Aula A04",
+            "K",
+            "Sterlinga 26",
+            84,
+            "aula",
+            "Aula do wykładów i spotkań. Pozostałe wyposażenie niepotwierdzone.",
+            "Lecture hall for classes and meetings. Remaining equipment is unverified.",
+            [features["projector"], features["wifi"], features["step_free"], features["elevator"]],
+            "https://www.mojekonferencje.pl/lodz/akademia-humanistyczno-ekonomiczna-w-lodzi",
+            "unverified",
+            photo_url="media/rooms/aula-a04.webp",
+        ),
+        "K320": room(
+            "K320",
+            "Sala K320",
+            "K",
+            "Sterlinga 26",
+            35,
+            "computer_lab",
+            "Robocza sala komputerowa dla warsztatów informatycznych i graficznych.",
+            "Working computer room for IT and graphic workshops.",
+            [features["computers"], features["projector"], features["wifi"], features["elevator"]],
+            None,
+            "unverified",
+            floor="II",
+            photo_url="media/rooms/computer-lab.avif",
+        ),
+        "K200A": room(
+            "K200A",
+            "Sala K200A",
+            "K",
+            "Sterlinga 26",
+            45,
+            "computer_lab",
+            "Przestronniejsza robocza sala komputerowa do warsztatów.",
+            "Larger working computer room for workshops.",
+            [features["computers"], features["projector"], features["wifi"], features["elevator"]],
+            None,
+            "unverified",
+            floor="II",
+            photo_url="media/rooms/computer-lab.avif",
+        ),
+        "S01": room(
+            "S01",
+            "Sala szkoleniowa Sterlinga",
+            "K",
+            "Sterlinga 26",
+            30,
+            "training_room",
+            "Sala szkoleniowa do mniejszych spotkań, warsztatów i konsultacji.",
+            "Training room for smaller meetings, workshops, and consultations.",
+            [features["projector"], features["screen"], features["wifi"], features["whiteboard"], features["step_free"], features["elevator"]],
+            "https://www.mojekonferencje.pl/lodz/akademia-humanistyczno-ekonomiczna-w-lodzi",
+            "unverified",
+            photo_url="media/rooms/sale-szkoleniowe.webp",
+        ),
+    }
