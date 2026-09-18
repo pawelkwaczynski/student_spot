@@ -1,7 +1,7 @@
 import pytest
 
 from app import create_app
-from app.cli import seed_demo
+from app.cli import DEMO_PASSWORD, seed_demo
 from app.config import TestConfig
 from app.extensions import db
 
@@ -22,7 +22,7 @@ def client(app):
     return app.test_client()
 
 
-def login(client, email="admin@studentspot.example.com", password="***REMOVED***"):
+def login(client, email="admin@studentspot.example.com", password=DEMO_PASSWORD):
     return client.post(
         "/auth/login",
         data={"login": email, "password": password},
