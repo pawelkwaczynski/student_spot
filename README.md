@@ -1,14 +1,18 @@
 # StudentSpot
 
+<p align="center">
+  <a href="README.pl.md">🇵🇱 <b>Przeczytaj po polsku</b></a> ·
+  <a href="#features-current-scope">Features</a> ·
+  <a href="#local-development">Run it</a> ·
+  <a href="#tests">Tests</a>
+</p>
+
 StudentSpot is an open-source platform for student organizations, campus accessibility and room management. It helps student clubs publish their profile, manage membership requests, send messages, find accessible rooms, submit room reservations and export approved meetings to a calendar file.
 
 StudentSpot is not an official AHE system. It shows how a lightweight management information system can support campus coordination with accessibility, bilingual UI and clear role-based workflows.
 
-Live instance:
-
-```text
-https://frog01-20412.wykr.es
-```
+There is no public instance running at the moment. The project is meant to be self-hosted;
+`Local development` below gets it up in three commands.
 
 ## Why it matters
 
