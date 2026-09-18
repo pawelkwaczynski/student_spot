@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 
+import os
+import secrets
+
 import click
 from flask import Flask
 
@@ -23,7 +26,9 @@ from app.models import (
 )
 from app.security import hash_password
 
-DEMO_PASSWORD = "StudentSpot123!"
+# The demo password is generated per run unless one is supplied, so a seeded demo
+# database never ships with a password that is public in this file.
+DEMO_PASSWORD = os.environ.get("DEMO_PASSWORD") or secrets.token_urlsafe(12)
 
 NEWS_SOURCE_DATA = [
     {
@@ -365,6 +370,7 @@ def register_cli(app: Flask) -> None:
     def seed_demo_command() -> None:
         seed_demo()
         click.echo("Demo data seeded.")
+        click.echo(f"Demo account password for this run: {DEMO_PASSWORD}")
 
     @app.cli.command("seed-catalog")
     def seed_catalog_command() -> None:
